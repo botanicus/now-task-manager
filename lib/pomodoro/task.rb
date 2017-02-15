@@ -1,19 +1,25 @@
 module Pomodoro
   class Task
-    # Task.parse("- TopTal. #online #work 20")
+    DEFAULT_DURATION = 10
+
     def self.parse(line)
-      match = line.match(/^- ([^#]+).*?(\d+)?$/)
-      text, duration = match[1], match[2] && match[2].to_i
+      match = line.match(/^- (?:\[(\d+)\]\s+)?([^#]+)\s*/)
+      text, duration = match[2], match[1] && match[1].to_i
       tags = line.scan(/#\S+/).map { |tag| tag[1..-1].to_sym }
-      self.new(text, duration, tags)
+      self.new(text.chomp(' '), duration, tags)
     end
 
-    def initialize(text, duration = 10, *tags)
-      @text, @duration, @tags = text, duration, tags
+    attr_reader :text, :duration, :tags
+    def initialize(text, duration, tags = [])
+      @text, @duration, @tags = text, duration || DEFAULT_DURATION, tags
     end
 
     def to_s
-      ["- #{@text}", @tags.map { |tag| "##{tag}"}.join(' '), duration].join(' ')
+      output = ['-']
+      output << "[#{@duration}]" unless @duration == DEFAULT_DURATION
+      output << @text
+      output << @tags.map { |tag| "##{tag}"}.join(' ') unless @tags.empty?
+      output.join(' ')
     end
   end
 end

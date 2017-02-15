@@ -1,0 +1,72 @@
+#!/usr/bin/env ruby
+
+# Today:
+# - Meditation. 20
+# - Dancing. 20
+# - TopTal. #online #work 15
+# - Some cleanup.
+# - Write a blog post. #online 90
+# - Plan tomorrow.
+
+
+class PomodoroTaskManager
+  TASK_LIST_PATH = File.expand_path('~/Dropbox/WIP/tasks.todo')
+
+  def initialize
+    @tasks = self.load_tasks
+  end
+
+  def today_tasks
+    @tasks[:today]
+  end
+
+  def mark_current_task_as_done
+    first_task = self.today_tasks.find { |task| ! task.tags.include?(:done) }
+    first_task.tags.push(:done)
+    self.write_tasks
+  end
+
+  def write_tasks
+    File.open(TASK_LIST_PATH, 'w') do |file|
+      @tasks.each do |key, tasks|
+        file.puts "#{key.to_s.sub(/^\w/) { |m| m.upcase }}:"
+        tasks.each do |task|
+          file.puts "- #{task}"
+        end
+        file.puts
+      end
+    end
+  end
+
+  protected
+  def load_tasks
+    File.readlines(TASK_LIST_PATH).reduce(Hash.new) do |buffer, line|
+      line.chomp!
+      buffer.merge!(line[0..-2].downcase.to_sym => []) if line.match(/:$/)
+      buffer[buffer.keys.last].push(line[2..-1]) if line.match(/^- /)
+      buffer
+    end
+  end
+end
+
+manager = PomodoroTaskManager.new
+
+case ARGV.shift
+when 'work'
+  abort "No more tasks." if manager.today_tasks.empty?
+  puts %Q{pomodoro #{manager.today_tasks.first.gsub('#', '\#')}}
+  %x{pomodoro #{manager.today_tasks.first.gsub('#', '\#')}}
+when 'done'
+  manager.mark_current_task_as_done
+when 'next'
+  system "#{$0} done && #{$0} work"
+when 'today'
+  unless manager.today_tasks.empty?
+    puts manager.today_tasks.map { |task| "- #{task}" }
+  else
+    puts "All done!"
+  end
+# TODO: punch-off
+else
+  abort "Usage: #{$0} [work|done|next|today]."
+end

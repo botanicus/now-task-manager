@@ -16,10 +16,10 @@ describe Pomodoro::TaskManager do
     end
   end
 
-  describe '#write_tasks' do
+  describe '#save' do
     it 'saves everything in the same format as was the input' do
       stream = StringIO.new
-      manager.write_tasks(stream)
+      manager.save(stream)
       generated = stream.tap { |stream| stream.rewind }.read
       expect(generated).to eql(File.read(task_list_path))
     end

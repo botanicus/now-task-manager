@@ -14,10 +14,11 @@ manager = Pomodoro::TaskManager.parse(File.expand_path('~/Dropbox/WIP/tasks.todo
 case ARGV.shift
 when 'work'
   abort "No more tasks." if manager.today_tasks.empty?
-  puts %Q{pomodoro #{manager.today_tasks.first.gsub('#', '\#')}}
-  %x{pomodoro #{manager.today_tasks.first.gsub('#', '\#')}}
+  puts %Q{log-time #{manager.active_task.to_s[2..-1]}}
+  %x{log-time #{manager.active_task.to_s[2..-1].gsub('#', '\#')}}
 when 'done'
   manager.mark_active_task_as_done
+  manager.save
 when 'next'
   system "#{$0} done && #{$0} work"
 when 'today'

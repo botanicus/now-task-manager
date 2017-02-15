@@ -17,7 +17,7 @@ when 'work'
   puts %Q{pomodoro #{manager.today_tasks.first.gsub('#', '\#')}}
   %x{pomodoro #{manager.today_tasks.first.gsub('#', '\#')}}
 when 'done'
-  manager.mark_current_task_as_done
+  manager.mark_active_task_as_done
 when 'next'
   system "#{$0} done && #{$0} work"
 when 'today'

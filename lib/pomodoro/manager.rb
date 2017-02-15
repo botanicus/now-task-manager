@@ -21,10 +21,12 @@ module Pomodoro
       @tasks[:today]
     end
 
-    def mark_current_task_as_done
-      first_task = self.today_tasks.find { |task| ! task.tags.include?(:done) }
-      first_task.tags.push(:done)
-      self.write_tasks
+    def mark_active_task_as_done
+      self.active_task.tags.push(:done)
+    end
+
+    def active_task
+      self.today_tasks.find { |task| ! task.tags.include?(:done) }
     end
 
     def write_tasks(stream = File.open(@task_list_path, 'w'))

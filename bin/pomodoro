@@ -2,7 +2,7 @@
 
 # Today:
 # - [20] Meditation. #meditation
-#   {started: '9:20', 'finished': '10:20', pomodoros: 4}
+#   {started: '9:20', 'finished': '10:20', pomodoros: 4, waiting_for: 'Email from ...'}
 # - [20] Dancing.
 # - [15] TopTal. #online #work
 # - Some cleanup.
@@ -10,16 +10,24 @@
 # - Plan tomorrow.
 
 require 'pomodoro'
-manager = Pomodoro::TaskManager.parse(File.expand_path('~/Dropbox/WIP/tasks.todo'))
+
+TASK_LIST_PATH = File.expand_path('~/Dropbox/WIP/tasks.todo')
+manager = Pomodoro::TaskManager.parse(TASK_LIST_PATH)
 
 case ARGV.shift
 when 'work'
   abort "No more tasks." if manager.today_tasks.empty?
-  puts %Q{log-time #{manager.active_task.to_s[2..-1]}}
-  %x{log-time #{manager.active_task.to_s[2..-1].gsub('#', '\#')}}
+  # Time handling has changed.
+  command = "log-time #{manager.active_task.to_s[2..-1].split(' ').map { |word| "'#{word}'" }.join(' ')}"
+  puts command; system command
 when 'done'
   manager.mark_active_task_as_done
   manager.save
+when 'postpone'
+  # with a reason.
+when 'skip'
+  # without a reason.
+when 'discard'
 when 'next'
   system "#{$0} done && #{$0} work"
 when 'today'
@@ -32,10 +40,11 @@ when 'punch-off'
   path = File.expand_path("~/Dropbox/WIP/Tasks/#{Time.now.strftime('%Y-%m-%d')}.todo")
   abort "File #{path} already exists!" if File.exists?(path)
   File.open(path, 'w') do |file|
-    file.puts(manager.finished_tasks)
+    file.puts(manager.finished_tasks.map { |task| task.tags.delete(:done) })
   end
   manager.switch_days
   manager.save
+  exec "vim #{TASK_LIST_PATH}"
 when 'add', '+'
   manager.add_task_for_later(ARGV.join(' '))
   manager.save

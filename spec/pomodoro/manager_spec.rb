@@ -7,10 +7,10 @@ describe Pomodoro::TaskManager do
   end
 
   let(:manager) do
-    described_class.load_tasks(task_list_path)
+    described_class.parse(task_list_path)
   end
 
-  describe '.load_tasks' do
+  describe '.parse' do
     it 'loads tasks from the specified path' do
       expect(manager.today_tasks.length).to be(4)
     end

@@ -2,7 +2,7 @@ require 'pomodoro/task'
 
 module Pomodoro
   class TaskManager
-    def self.load_tasks(task_list_path)
+    def self.parse(task_list_path)
       hash = File.readlines(task_list_path).reduce(Hash.new) do |buffer, line|
         line.chomp!
         buffer.merge!(line[0..-2].downcase.to_sym => []) if line.match(/:$/)

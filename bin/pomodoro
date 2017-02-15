@@ -9,7 +9,7 @@
 # - Plan tomorrow.
 
 require 'pomodoro'
-manager = Pomodoro::TaskManager.new(File.expand_path('~/Dropbox/WIP/tasks.todo'))
+manager = Pomodoro::TaskManager.parse(File.expand_path('~/Dropbox/WIP/tasks.todo'))
 
 case ARGV.shift
 when 'work'
@@ -22,7 +22,7 @@ when 'next'
   system "#{$0} done && #{$0} work"
 when 'today'
   unless manager.today_tasks.empty?
-    puts manager.today_tasks.map { |task| "- #{task}" }
+    puts manager.today_tasks
   else
     puts "All done!"
   end

@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 
 # Today:
-# - [20] Meditation.
+# - [20] Meditation. #meditation
+#   {started: '9:20', 'finished': '10:20', pomodoros: 4}
 # - [20] Dancing.
 # - [15] TopTal. #online #work
 # - Some cleanup.
@@ -27,7 +28,17 @@ when 'today'
   else
     puts "All done!"
   end
-# TODO: punch-off
+when 'punch-off'
+  path = File.expand_path("~/Dropbox/WIP/Tasks/#{Time.now.strftime('%Y-%m-%d')}.todo")
+  abort "File #{path} already exists!" if File.exists?(path)
+  File.open(path, 'w') do |file|
+    file.puts(manager.finished_tasks)
+  end
+  manager.switch_days
+  manager.save
+when 'add', '+'
+  manager.add_task_for_later(ARGV.join(' '))
+  manager.save
 else
-  abort "Usage: #{$0} [work|done|next|today]."
+  abort "Usage: #{$0} [work|done|next|today|add]."
 end

@@ -24,4 +24,13 @@ describe Pomodoro::TaskManager do
       expect(generated).to eql(File.read(task_list_path))
     end
   end
+
+  describe '#active_task and #mark_active_task_as_done' do
+    it 'pushes #done into the tags of the current task' do
+      expect { manager.mark_active_task_as_done }.
+        to change { manager.active_task.text }.
+        from('Item 1.').
+        to('Item 2.')
+    end
+  end
 end

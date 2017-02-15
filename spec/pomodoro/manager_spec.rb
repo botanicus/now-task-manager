@@ -33,4 +33,24 @@ describe Pomodoro::TaskManager do
         to('Item 2.')
     end
   end
+
+  describe '#add_task_for_later' do
+    it 'adds a new task for later' do
+      expect { manager.add_task_for_later('Discover America.') }.
+        to change { manager.tasks_for_later.length }.by(1)
+    end
+  end
+
+  describe '#switch_days' do
+    it 'inserts unfinished tasks from today into the template' do
+      manager.switch_days
+      expected = []
+      expected << '- Meditation.'
+      expected << '- Item 1.'
+      expected << '- Item 2. #simple'
+      expected << '- [20] Item 3.'
+      expected << '- Plan tomorrow.'
+      expect(manager.today_tasks.map(&:to_s).join("\n")).to eql(expected.join("\n"))
+    end
+  end
 end

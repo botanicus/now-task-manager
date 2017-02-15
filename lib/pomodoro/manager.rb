@@ -29,7 +29,7 @@ module Pomodoro
       self.today_tasks.find { |task| ! task.tags.include?(:done) }
     end
 
-    def write_tasks(stream = File.open(@task_list_path, 'w'))
+    def save(stream = File.open(@task_list_path, 'w'))
       @tasks.each do |key, tasks|
         stream.puts "#{key.to_s.sub(/^\w/) { |m| m.upcase }}:"
         tasks.each do |task|

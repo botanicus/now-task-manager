@@ -18,6 +18,7 @@ module Pomodoro
     end
 
     class DSL
+      attr_reader :rules, :projects
       def initialize
         @rules = Hash.new
         @projects = Array.new

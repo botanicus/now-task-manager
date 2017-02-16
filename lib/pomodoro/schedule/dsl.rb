@@ -24,6 +24,11 @@ module Pomodoro
         @projects = Array.new
       end
 
+      def require(schedule)
+        path = File.expand_path("~/.config/pomodoro/schedules/#{schedule}.rb")
+        self.instance_eval(File.read(path))
+      end
+
       def rule(name, condition, &block)
         @rules[name] = Rule.new(condition, &block)
       end
@@ -62,9 +67,9 @@ module Pomodoro
       # TODO: possibly store in tasks.todo as well.
       def project_of_the_week
         unless File.exists?(project_of_the_week_path)
-          File.open(path, 'w') { |f| f.puts(random_project) }
+          File.open(project_of_the_week_path, 'w') { |f| f.puts(random_project) }
         end
-        File.read(project_of_the_week_path)
+        File.read(project_of_the_week_path).chomp
       end
 
       def switch_project_of_the_week

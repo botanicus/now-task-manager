@@ -22,8 +22,9 @@ when 'skip'
 when 'discard'
 when 'next'
   abort "No more tasks." if manager.today_tasks.empty?
-  # Time handling has changed.
-  command = "log-time #{manager.active_task.to_s[2..-1].split(' ').map { |word| "'#{word}'" }.join(' ')}"
+  task = manager.active_task
+  arguments = "#{task.text} #{task.tags.map { |tag| "##{tag}" }} #{task.duration}"
+  command = "log-time #{arguments.split(' ').map { |word| "'#{word}'" }.join(' ')}"
   puts command; system command
 
   manager.mark_active_task_as_done

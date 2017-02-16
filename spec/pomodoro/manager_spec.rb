@@ -43,9 +43,9 @@ describe Pomodoro::TaskManager do
 
   describe '#switch_days' do
     it 'inserts unfinished tasks from today into the template' do
-      manager.switch_days
+      manager.switch_days('spec/data/schedule.rb')
       expected = []
-      expected << '- Meditation.'
+      expected << '- [20] Meditation. #morning_ritual'
       expected << '- Item 1.'
       expected << '- Item 2. #simple'
       expected << '- [20] Item 3.'

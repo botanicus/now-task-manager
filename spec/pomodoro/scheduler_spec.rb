@@ -6,4 +6,14 @@ describe Pomodoro::Scheduler do
       expect { described_class.load('spec/data/schedule.rb') }.not_to raise_error
     end
   end
+
+  subject do
+    described_class.load('spec/data/schedule.rb')
+  end
+
+  describe '#for_today' do
+    it 'xxxxx' do
+      p subject.for_today
+    end
+  end
 end

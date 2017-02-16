@@ -1,4 +1,5 @@
 require 'pomodoro/task'
+require 'pomodoro/scheduler'
 
 module Pomodoro
   class TaskManager
@@ -42,13 +43,12 @@ module Pomodoro
       self.today_tasks.select { |task| task.tags.include?(:done) }
     end
 
-    def switch_days
+    def switch_days(schedule = File.expand_path('~/.config/pomodoro/schedules/base.rb'))
       unfinished_tasks = @tasks[:today].select { |task| ! task.tags.include?(:done) }
-      @tasks[:today] = @tasks[:template].dup
-      placeholder = @tasks[:today].find { |task| task.text == '[content]' }
-      position = @tasks[:today].index(placeholder)
-      @tasks[:today].delete(placeholder)
-      @tasks[:today].insert(position, *unfinished_tasks)
+      @tasks[:today] = Scheduler.load(schedule).for_today
+      first_personal_item = @tasks[:today].find { |task| ! task.tags.include?(:morning_ritual) && task.tags.include?(:work)}
+      position = @tasks[:today].index(first_personal_item) || @tasks[:today].length
+      @tasks[:today].insert(position - 1, *unfinished_tasks)
     end
 
     def save(stream = File.open(@task_list_path, 'w'))

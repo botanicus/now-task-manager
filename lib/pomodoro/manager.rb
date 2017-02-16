@@ -43,9 +43,8 @@ module Pomodoro
       self.today_tasks.select { |task| task.tags.include?(:done) }
     end
 
-    def switch_days(schedule = File.expand_path('~/.config/pomodoro/schedules/base.rb'))
+    def switch_days(schedule)
       unfinished_tasks = @tasks[:today].select { |task| ! task.tags.include?(:done) }
-
 
       @tasks[:today] = Scheduler.load(schedule).for_today
       unfinished_tasks.delete_if { |task| @tasks[:today].any? { |task2| task.text == task2.text } }

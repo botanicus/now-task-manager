@@ -20,5 +20,9 @@ module Pomodoro
         end
       end
     end
+
+    def projects
+      @schedule.projects
+    end
   end
 end

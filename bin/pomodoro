@@ -53,7 +53,7 @@ when 'punch-off'
     end)
   end
 
-  manager.switch_days
+  manager.switch_days(File.expand_path('~/.config/pomodoro/schedules/base.rb'))
   if ARGV.include?('--dry-run')
     puts "\n\nTomorrow:"
     puts manager.today_tasks
@@ -64,6 +64,10 @@ when 'punch-off'
 when 'add', '+'
   manager.add_task_for_later(ARGV.join(' '))
   manager.save
+when 'show-projects'
+  schedule = Pomodoro::Scheduler.load(File.expand_path('~/.config/pomodoro/schedules/base.rb'))
+  puts schedule.projects
+  puts "\n#{schedule.projects.length} in total, repeats every #{((schedule.projects.length * 7) / 30.0).round(2)} months."
 else
-  abort "Usage: #{$0} [next|today|add]."
+  abort "Usage: #{$0} [postpone|skip|discard|next|today|punch-off|add|show-projects]."
 end

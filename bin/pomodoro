@@ -74,9 +74,11 @@ when 'show-schedule'
     require 'date'
     date = Date.parse(date_string)
     puts "#{date.strftime('%A %d/%m/%Y')}:"
-    puts schedule.for_today(date)
+    schedule = schedule.for_today(date, true)
+    puts; puts schedule
   else
-    puts schedule.for_today
+    schedule = schedule.for_today(Date.today, true)
+    puts; puts schedule
   end
 else
   abort "Usage: #{$0} [postpone|skip|discard|next|today|punch-off|add|show-projects|show-schedule]."

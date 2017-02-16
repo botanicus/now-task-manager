@@ -13,9 +13,10 @@ module Pomodoro
       @schedule = schedule
     end
 
-    def for_today(today = Date.today)
+    def for_today(today = Date.today, debug = false)
       Array.new.tap do |tasks|
         @schedule.rules.each do |name, rule|
+          puts "~ Rule #{name} evaluated to #{rule.true?}" if debug
           rule.call(tasks) if rule.true?
         end
       end

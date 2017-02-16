@@ -73,6 +73,7 @@ module Pomodoro
 
       # TODO: load past projects of the week to make sure we're not repeating.
       # TODO: possibly store in tasks.todo as well.
+      # TODO: dry run with show-schedule rewrites the file.
       def project_of_the_week
         unless File.exists?(project_of_the_week_path)
           File.open(project_of_the_week_path, 'w') { |f| f.puts(random_project) }
@@ -82,6 +83,7 @@ module Pomodoro
 
       def switch_project_of_the_week
         File.unlink(project_of_the_week_path)
+      rescue Errno::ENOENT
       end
     end
   end

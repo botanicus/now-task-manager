@@ -17,11 +17,23 @@ module Pomodoro
       end
     end
 
+    module DateExts
+      def weekend?
+        self.saturday? || self.sunday?
+      end
+
+      def weekday?
+        ! self.weekend?
+      end
+    end
+
     class DSL
-      attr_reader :rules, :projects
-      def initialize
+      attr_reader :rules, :projects, :today
+      def initialize(today = Date.today)
+        today.extend(DateExts)
         @rules = Hash.new
         @projects = Array.new
+        @today = today
       end
 
       def require(schedule)
@@ -31,10 +43,6 @@ module Pomodoro
 
       def rule(name, condition, &block)
         @rules[name] = Rule.new(condition, &block)
-      end
-
-      def today
-        Date.today
       end
 
       def last_day_of_a_month

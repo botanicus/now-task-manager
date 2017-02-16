@@ -69,17 +69,19 @@ when 'show-projects'
   puts schedule.projects
   puts "\n#{schedule.projects.length} in total, repeats every #{((schedule.projects.length * 7) / 30.0).round(2)} months."
 when 'show-schedule'
-  schedule = Pomodoro::Scheduler.load(File.expand_path('~/.config/pomodoro/schedules/base.rb'))
+  require 'date'
+
   if date_string = ARGV.shift
-    require 'date'
     date = Date.parse(date_string)
-    puts "#{date.strftime('%A %d/%m/%Y')}:"
-    schedule = schedule.for_today(date, true)
-    puts; puts schedule
   else
-    schedule = schedule.for_today(Date.today, true)
-    puts; puts schedule
+    date = Date.today
   end
+
+  schedule = Pomodoro::Scheduler.load(File.expand_path('~/.config/pomodoro/schedules/base.rb'), date)
+
+  puts "#{date.strftime('%A %d/%m/%Y')}:"
+  schedule = schedule.for_today(true)
+  puts; puts schedule
 else
   abort "Usage: #{$0} [postpone|skip|discard|next|today|punch-off|add|show-projects|show-schedule]."
 end

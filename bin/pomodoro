@@ -38,12 +38,29 @@ when 'today'
 when 'punch-off'
   path = File.expand_path("~/Dropbox/WIP/Tasks/#{Time.now.strftime('%Y-%m-%d')}.todo")
   abort "File #{path} already exists!" if File.exists?(path)
-  File.open(path, 'w') do |file|
-    file.puts(manager.finished_tasks.map { |task| task.tags.delete(:done) })
+  unless ARGV.include?('--dry-run')
+    File.open(path, 'w') do |file|
+      file.puts(manager.finished_tasks.map do |task|
+        tags = task.tags - [:done]
+        Pomodoro::Task.new(task.text, task.duration, tags)
+      end)
+    end
+  else
+    puts "#{path}:"
+    puts(manager.finished_tasks.map do |task|
+      tags = task.tags - [:done]
+      Pomodoro::Task.new(task.text, task.duration, tags)
+    end)
   end
+
   manager.switch_days
-  manager.save
-  exec "vim #{TASK_LIST_PATH}"
+  if ARGV.include?('--dry-run')
+    puts "\n\nTomorrow:"
+    puts manager.today_tasks
+  else
+    manager.save
+    exec "vim #{TASK_LIST_PATH}"
+  end
 when 'add', '+'
   manager.add_task_for_later(ARGV.join(' '))
   manager.save

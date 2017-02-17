@@ -25,6 +25,22 @@ describe Pomodoro::TaskManager do
     end
   end
 
+  describe '#today_tasks' do
+    it 'is pending'
+  end
+
+  describe '#tasks_for_later' do
+    it 'is pending'
+  end
+
+  describe '#tasks_for_tomorrow' do
+    it 'is pending'
+  end
+
+  describe '#finished_tasks' do
+    it 'is pending'
+  end
+
   describe '#active_task and #mark_active_task_as_done' do
     it 'pushes #done into the tags of the current task' do
       expect { manager.mark_active_task_as_done }.
@@ -45,11 +61,21 @@ describe Pomodoro::TaskManager do
     it 'inserts unfinished tasks from today into the template' do
       manager.switch_days('spec/data/schedule.rb')
       expected = []
-      expected << '- [20] Meditation. #morning_ritual'
-      expected << '- Item 1.'
-      expected << '- Item 2. #simple'
-      expected << '- [20] Item 3.'
-      expected << '- Plan tomorrow.'
+      expected << '- [20] Meditation. #morning_ritual' # From the schedule.
+      expected << '- Item 1.' # Unfinished task from yesterday (tasks.todo).
+      expected << '- Item 2. #simple' # Unfinished task from yesterday (tasks.todo).
+      expected << '- [20] Item 3.' # Unfinished task from yesterday (tasks.todo).
+      expected << '- Plan tomorrow.' # From the schedule.
+      expect(manager.today_tasks.map(&:to_s).join("\n")).to eql(expected.join("\n"))
+    end
+
+    it 'inserts tasks for tomorrow into the template' do
+      manager = described_class.parse('spec/data/tasks2.todo')
+      manager.switch_days('spec/data/schedule.rb')
+      expected = []
+      expected << '- [20] Meditation. #morning_ritual' # From the schedule.
+      expected << '- Do nothing. #ohyeah' # Tomorrow task.
+      expected << '- Plan tomorrow.' # From the schedule.
       expect(manager.today_tasks.map(&:to_s).join("\n")).to eql(expected.join("\n"))
     end
   end

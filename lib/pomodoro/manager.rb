@@ -27,7 +27,7 @@ module Pomodoro
     end
 
     def mark_active_task_as_done
-      Time.now.strftime('%H:%M')
+      #Time.now.strftime('%H:%M')
       self.active_task.tags.push(:done)
     end
 
@@ -51,9 +51,12 @@ module Pomodoro
 
       tasks_for_tomorrow = @tasks[:tomorrow] || []
 
-      first_personal_item = @tasks[:today].find { |task| ! task.tags.include?(:morning_ritual) && task.tags.include?(:work)}
+      first_personal_item = @tasks[:today].find do |task|
+        ! task.tags.include?(:morning_ritual) && ! task.tags.include?(:work)
+      end
+
       position = @tasks[:today].index(first_personal_item) || @tasks[:today].length
-      @tasks[:today].insert(position + 1, *(unfinished_tasks + tasks_for_tomorrow))
+      @tasks[:today].insert(position, *(unfinished_tasks + tasks_for_tomorrow))
     end
 
     def save(stream = File.open(@task_list_path, 'w'))

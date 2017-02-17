@@ -1,5 +1,6 @@
 require 'date'
 require 'pomodoro/task'
+require 'pomodoro/exts/date_exts'
 
 module Pomodoro
   module Schedule
@@ -14,16 +15,6 @@ module Pomodoro
 
       def call(tasks)
         @callable.call(tasks)
-      end
-    end
-
-    module DateExts
-      def weekend?
-        self.saturday? || self.sunday?
-      end
-
-      def weekday?
-        ! self.weekend?
       end
     end
 

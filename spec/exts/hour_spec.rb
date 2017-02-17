@@ -17,6 +17,16 @@ describe Hour do
     end
   end
 
+  describe '#==' do
+    it 'returns true if the other instance is of the same length' do
+      expect(described_class.new(1) == described_class.new(0, 60)).to be(true)
+    end
+
+    it 'returns false if the other instance is not of the same length' do
+      expect(described_class.new(0, 5) == described_class.new(0, 1)).to be(false)
+    end
+  end
+
   describe '#<' do
     it 'returns true if the other instance is bigger' do
       expect(described_class.new(0, 5) < described_class.new(0, 10)).to be(true)
@@ -42,6 +52,34 @@ describe Hour do
 
     it 'returns false if the other instance is of the same length' do
       expect(described_class.new(0, 5) > described_class.new(0, 5)).to be(false)
+    end
+  end
+
+  describe '#<=' do
+    it 'returns true if the other instance is bigger' do
+      expect(described_class.new(0, 5) <= described_class.new(0, 10)).to be(true)
+    end
+
+    it 'returns false if the other instance is smaller' do
+      expect(described_class.new(0, 5) <= described_class.new(0, 1)).to be(false)
+    end
+
+    it 'returns true if the other instance is of the same length' do
+      expect(described_class.new(0, 5) <= described_class.new(0, 5)).to be(true)
+    end
+  end
+
+  describe '#>=' do
+    it 'returns false if the other instance is bigger' do
+      expect(described_class.new(0, 5) >= described_class.new(0, 10)).to be(false)
+    end
+
+    it 'returns true if the other instance is smaller' do
+      expect(described_class.new(0, 5) >= described_class.new(0, 1)).to be(true)
+    end
+
+    it 'returns true if the other instance is of the same length' do
+      expect(described_class.new(0, 5) >= described_class.new(0, 5)).to be(true)
     end
   end
 end

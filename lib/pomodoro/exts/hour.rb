@@ -27,7 +27,7 @@ class Hour
   alias_method :eql?, :==
 
   def inspect
-    "#{self.hours}:#{self.minutes_over_the_hour}"
+    "#{self.hours}:#{format('%02d', self.minutes_over_the_hour)}"
   end
   alias_method :to_s, :inspect
 

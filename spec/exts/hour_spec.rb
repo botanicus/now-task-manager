@@ -3,6 +3,8 @@ require 'pomodoro/exts/hour'
 describe Hour do
   describe '#initialize' do
     it 'can be initialised with a mix of hours and minutes' do
+      expect(described_class.new(0, 0).to_s).to eql('0:00')
+      expect(described_class.new(0, 1).to_s).to eql('0:01')
       expect(described_class.new(0, 20).to_s).to eql('0:20')
       expect(described_class.new(2, 20).to_s).to eql('2:20')
       expect(described_class.new(2, 80).to_s).to eql('3:20')

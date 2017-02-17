@@ -9,6 +9,7 @@ Increase awareness.
 No skipping.
 End-of-the day/week reports for clients (incl. how much to charge).
 Offlining.
+Make your work easier with `git commit-pomodoro`.
 
 # Tutorial
 

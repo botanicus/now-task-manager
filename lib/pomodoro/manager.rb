@@ -49,9 +49,11 @@ module Pomodoro
       @tasks[:today] = Scheduler.load(schedule, Date.today.next_day).for_today
       unfinished_tasks.delete_if { |task| @tasks[:today].any? { |task2| task.text == task2.text } }
 
+      tasks_for_tomorrow = @tasks[:tomorrow] || []
+
       first_personal_item = @tasks[:today].find { |task| ! task.tags.include?(:morning_ritual) && task.tags.include?(:work)}
       position = @tasks[:today].index(first_personal_item) || @tasks[:today].length
-      @tasks[:today].insert(position + 1, *unfinished_tasks)
+      @tasks[:today].insert(position + 1, *(unfinished_tasks + tasks_for_tomorrow))
     end
 
     def save(stream = File.open(@task_list_path, 'w'))

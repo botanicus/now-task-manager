@@ -4,12 +4,12 @@ Simple command-line [pomodoro](http://cirillocompany.de/pages/pomodoro-technique
 
 ## Why?
 
-Schedules, task archive.
-Increase awareness.
-No skipping.
-End-of-the day/week reports for clients (incl. how much to charge).
-Offlining.
-Make your work easier with `git commit-pomodoro`.
+- Schedules, task archive.
+- Increase awareness.
+- No skipping.
+- End-of-the day/week reports for clients (incl. how much to charge).
+- Offlining.
+- Make your work easier with `git commit-pomodoro`.
 
 # Tutorial
 
@@ -25,23 +25,35 @@ Make your work easier with `git commit-pomodoro`.
 
 The real fun starts with using schedules.
 
+```ruby
+# ~/.config/pomodoro/schedules/base.rb
+rule(:weekday, -> { today.weekday? }) do |tasks|
+  tasks.push(*morning_ritual_tasks)
+  tasks << Pomodoro::Task.new('TopTal.', 20, [:online, :work])
+  tasks << work_tasks[rand(work_tasks.length)]
+  tasks.push(*lunch_break_tasks)
+  tasks << Pomodoro::Task.new(project_of_the_week, 90, [:project_of_the_week, :online])
+  tasks << cleanup_tasks[rand(cleanup_tasks.length)]
+  tasks.push(*evening_tasks)
+end
+```
+
 # Configuration
 
-```shell
-mkdir ~/.config && tee -a ~/.config/internet-usage-limiter.yml <<EOF
+```yaml
+# ~/.config/internet-usage-limiter.yml
 ---
  log_file_path: ~/Dropbox/WIP/Pomodoro.log
  work_day_work_schedule: ['9:30', '14:00']
  work_day_personal_schedule: ['14:00', '18:20']
  saturday_schedule: ['9:30', '18:20']
-EOF
 ```
 ## BitBar plugin
 
 [BitBar](https://getbitbar.com/)
 
 ```shell
-tee /.bitbar/pomodoro.1s.sh <<EOF
+tee ~/.bitbar/pomodoro.1s.sh <<EOF
 #!/bin/sh
 
 log-time --bitbar

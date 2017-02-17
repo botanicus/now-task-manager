@@ -46,7 +46,7 @@ module Pomodoro
     def switch_days(schedule)
       unfinished_tasks = @tasks[:today].select { |task| ! task.tags.include?(:done) }
 
-      @tasks[:today] = Scheduler.load(schedule).for_today
+      @tasks[:today] = Scheduler.load(schedule, Date.today.next_day).for_today
       unfinished_tasks.delete_if { |task| @tasks[:today].any? { |task2| task.text == task2.text } }
 
       first_personal_item = @tasks[:today].find { |task| ! task.tags.include?(:morning_ritual) && task.tags.include?(:work)}

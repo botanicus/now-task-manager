@@ -117,6 +117,11 @@ launchctl load -w ~/Library/LaunchAgents/botanicus.pomodoro_notification.plist
 - [15] Pomodoro: add postponing (with a reason).
 - [30] Pomodoro: add stats about total minutes expected and actual to the backup.
 
+Timeframing:
+Use alarm every day, get up at set time no matter what.
+Do what's important and sleep later.
+This way it's also easier to keep track of time frames.
+
 # TODO
  system %(osascript -e 'display notification "Times up!" with title "Times up!" sound name "Glass"')
 

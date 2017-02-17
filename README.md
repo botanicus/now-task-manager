@@ -61,8 +61,8 @@ log-time --bitbar
 EOF
 ```
 
-![](https://raw.githubusercontent.com/botanicus/pomodoro/master/doc/less-than-5m.png)
 ![](https://raw.githubusercontent.com/botanicus/pomodoro/master/doc/more-than-5m.png)
+![](https://raw.githubusercontent.com/botanicus/pomodoro/master/doc/less-than-5m.png)
 
 ## ZSH prompt.
 

@@ -1,0 +1,46 @@
+#!/usr/bin/env ruby
+
+# It should do something at the end of each pomodoro (ring). -> another launchd script
+# TODO: If the last pomodoro is still active, adjust it so it's finished.
+# OS X: It could show time remaning in the top-right bar.
+
+require 'internet-usage-limiter'
+
+# Usage:
+#
+# pomodoro [purpose of the session #tags] [time in minutes (defaults to 10)]
+# pomodoro for the status
+
+if ARGV.empty? || ARGV.include?('--prompt') || ARGV.include?('--bitbar')
+  log = InternetUsageLimiter::LogReader.new
+  if log.entries.last && log.entries.last.active?
+    if ARGV.include?('--prompt')
+      entry = log.entries.last
+      puts "#{entry.description} (#{(entry.time_till_the_end / 60).round(2)}min) "
+    elsif ARGV.include?('--bitbar')
+      entry = log.entries.last
+      time = (entry.time_till_the_end / 60).round(2).to_s.tr('.', ':')
+      puts "#{time}s"
+      puts "---"
+      puts entry.description
+      # TODO: Show a message if not set -> so I use the shit more.
+    else
+      puts log.entries.last
+    end
+  else
+    exit 1
+  end
+elsif ARGV.include?('--delete')
+  # TODO: Delete the last item.
+elsif ARGV.include?('--finish')
+  # TODO: Finish the last pomodoro (which will make you go offline if it was #online).
+else
+  reason_and_tags = ARGV.grep(/^\D+$/).join(' ')
+  minutes = ARGV.last.match(/^\d+$/) { |match| match[0].to_i } || 10
+
+  log_file_path = InternetUsageLimiter.config.log_file_path
+
+  File.open(log_file_path, 'a') do |file|
+    file.puts("#{Time.now.strftime('%d/%m/%Y %H:%M')} (#{minutes}min) #{reason_and_tags}")
+  end
+end

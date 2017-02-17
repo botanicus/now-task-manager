@@ -27,6 +27,10 @@ when 'next'
 
   manager.mark_active_task_as_done
   manager.save
+when 'next?'
+  abort "No more tasks." if manager.today_tasks.empty?
+  task = manager.active_task
+  puts "#{task.text} #{task.tags.map { |tag| "##{tag}" }.join(' ')} #{task.duration}"
 when 'today'
   unfinished_tasks = manager.today_tasks.select { |task| ! task.tags.include?(:done) }
   unless unfinished_tasks.empty?
@@ -85,5 +89,5 @@ when 'show-schedule'
   schedule = schedule.for_today(true)
   puts; puts schedule
 else
-  abort "Usage: #{$0} [next|today|punch-off|add|show-projects|show-schedule]."
+  abort "Usage: #{File.basename($0)} [next|next?|today|punch-off|add|show-projects|show-schedule]."
 end

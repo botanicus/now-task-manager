@@ -21,19 +21,11 @@ class Hour
   #   (@minutes * (rate / 60.0)).round(2)
   # end
 
-  def ==(anotherHour)
-    self.minutes == anotherHour.minutes
+  [:==, :eql?, :<, :<=, :>, :>=].each do |method_name|
+    define_method(method_name) do |anotherHour|
+      self.minutes.send(method_name, anotherHour.minutes)
+    end
   end
-  alias_method :eql?, :==
-
-  def <(anotherHour)
-    self.minutes < anotherHour.minutes
-  end
-
-  def >(anotherHour)
-    self.minutes > anotherHour.minutes
-  end
-  # TODO: <= and >=.
 
   def inspect
     "#{self.hours}:#{format('%02d', self.minutes_over_the_hour)}"

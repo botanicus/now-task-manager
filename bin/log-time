@@ -21,7 +21,8 @@ if ARGV.empty? || ARGV.include?('--prompt') || ARGV.include?('--bitbar') || ARGV
     elsif ARGV.include?('--bitbar')
       entry = log.entries.last
       time_till_the_end = Hour.new(0, entry.time_till_the_end)
-      color = (time_till_the_end < Hour.new(0, 5)) ? 'red' : 'green'
+      # Here it's actually min:s.
+      color = (time_till_the_end < Hour.new(0, 5 * 60)) ? 'red' : 'green'
       puts "#{time_till_the_end} | color=#{color}"
       puts "---"
       puts entry.description

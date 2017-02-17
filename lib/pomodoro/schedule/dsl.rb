@@ -38,7 +38,7 @@ module Pomodoro
 
       def require(schedule)
         path = File.expand_path("~/.config/pomodoro/schedules/#{schedule}.rb")
-        self.instance_eval(File.read(path))
+        self.instance_eval(File.read(path), path)
       end
 
       def rule(name, condition, &block)

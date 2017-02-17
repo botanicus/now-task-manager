@@ -5,25 +5,31 @@
 # OS X: It could show time remaning in the top-right bar.
 
 require 'internet-usage-limiter'
+require 'pomodoro/exts/hour'
 
 # Usage:
 #
 # pomodoro [purpose of the session #tags] [time in minutes (defaults to 10)]
 # pomodoro for the status
 
-if ARGV.empty? || ARGV.include?('--prompt') || ARGV.include?('--bitbar')
+if ARGV.empty? || ARGV.include?('--prompt') || ARGV.include?('--bitbar') || ARGV.include?('--commit-message')
   log = InternetUsageLimiter::LogReader.new
   if log.entries.last && log.entries.last.active?
     if ARGV.include?('--prompt')
       entry = log.entries.last
-      puts "#{entry.description} (#{(entry.time_till_the_end / 60).round(2)}min) "
+      puts "#{entry.description} [#{Hour.new(0, entry.time_till_the_end)}] "
     elsif ARGV.include?('--bitbar')
       entry = log.entries.last
-      time = (entry.time_till_the_end / 60).round(2).to_s.tr('.', ':')
-      puts "#{time}s"
+      time_till_the_end = Hour.new(0, entry.time_till_the_end)
+      color = (time_till_the_end < Hour.new(0, 5)) ? 'red' : 'green'
+      puts "#{time_till_the_end} | color=#{color}"
       puts "---"
       puts entry.description
       # TODO: Show a message if not set -> so I use the shit more.
+    elsif ARGV.include?('--commit-message')
+      description = log.entries.last.description
+      # Pomodoro: fix a bug -> Fix a bug.
+      puts description.sub(/^[^\s]+:\s*(.)(.+)$/) { "#{$1.upcase}#{$2}" }
     else
       puts log.entries.last
     end

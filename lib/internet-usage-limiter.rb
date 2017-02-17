@@ -75,6 +75,7 @@ module InternetUsageLimiter
       self.finishes_at - Time.now if self.active?
     end
 
+    # TODO: Use Hour.
     def overall_time
       @line[2].match(/\d+/)[0].to_i * 60
     end

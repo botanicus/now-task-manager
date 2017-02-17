@@ -26,6 +26,15 @@ class Hour
   end
   alias_method :eql?, :==
 
+  def <(anotherHour)
+    self.minutes < anotherHour.minutes
+  end
+
+  def >(anotherHour)
+    self.minutes > anotherHour.minutes
+  end
+  # TODO: <= and >=.
+
   def inspect
     "#{self.hours}:#{format('%02d', self.minutes_over_the_hour)}"
   end

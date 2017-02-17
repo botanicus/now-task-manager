@@ -62,7 +62,7 @@ when 'punch-off'
     system "vim #{TASK_LIST_PATH}"
   end
   manager = Pomodoro::TaskManager.parse(TASK_LIST_PATH)
-  puts; puts "Total time: #{Hour.new(0, manager.today_tasks.sum(&:duration}."
+  puts; puts "Total time: #{Hour.new(0, manager.today_tasks.sum(&:duration))}."
 when 'add', '+'
   manager.add_task_for_later(ARGV.join(' '))
   manager.save

@@ -10,6 +10,7 @@
 # - Plan tomorrow.
 
 require 'pomodoro'
+require 'pomodoro/exts/hour'
 
 TASK_LIST_PATH = File.expand_path('~/Dropbox/WIP/tasks.todo')
 manager = Pomodoro::TaskManager.parse(TASK_LIST_PATH)
@@ -27,8 +28,10 @@ when 'next'
   manager.mark_active_task_as_done
   manager.save
 when 'today'
-  unless manager.today_tasks.empty?
-    puts manager.today_tasks
+  unfinished_tasks = manager.today_tasks.select { |task| ! task.tags.include?(:done) }
+  unless unfinished_tasks.empty?
+    puts unfinished_tasks
+    puts; puts "Time to done: #{Hour.new(0, unfinished_tasks.sum(&:duration))}."
   else
     puts "All done!"
   end
@@ -56,8 +59,10 @@ when 'punch-off'
     puts manager.today_tasks
   else
     manager.save
-    exec "vim #{TASK_LIST_PATH}"
+    system "vim #{TASK_LIST_PATH}"
   end
+  manager = Pomodoro::TaskManager.parse(TASK_LIST_PATH)
+  puts; puts "Total time: #{Hour.new(0, manager.today_tasks.sum(&:duration}."
 when 'add', '+'
   manager.add_task_for_later(ARGV.join(' '))
   manager.save

@@ -5,7 +5,7 @@ module Pomodoro
   class Scheduler
     def self.load(schedule_path, today = Date.today)
       context = Pomodoro::Schedule::DSL.new(today)
-      context.instance_eval(File.read(schedule_path))
+      context.instance_eval(File.read(schedule_path), schedule_path)
       self.new(context)
     end
 

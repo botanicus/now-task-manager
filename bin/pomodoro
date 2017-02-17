@@ -38,19 +38,19 @@ when 'today'
 when 'punch-off'
   path = File.expand_path("~/Dropbox/WIP/Tasks/#{Time.now.strftime('%Y-%m-%d')}.todo")
   abort "File #{path} already exists!" if File.exists?(path)
+
+  finished_tasks = manager.finished_tasks.map do |task|
+    tags = task.tags - [:done]
+    Pomodoro::Task.new(task.text, task.duration, tags)
+  end
+
   unless ARGV.include?('--dry-run')
     File.open(path, 'w') do |file|
-      file.puts(manager.finished_tasks.map do |task|
-        tags = task.tags - [:done]
-        Pomodoro::Task.new(task.text, task.duration, tags)
-      end)
+      file.puts(finished_tasks)
     end
   else
     puts "#{path}:"
-    puts(manager.finished_tasks.map do |task|
-      tags = task.tags - [:done]
-      Pomodoro::Task.new(task.text, task.duration, tags)
-    end)
+    puts(finished_tasks)
   end
 
   manager.switch_days(File.expand_path('~/.config/pomodoro/schedules/base.rb'))

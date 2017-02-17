@@ -15,11 +15,8 @@ TASK_LIST_PATH = File.expand_path('~/Dropbox/WIP/tasks.todo')
 manager = Pomodoro::TaskManager.parse(TASK_LIST_PATH)
 
 case ARGV.shift
-when 'postpone'
-  # with a reason.
-when 'skip'
-  # without a reason.
-when 'discard'
+when 'postpone', 'skip', 'discard'
+  abort 'Currently found unnecessary. Pomodoro is trying to be simple and against skipping.'
 when 'next'
   abort "No more tasks." if manager.today_tasks.empty?
   task = manager.active_task
@@ -83,5 +80,5 @@ when 'show-schedule'
   schedule = schedule.for_today(true)
   puts; puts schedule
 else
-  abort "Usage: #{$0} [postpone|skip|discard|next|today|punch-off|add|show-projects|show-schedule]."
+  abort "Usage: #{$0} [next|today|punch-off|add|show-projects|show-schedule]."
 end

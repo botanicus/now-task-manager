@@ -48,6 +48,7 @@ end
  work_day_personal_schedule: ['14:00', '18:20']
  saturday_schedule: ['9:30', '18:20']
 ```
+
 ## BitBar plugin
 
 [BitBar](https://getbitbar.com/)
@@ -62,9 +63,52 @@ EOF
 
 _TODO: Screenshots._
 
+## ZSH prompt.
+
+_TODO_
+
 ## Limiting online access
 
+_TODO_
 This is why I wrote it in the first place.
+
+## OS X notifications
+
+`~/Library/LaunchAgents/botanicus.pomodoro_notification.plist`
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>botanicus.pomodoro_notification</string>
+
+    <key>ProgramArguments</key>
+    <array>
+      <string>zsh</string>
+      <string>-c</string>
+      <string>pomodoro-loop</string>
+    </array>
+
+    <key>RunAtLoad</key>
+    <true />
+
+    <key>KeepAlive</key>
+    <true />
+
+    <!-- I don't have permissions to write into /var/log. -->
+    <key>StandardOutPath</key>
+    <string>/tmp/botanicus.pomodoro_notification.stdout</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/botanicus.pomodoro_notification.stderr</string>
+  </dict>
+</plist>
+```
+
+```shell
+launchctl load -w ~/Library/LaunchAgents/botanicus.pomodoro_notification.plist
+```
 
 # Features under consideration
 

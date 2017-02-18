@@ -52,6 +52,8 @@ when 'punch-off'
     File.open(path, 'w') do |file|
       file.puts(finished_tasks)
     end
+    puts "Well done! Today you have done:\n\n"
+    puts(finished_tasks)
   else
     puts "#{path}:"
     puts(finished_tasks)

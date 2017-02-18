@@ -44,12 +44,13 @@ module Pomodoro
     end
 
     def switch_days(schedule)
+      tomorrow = Date.today.next_day
       unfinished_tasks = @tasks[:today].select { |task| ! task.tags.include?(:done) }
 
-      @tasks[:today] = Scheduler.load(schedule, Date.today.next_day).for_today
+      @tasks[:today] = Scheduler.load(schedule, tomorrow).for_today
       unfinished_tasks.delete_if { |task| @tasks[:today].any? { |task2| task.text == task2.text } }
 
-      tasks_for_tomorrow = @tasks[:tomorrow] || []
+      tasks_for_tomorrow = (tomorrow.sunday?) ? [] : (@tasks[:tomorrow] || [])
 
       first_personal_item = @tasks[:today].find do |task|
         ! task.tags.include?(:morning_ritual) && ! task.tags.include?(:work)
@@ -57,6 +58,8 @@ module Pomodoro
 
       position = @tasks[:today].index(first_personal_item) || @tasks[:today].length
       @tasks[:today].insert(position, *(unfinished_tasks + tasks_for_tomorrow))
+
+      @tasks[:tomorrow] -= tasks_for_tomorrow
     end
 
     def save(stream = File.open(@task_list_path, 'w'))

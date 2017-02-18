@@ -68,8 +68,17 @@ when 'punch-off'
   manager = Pomodoro::TaskManager.parse(TASK_LIST_PATH)
   puts; puts "Total time: #{Hour.new(0, manager.today_tasks.sum(&:duration))}."
 when 'add', '+'
-  manager.add_task_for_later(ARGV.join(' '))
-  manager.save
+  if File.exists?('tasks.todo') && ARGV[0].downcase.match("#{File.basename(Dir.pwd)}:")
+    puts "~ Appending locally."
+    manager = Pomodoro::TaskManager.parse('tasks.todo')
+    tasks = manager.instance_variable_get(:@tasks)
+    tasks[:tasks] ||= []
+    tasks[:tasks].push(Pomodoro::Task.new(ARGV.join(' ')))
+    manager.save
+  else
+    manager.add_task_for_later(ARGV.join(' '))
+    manager.save
+  end
 when 'edit'
   editor = ARGV.shift || ENV['EDITOR']
   exec "#{editor} #{TASK_LIST_PATH}"

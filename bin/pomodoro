@@ -70,6 +70,9 @@ when 'punch-off'
 when 'add', '+'
   manager.add_task_for_later(ARGV.join(' '))
   manager.save
+when 'edit'
+  editor = ARGV.shift || ENV['EDITOR']
+  exec "#{editor} #{TASK_LIST_PATH}"
 when 'show-projects'
   schedule = Pomodoro::Scheduler.load(File.expand_path('~/.config/pomodoro/schedules/base.rb'))
   puts schedule.projects
@@ -89,5 +92,5 @@ when 'show-schedule'
   schedule = schedule.for_today(true)
   puts; puts schedule
 else
-  abort "Usage: #{File.basename($0)} [next|next?|today|punch-off|add|show-projects|show-schedule]."
+  abort "Usage: #{File.basename($0)} [next|next?|today|punch-off|add|edit|show-projects|show-schedule]."
 end

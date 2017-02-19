@@ -3,4 +3,3 @@ Tasks:
 - Pomodoro: log-time tag #online
 - Pomodoro: log-time done to make as done, also when other item is added.
 - Pomodoro: loop that runs and automatically schedule breaks and next items from the list, becoming an actual pomodoro client. Use the say command to say what's going on.
-- Pomodoro: possibly task could have associated a command, such as for the morning day plan review or sys update.

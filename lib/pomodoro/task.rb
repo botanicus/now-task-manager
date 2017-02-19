@@ -21,5 +21,9 @@ module Pomodoro
       output << @tags.map { |tag| "##{tag}"}.join(' ') unless @tags.empty?
       output.join(' ')
     end
+
+    def command
+      $1 if @text.match(/^\$ (.+)$/)
+    end
   end
 end

@@ -21,9 +21,15 @@ when 'postpone', 'skip', 'discard'
 when 'next'
   abort "No more tasks." if manager.today_tasks.empty?
   task = manager.active_task
-  arguments = "#{task.text} #{task.tags.map { |tag| "##{tag}" }.join(' ')} #{task.duration}"
-  command = "log-time #{arguments.split(' ').map { |word| "'#{word}'" }.join(' ')}"
-  puts command; system command
+
+  if task.command
+    puts task.description
+    puts %x{#{task.command}}
+  else
+    arguments = "#{task.text} #{task.tags.map { |tag| "##{tag}" }.join(' ')} #{task.duration}"
+    command = "log-time #{arguments.split(' ').map { |word| "'#{word}'" }.join(' ')}"
+    puts command; system command
+  end
 
   manager.mark_active_task_as_done
   manager.save

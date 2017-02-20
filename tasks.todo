@@ -3,3 +3,7 @@ Tasks:
 - Pomodoro: log-time tag #online
 - Pomodoro: log-time done to make as done, also when other item is added.
 - Pomodoro: loop that runs and automatically schedule breaks and next items from the list, becoming an actual pomodoro client. Use the say command to say what's going on.
+- Pomodoro: better support for project-specific TODOs, i. e. I shouldn't have to be switched to the project dir.
+- Pomodoro: day review - launch Vim and write about the day to the day summary (Y%-%m-%d.todo)
+- Pomodoro: instead of minutes, use number of Pomodoros. How to deal with done then?
+- Pomodoro: Zip-traffic style breaks/work (TopTal, then meditation).

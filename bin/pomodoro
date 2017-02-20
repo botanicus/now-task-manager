@@ -77,6 +77,7 @@ when 'punch-off'
   puts; puts "Total time: #{Hour.new(0, manager.today_tasks.sum(&:duration))}."
 when 'add', '+'
   if File.exists?('tasks.todo') && ARGV[0].downcase.match("#{File.basename(Dir.pwd)}:")
+    # TODO: Fails for .bitbar.
     puts "~ Appending locally."
     manager = Pomodoro::TaskManager.parse('tasks.todo')
     tasks = manager.instance_variable_get(:@tasks)

@@ -59,7 +59,7 @@ module Pomodoro
       position = @tasks[:today].index(first_personal_item) || @tasks[:today].length
       @tasks[:today].insert(position, *(unfinished_tasks + tasks_for_tomorrow))
 
-      @tasks[:tomorrow] -= tasks_for_tomorrow
+      @tasks[:tomorrow] -= tasks_for_tomorrow if @tasks[:tomorrow]
     end
 
     def save(stream = File.open(@task_list_path, 'w'))

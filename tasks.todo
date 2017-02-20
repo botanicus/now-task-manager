@@ -7,3 +7,4 @@ Tasks:
 - Pomodoro: day review - launch Vim and write about the day to the day summary (Y%-%m-%d.todo)
 - Pomodoro: instead of minutes, use number of Pomodoros. How to deal with done then?
 - Pomodoro: Zip-traffic style breaks/work (TopTal, then meditation).
+- Pomodoro: it would be nice to allow for multiple lines for notes.

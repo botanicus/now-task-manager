@@ -55,9 +55,15 @@ when 'punch-off'
   end
 
   unless ARGV.include?('--dry-run')
+    require 'date' # TODO: use the lib.
+    lines = File.readlines(File.expand_path('~/Dropbox/WIP/Pomodoro.log'))
+    today = Date.today.strftime('%d/%m/%Y')
+    log_items = lines.grep(/^#{today} /)
     File.open(path, 'w') do |file|
       file.puts("\n\n")
       file.puts(finished_tasks)
+      file.puts("\n")
+      file.puts(log_items)
     end
     # puts "Well done! Today you have done:\n\n"
     # puts(finished_tasks)

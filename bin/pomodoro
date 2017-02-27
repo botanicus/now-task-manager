@@ -56,10 +56,12 @@ when 'punch-off'
 
   unless ARGV.include?('--dry-run')
     File.open(path, 'w') do |file|
+      file.puts("\n\n")
       file.puts(finished_tasks)
     end
-    puts "Well done! Today you have done:\n\n"
-    puts(finished_tasks)
+    # puts "Well done! Today you have done:\n\n"
+    # puts(finished_tasks)
+    system("vim #{path}")
   else
     puts "#{path}:"
     puts(finished_tasks)

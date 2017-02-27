@@ -23,8 +23,8 @@ when 'next'
   task = manager.active_task
 
   if task.command
-    puts task.description
-    puts %x{#{task.command}}
+    puts task.text
+    puts %x{#{task.command}} # TODO: Time.timer -> update log-time.
   else
     arguments = "#{task.text} #{task.tags.map { |tag| "##{tag}" }.join(' ')} #{task.duration}"
     command = "log-time #{arguments.split(' ').map { |word| "'#{word}'" }.join(' ')}"

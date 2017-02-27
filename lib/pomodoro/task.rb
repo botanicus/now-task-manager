@@ -23,7 +23,7 @@ module Pomodoro
     end
 
     def command
-      $1 if @text.match(/^\$ (.+)$/)
+      $1 if @text.match(/\$\s+(.+)$/)
     end
   end
 end

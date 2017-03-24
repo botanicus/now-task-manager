@@ -11,9 +11,12 @@
 
 require 'pomodoro'
 require 'pomodoro/exts/hour'
+require 'refined-refinements/colours'
 
 TASK_LIST_PATH = File.expand_path('~/Dropbox/WIP/tasks.todo')
 manager = Pomodoro::TaskManager.parse(TASK_LIST_PATH)
+
+using CoreExts
 
 case ARGV.shift
 when 'postpone', 'skip', 'discard'
@@ -46,7 +49,14 @@ when 'today'
     puts "All done!"
   end
 when 'punch-off'
-  path = File.expand_path("~/Dropbox/WIP/Tasks/#{Time.now.strftime('%Y-%m-%d')}.todo")
+  require 'date' # TODO: use the lib.
+
+  path = if ARGV.include?('--yesterday')
+    File.expand_path("~/Dropbox/WIP/Tasks/#{Date.today.prev_day.strftime('%Y-%m-%d')}.todo")
+  else
+    File.expand_path("~/Dropbox/WIP/Tasks/#{Date.today.strftime('%Y-%m-%d')}.todo")
+  end
+
   abort "File #{path} already exists!" if File.exists?(path)
 
   finished_tasks = manager.finished_tasks.map do |task|
@@ -55,7 +65,6 @@ when 'punch-off'
   end
 
   unless ARGV.include?('--dry-run')
-    require 'date' # TODO: use the lib.
     lines = File.readlines(File.expand_path('~/Dropbox/WIP/Pomodoro.log'))
     today = Date.today.strftime('%d/%m/%Y')
     log_items = lines.grep(/^#{today} /)
@@ -118,5 +127,20 @@ when 'show-schedule'
   schedule = schedule.for_today(true)
   puts; puts schedule
 else
-  abort "Usage: #{File.basename($0)} [next|next?|today|punch-off|add|edit|show-projects|show-schedule]."
+  abort(colourise(DATA.read))
 end
+
+__END__
+
+<red.bold>:: Pomodoro ::</red>
+
+  pomodoro next
+  pomodoro next?
+  pomodoro today
+  pomodoro punch-off
+  pomodoro punch-off --yesterday
+  pomodoro punch-off --dry-run
+  pomodoro add
+  pomodoro edit
+  pomodoro show-projects
+  pomodoro show-schedule

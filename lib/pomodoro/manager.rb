@@ -52,6 +52,15 @@ module Pomodoro
 
       tasks_for_tomorrow = (tomorrow.sunday?) ? [] : (@tasks[:tomorrow] || [])
 
+      # Parse dates like "Wednesday", "1/1", "Wednesday 1/1" etc.
+      @tasks.keys.each do |key|
+        date = Date.parse(key.to_s) rescue nil
+        if date && date == tomorrow
+          tasks_for_tomorrow.push(*@tasks[key])
+          @tasks.delete(key)
+        end
+      end
+
       first_personal_item = @tasks[:today].find do |task|
         ! task.tags.include?(:morning_ritual) && ! task.tags.include?(:work)
       end

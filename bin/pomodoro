@@ -103,6 +103,36 @@ when 'add', '+'
     manager.add_task_for_later(ARGV.join(' '))
     manager.save
   end
+when 'review-and-plan', 'rp'
+  today = Date.today
+
+  # TODO: Quarters currently unsupported. Don't be lazy, do it manually!
+  interval = if today == Date.parse('1/1') then :year
+          elsif today == Date.parse("1/#{today.month}") then :month
+          elsif today.sunday? then :week
+          else raise("Unknown interval")
+  end
+
+  today_date_string = Date.today.strftime('%Y-%m-%d')
+
+  review_path = File.expand_path("~/Dropbox/WIP/Tasks/#{today_date_string}.#{interval}.review")
+  plan_path   = File.expand_path("~/Dropbox/WIP/Tasks/#{today_date_string}.#{interval}.plan")
+
+  File.open(review_path, 'w') do |file|
+    file.puts <<-EOF
+# How did the week go?
+# Observations? Diet, drinking, state of mind ...
+    EOF
+  end
+
+  File.open(plan_path, 'w') do |file|
+    file.puts <<-EOF
+# Important, urgent, long-term.
+    EOF
+  end
+
+  system("vim '#{review_path}'")
+  system("vim '#{plan_path}'")
 when 'edit'
   editor = ARGV.shift || ENV['EDITOR']
   exec "#{editor} #{TASK_LIST_PATH}"
@@ -161,8 +191,7 @@ __END__
   Plan in the evening and then stick to it.
 
 <bright_black>pomodoro</bright_black> <cyan>edit</cyan>
-  Edit tasks.todo.
-  $EDITOR
+  Edit tasks.todo using <bright_black>$EDITOR</bright_black>.
 
 <bright_black>pomodoro</bright_black> <green.bold>show-projects</green.bold>
   Show active projects.

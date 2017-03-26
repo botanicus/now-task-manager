@@ -1,8 +1,12 @@
 require 'date'
+require 'refined-refinements/date'
+
 require 'pomodoro/schedule/dsl'
 
 module Pomodoro
   class Scheduler
+    using RR::DateExts
+
     def self.load(schedule_path, today = Date.today)
       context = Pomodoro::Schedule::DSL.new(today)
       context.instance_eval(File.read(schedule_path), schedule_path)

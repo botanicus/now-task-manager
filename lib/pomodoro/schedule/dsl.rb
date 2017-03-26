@@ -1,8 +1,5 @@
 require 'pomodoro/task'
 
-require 'date'
-require 'refined-refinements/date'
-
 module Pomodoro
   module Schedule
     class Rule
@@ -20,11 +17,8 @@ module Pomodoro
     end
 
     class DSL
-      using RR::DateExts
-
       attr_reader :rules, :projects, :today
       def initialize(today = Date.today)
-        # today.extend(DateExts)
         @rules = Hash.new
         @projects = Array.new
         @today = today

@@ -90,20 +90,7 @@ when 'punch-off'
   end
   manager = Pomodoro::TaskManager.parse(TASK_LIST_PATH)
   puts; puts "Total time: #{Hour.new(0, manager.today_tasks.sum(&:duration))}."
-when 'add', '+'
-  if File.exists?('tasks.todo') && ARGV[0].downcase.match("#{File.basename(Dir.pwd)}:")
-    # TODO: Fails for .bitbar.
-    puts "~ Appending locally."
-    manager = Pomodoro::TaskManager.parse('tasks.todo')
-    tasks = manager.instance_variable_get(:@tasks)
-    tasks[:tasks] ||= []
-    tasks[:tasks].push(Pomodoro::Task.new(ARGV.join(' ')))
-    manager.save
-  else
-    manager.add_task_for_later(ARGV.join(' '))
-    manager.save
-  end
-when 'review-and-plan', 'rp'
+when 'review-and-plan'
   today = Date.today
 
   # TODO: Quarters currently unsupported. Don't be lazy, do it manually!
@@ -133,6 +120,19 @@ when 'review-and-plan', 'rp'
 
   system("vim '#{review_path}'")
   system("vim '#{plan_path}'")
+when 'add', '+'
+  if File.exists?('tasks.todo') && ARGV[0].downcase.match("#{File.basename(Dir.pwd)}:")
+    # TODO: Fails for .bitbar.
+    puts "~ Appending locally."
+    manager = Pomodoro::TaskManager.parse('tasks.todo')
+    tasks = manager.instance_variable_get(:@tasks)
+    tasks[:tasks] ||= []
+    tasks[:tasks].push(Pomodoro::Task.new(ARGV.join(' ')))
+    manager.save
+  else
+    manager.add_task_for_later(ARGV.join(' '))
+    manager.save
+  end
 when 'edit'
   editor = ARGV.shift || ENV['EDITOR']
   exec "#{editor} #{TASK_LIST_PATH}"
@@ -182,6 +182,17 @@ __END__
   Punch off for yesterday.
 
 <bright_black>pomodoro</bright_black> <blue.bold>punch-off</blue.bold> --dry-run
+
+<bright_black>pomodoro</bright_black> <cyan>review-and-plan</cyan>
+  Create and open review and plan files for editing.
+
+  Based on current date, it will be either:
+    <blue>Weekly</blue> review & plan if it's Sunday.
+    <blue>Monthly</blue> review & plan if it's the first day of a month.
+    <blue>Yearly</blue> review & plan if it's the 1st of January.
+
+  Note that as of now there is no support for quaterly reviews,
+  but you can just add them manually.
 
 <bright_black>pomodoro</bright_black> <yellow>add</yellow>
 <bright_black>pomodoro</bright_black> <yellow>+</yellow>

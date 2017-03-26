@@ -16,8 +16,6 @@ require 'refined-refinements/colours'
 TASK_LIST_PATH = File.expand_path('~/Dropbox/WIP/tasks.todo')
 manager = Pomodoro::TaskManager.parse(TASK_LIST_PATH)
 
-using CoreExts
-
 case ARGV.shift
 when 'postpone', 'skip', 'discard'
   abort 'Currently found unnecessary. Pomodoro is trying to be simple and against skipping.'
@@ -126,21 +124,48 @@ when 'show-schedule'
   puts "#{date.strftime('%A %d/%m/%Y')}:"
   schedule = schedule.for_today(true)
   puts; puts schedule
+when '-h', '--help'
+  using RR::ColourExts
+  puts(DATA.read.colourise)
 else
-  abort(colourise(DATA.read))
+  using RR::ColourExts
+  abort(DATA.read.colourise)
 end
 
 __END__
 
-<red.bold>:: Pomodoro ::</red>
+<red.bold>:: Pomodoro ::</red.bold>
 
-  pomodoro next
-  pomodoro next?
-  pomodoro today
-  pomodoro punch-off
-  pomodoro punch-off --yesterday
-  pomodoro punch-off --dry-run
-  pomodoro add
-  pomodoro edit
-  pomodoro show-projects
-  pomodoro show-schedule
+<bright_black>pomodoro</bright_black> <magenta>next</magenta>
+  Start a new pomodoro from tasks.todo.
+
+<bright_black>pomodoro</bright_black> <red>next?</red>
+  Displays the next pomodoro.
+
+<bright_black>pomodoro</bright_black> <green>today</green>
+  Shows today's tasks.
+
+<bright_black>pomodoro</bright_black> <blue.bold>punch-off</blue.bold>
+  Punch off for the day.
+
+<bright_black>pomodoro</bright_black> <blue.bold>punch-off</blue.bold> --yesterday
+  Punch off for yesterday.
+
+<bright_black>pomodoro</bright_black> <blue.bold>punch-off</blue.bold> --dry-run
+
+<bright_black>pomodoro</bright_black> <yellow>add</yellow>
+<bright_black>pomodoro</bright_black> <yellow>+</yellow>
+  Add a task for later.
+
+  Note that this is by design. You should not be adding tasks for today during the day.
+  Plan in the evening and then stick to it.
+
+<bright_black>pomodoro</bright_black> <cyan>edit</cyan>
+  Edit tasks.todo.
+  $EDITOR
+
+<bright_black>pomodoro</bright_black> <green.bold>show-projects</green.bold>
+  Show active projects.
+
+<bright_black>pomodoro</bright_black> <yellow.bold>show-schedule</yellow.bold>
+<bright_black>pomodoro</bright_black> <yellow.bold>show-schedule 24/12/2018</yellow.bold>

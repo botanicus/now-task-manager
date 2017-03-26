@@ -1,5 +1,6 @@
-require 'date'
 require 'pomodoro/task'
+
+require 'date'
 require 'refined-refinements/date'
 
 module Pomodoro

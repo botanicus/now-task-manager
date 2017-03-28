@@ -49,11 +49,8 @@ when 'today'
 when 'punch-off'
   require 'date' # TODO: use the lib.
 
-  path = if ARGV.include?('--yesterday')
-    File.expand_path("~/Dropbox/WIP/Tasks/#{Date.today.prev_day.strftime('%Y-%m-%d')}.todo")
-  else
-    File.expand_path("~/Dropbox/WIP/Tasks/#{Date.today.strftime('%Y-%m-%d')}.todo")
-  end
+  date = ARGV.include?('--yesterday') ? Date.today.prev_day : Date.today
+  path = File.expand_path("~/Dropbox/WIP/Tasks/#{date.strftime('%Y-%m-%d')}.todo")
 
   abort "File #{path} already exists!" if File.exists?(path)
 
@@ -64,8 +61,7 @@ when 'punch-off'
 
   unless ARGV.include?('--dry-run')
     lines = File.readlines(File.expand_path('~/Dropbox/WIP/Pomodoro.log'))
-    today = Date.today.strftime('%d/%m/%Y')
-    log_items = lines.grep(/^#{today} /)
+    log_items = lines.grep(/^#{date.strftime('%d/%m/%Y')} /)
     File.open(path, 'w') do |file|
       file.puts("\n\n")
       file.puts(finished_tasks)
@@ -80,7 +76,7 @@ when 'punch-off'
     puts(finished_tasks)
   end
 
-  manager.switch_days(File.expand_path('~/.config/pomodoro/schedules/base.rb'))
+  manager.switch_days(date.next_day, File.expand_path('~/.config/pomodoro/schedules/base.rb'))
   if ARGV.include?('--dry-run')
     puts "\n\nTomorrow:"
     puts manager.today_tasks

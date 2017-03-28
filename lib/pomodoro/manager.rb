@@ -43,8 +43,7 @@ module Pomodoro
       self.today_tasks.select { |task| task.tags.include?(:done) }
     end
 
-    def switch_days(schedule)
-      tomorrow = Date.today.next_day
+    def switch_days(tomorrow, schedule)
       unfinished_tasks = @tasks[:today].select { |task| ! task.tags.include?(:done) }
 
       @tasks[:today] = Scheduler.load(schedule, tomorrow).for_today

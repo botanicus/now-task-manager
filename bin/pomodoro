@@ -11,7 +11,7 @@
 
 require 'pomodoro'
 require 'pomodoro/exts/hour'
-require 'refined-refinements/colours'
+# require 'refined-refinements/colours' # Not needed for bitbar for instance.
 
 TASK_LIST_PATH = File.expand_path('~/Dropbox/WIP/tasks.todo')
 manager = Pomodoro::TaskManager.parse(TASK_LIST_PATH)

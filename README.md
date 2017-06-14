@@ -43,7 +43,7 @@ end
 ```yaml
 # ~/.config/internet-usage-limiter.yml
 ---
- log_file_path: ~/Dropbox/WIP/Pomodoro.log
+ log_file_path: ~/Dropbox/Data/WIP/Pomodoro.log
  work_day_work_schedule: ['9:30', '14:00']
  work_day_personal_schedule: ['14:00', '18:20']
  saturday_schedule: ['9:30', '18:20']

@@ -56,7 +56,7 @@ module Pomodoro
       end
 
       def project_of_the_week_path
-        File.expand_path('~/Dropbox/WIP/project_of_the_week.txt')
+        File.expand_path('~/Dropbox/Data/WIP/project_of_the_week.txt')
       end
 
       # TODO: load past projects of the week to make sure we're not repeating.

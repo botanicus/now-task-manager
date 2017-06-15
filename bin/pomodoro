@@ -49,7 +49,7 @@ when 'punch-off'
   require 'date' # TODO: use the lib.
 
   date = ARGV.include?('--yesterday') ? Date.today.prev_day : Date.today
-  path = File.expand_path("~/Dropbox/Data/Tasks/#{date.strftime('%Y-%m-%d')}.todo")
+  path = File.expand_path("~/Dropbox/Data/Archive/Tasks/#{date.strftime('%Y-%m-%d')}.todo")
 
   abort "File #{path} already exists!" if File.exists?(path)
 
@@ -59,7 +59,7 @@ when 'punch-off'
   end
 
   unless ARGV.include?('--dry-run')
-    lines = File.readlines(File.expand_path('~/Dropbox/Data/Tasks/Pomodoro.log'))
+    lines = File.readlines(File.expand_path('~/Dropbox/Data/Archive/Pomodoro.log'))
     log_items = lines.grep(/^#{date.strftime('%d/%m/%Y')} /)
     File.open(path, 'w') do |file|
       file.puts("\n\n")

@@ -75,7 +75,7 @@ when 'punch-off'
     puts(finished_tasks)
   end
 
-  manager.switch_days(date.next_day, File.expand_path('~/.config/pomodoro/schedules/base.rb'))
+  manager.switch_days(date.next_day, File.expand_path('~/Dropbox/Data/Data/Pomodoro/schedules/base.rb'))
   if ARGV.include?('--dry-run')
     puts "\n\nTomorrow:"
     puts manager.today_tasks
@@ -132,7 +132,7 @@ when 'edit'
   editor = ARGV.shift || ENV['EDITOR']
   exec "#{editor} #{TASK_LIST_PATH}"
 when 'show-projects'
-  schedule = Pomodoro::Scheduler.load(File.expand_path('~/.config/pomodoro/schedules/base.rb'))
+  schedule = Pomodoro::Scheduler.load(File.expand_path('~/Dropbox/Data/Data/Pomodoro/schedules/base.rb'))
   puts schedule.projects
   puts "\n#{schedule.projects.length} in total, repeats every #{((schedule.projects.length * 7) / 30.0).round(2)} months."
 when 'show-schedule'
@@ -144,7 +144,7 @@ when 'show-schedule'
     date = Date.today
   end
 
-  schedule = Pomodoro::Scheduler.load(File.expand_path('~/.config/pomodoro/schedules/base.rb'), date)
+  schedule = Pomodoro::Scheduler.load(File.expand_path('~/Dropbox/Data/Data/Pomodoro/schedules/base.rb'), date)
 
   puts "#{date.strftime('%A %d/%m/%Y')}:"
   schedule = schedule.for_today(true)

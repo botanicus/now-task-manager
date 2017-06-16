@@ -153,6 +153,8 @@ when '-h', '--help'
   require 'refined-refinements/colours'
   using RR::ColourExts
   puts(DATA.read.colourise)
+  # From expenses to allow #{eval}:
+  # puts DATA.read.colourise.gsub(/#\{[^}]+\}/) { |match| eval(match[2..-2]) }
 else
   require 'refined-refinements/colours'
   using RR::ColourExts

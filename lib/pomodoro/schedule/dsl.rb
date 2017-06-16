@@ -25,7 +25,7 @@ module Pomodoro
       end
 
       def require(schedule)
-        path = File.expand_path("~/.config/pomodoro/schedules/#{schedule}.rb")
+        path = File.expand_path("~/Dropbox/Data/Data/Pomodoro/schedules/#{schedule}.rb")
         self.instance_eval(File.read(path), path)
       end
 

@@ -25,7 +25,7 @@ module Pomodoro
       end
 
       def require(schedule)
-        path = File.expand_path("~/Dropbox/Data/Data/Pomodoro/schedules/#{schedule}.rb")
+        path = File.expand_path("~/Dropbox/Data/Data/Pomodoro/Schedules/#{schedule}.rb")
         self.instance_eval(File.read(path), path)
       end
 
@@ -55,24 +55,24 @@ module Pomodoro
         @projects[rand(@projects.length)]
       end
 
-      def project_of_the_week_path
-        File.expand_path('~/Dropbox/Data/WIP/project_of_the_week.txt')
-      end
-
-      # TODO: load past projects of the week to make sure we're not repeating.
-      # TODO: possibly store in tasks.todo as well.
-      # TODO: dry run with show-schedule rewrites the file.
-      def project_of_the_week
-        unless File.exists?(project_of_the_week_path)
-          File.open(project_of_the_week_path, 'w') { |f| f.puts(random_project) }
-        end
-        File.read(project_of_the_week_path).chomp
-      end
-
-      def switch_project_of_the_week
-        File.unlink(project_of_the_week_path)
-      rescue Errno::ENOENT
-      end
+    #   def project_of_the_week_path
+    #     File.expand_path('~/Dropbox/Data/WIP/project_of_the_week.txt')
+    #   end
+    #
+    #   # TODO: load past projects of the week to make sure we're not repeating.
+    #   # TODO: possibly store in tasks.todo as well.
+    #   # TODO: dry run with show-schedule rewrites the file.
+    #   def project_of_the_week
+    #     unless File.exists?(project_of_the_week_path)
+    #       File.open(project_of_the_week_path, 'w') { |f| f.puts(random_project) }
+    #     end
+    #     File.read(project_of_the_week_path).chomp
+    #   end
+    #
+    #   def switch_project_of_the_week
+    #     File.unlink(project_of_the_week_path)
+    #   rescue Errno::ENOENT
+    #   end
     end
   end
 end

@@ -24,9 +24,12 @@ module Pomodoro
         @today = today
       end
 
+      alias_method :_require, :require
       def require(schedule)
         path = File.expand_path("~/Dropbox/Data/Data/Pomodoro/Schedules/#{schedule}.rb")
         self.instance_eval(File.read(path), path)
+      rescue Errno::ENOENT # require 'pry'
+        _require schedule
       end
 
       def rule(name, condition, &block)

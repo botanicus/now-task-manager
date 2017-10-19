@@ -4,7 +4,7 @@ require 'pomodoro/scheduler'
 module Pomodoro
   class TaskManager
     def self.parse(task_list_path)
-      hash = File.readlines(task_list_path).reduce(Hash.new) do |buffer, line|
+      hash = File.readlines(task_list_path, encoding: 'utf-8').reduce(Hash.new) do |buffer, line|
         line.chomp!
         buffer.merge!(line[0..-2].downcase.to_sym => []) if line.match(/:$/)
         buffer[buffer.keys.last].push(Task.parse(line)) if line.match(/^- /)

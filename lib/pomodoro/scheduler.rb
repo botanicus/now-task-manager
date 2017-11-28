@@ -8,7 +8,8 @@ module Pomodoro
     using RR::DateExts
 
     def self.load(schedule_path, today = Date.today)
-      context = Pomodoro::Schedule::DSL.new(today)
+      schedule_dir = File.expand_path("#{schedule_path}/..")
+      context = Pomodoro::Schedule::DSL.new(today, schedule_dir)
       context.instance_eval(File.read(schedule_path), schedule_path)
       self.new(context)
     end
@@ -24,10 +25,6 @@ module Pomodoro
           rule.call(tasks) if rule.true?
         end
       end
-    end
-
-    def projects
-      @schedule.projects
     end
   end
 end

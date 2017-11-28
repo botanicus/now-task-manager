@@ -1,4 +1,9 @@
 class Hour
+  def self.parse(string)
+    hours, minutes = string.split(':')
+    self.new(hours, minutes)
+  end
+
   attr_reader :minutes
   def initialize(hours, minutes = 0)
     @minutes = (hours * 60) + minutes

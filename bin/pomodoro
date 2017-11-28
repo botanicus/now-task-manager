@@ -1,19 +1,10 @@
 #!/usr/bin/env ruby
 
-# Today:
-# - [20] Meditation. #meditation
-#   {started: '9:20', 'finished': '10:20', pomodoros: 4, waiting_for: 'Email from ...'}
-# - [20] Dancing.
-# - [15] TopTal. #online #work
-# - Some cleanup.
-# - [90] Write a blog post. #online
-# - Plan tomorrow.
-
 require 'pomodoro'
 require 'pomodoro/exts/hour'
 
-TASK_LIST_PATH = File.expand_path('~/Dropbox/Data/WIP/tasks.todo')
-manager = Pomodoro::TaskManager.parse(TASK_LIST_PATH)
+config  = Pomodoro::Config.new
+manager = Pomodoro::TaskManager.parse(config.task_list_path)
 
 case ARGV.shift
 when 'postpone', 'skip', 'discard'

@@ -1,6 +1,7 @@
 require 'date'
 require 'pomodoro/task'
 require 'pomodoro/time_frame'
+require 'pomodoro/task_list'
 
 module Pomodoro
   module Schedule
@@ -22,6 +23,10 @@ module Pomodoro
     end
 
     class Schedule < Thing
+      def call
+        list = @callable.call
+        TaskList.new(list)
+      end
     end
 
     class DSL
@@ -33,7 +38,7 @@ module Pomodoro
 
       alias_method :_require, :require
       def require(schedule)
-        path = File.expand_path("#{schedule_dir}/#{schedule}.rb")
+        path = File.expand_path("#{@schedule_dir}/#{schedule}.rb")
         self.instance_eval(File.read(path), path)
       rescue Errno::ENOENT # require 'pry'
         _require schedule

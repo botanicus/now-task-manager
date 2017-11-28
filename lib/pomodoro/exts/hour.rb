@@ -1,7 +1,7 @@
 class Hour
   def self.parse(string)
     hours, minutes = string.split(':')
-    self.new(hours, minutes)
+    self.new(hours.to_i, minutes.to_i)
   end
 
   attr_reader :minutes

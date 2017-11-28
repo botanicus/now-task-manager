@@ -1,7 +1,34 @@
 require 'pomodoro/task'
+require 'pomodoro/time_frame'
 require 'pomodoro/scheduler'
 
 module Pomodoro
+  class DayManager
+    def self.parse(task_list_path)
+      hash = File.readlines(task_list_path, encoding: 'utf-8').reduce(Hash.new) do |buffer, line|
+        line.chomp!
+        buffer.merge!(line[0..-2].downcase.to_sym => []) if line.match(/^[^-#].+\(.+\)/)
+        buffer[buffer.keys.last].push(Task.parse(line)) if line.match(/^- /)
+        buffer
+      end
+
+      self.new(hash, task_list_path)
+    end
+
+    def mark_active_task_as_done # TODO: WIP
+      #Time.now.strftime('%H:%M')
+      self.active_task.tags.push(:done)
+    end
+
+    def active_task
+      self.today_tasks.find { |task| ! task.tags.include?(:done) }
+    end
+
+    def finished_tasks
+      self.today_tasks.select { |task| task.tags.include?(:done) }
+    end
+  end
+
   class TaskManager
     def self.parse(task_list_path)
       hash = File.readlines(task_list_path, encoding: 'utf-8').reduce(Hash.new) do |buffer, line|
@@ -18,29 +45,12 @@ module Pomodoro
       @tasks, @task_list_path = tasks, task_list_path
     end
 
-    def today_tasks
-      @tasks[:today]
-    end
-
     def tasks_for_later
       @tasks[:later]
     end
 
-    def mark_active_task_as_done
-      #Time.now.strftime('%H:%M')
-      self.active_task.tags.push(:done)
-    end
-
-    def active_task
-      self.today_tasks.find { |task| ! task.tags.include?(:done) }
-    end
-
     def add_task_for_later(task)
       @tasks[:later] << Task.new(task)
-    end
-
-    def finished_tasks
-      self.today_tasks.select { |task| task.tags.include?(:done) }
     end
 
     def switch_days(tomorrow, schedule)

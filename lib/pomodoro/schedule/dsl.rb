@@ -1,8 +1,10 @@
+require 'date'
 require 'pomodoro/task'
+require 'pomodoro/time_frame'
 
 module Pomodoro
   module Schedule
-    class Rule
+    class Thing
       def initialize(condition, &block)
         @condition, @callable = condition, block
       end
@@ -16,20 +18,29 @@ module Pomodoro
       end
     end
 
+    class Rule < Thing
+    end
+
+    class Schedule < Thing
+    end
+
     class DSL
-      attr_reader :rules, :projects, :today
-      def initialize(today = Date.today)
-        @rules = Hash.new
-        @projects = Array.new
-        @today = today
+      attr_reader :rules, :schedules, :today
+      def initialize(schedule_dir, today = Date.today)
+        @schedule_dir, @today = schedule_dir, today
+        @rules, @schedules = Hash.new, Hash.new
       end
 
       alias_method :_require, :require
       def require(schedule)
-        path = File.expand_path("~/Dropbox/Data/Data/Pomodoro/Schedules/#{schedule}.rb")
+        path = File.expand_path("#{schedule_dir}/#{schedule}.rb")
         self.instance_eval(File.read(path), path)
       rescue Errno::ENOENT # require 'pry'
         _require schedule
+      end
+
+      def schedule(name, condition, &block)
+        @schedules[name] = Schedule.new(condition, &block)
       end
 
       def rule(name, condition, &block)
@@ -49,33 +60,6 @@ module Pomodoro
           last_work_day_of_a_month = last_day_of_a_month
         end
       end
-
-      def project(project)
-        @projects << project
-      end
-
-      def random_project
-        @projects[rand(@projects.length)]
-      end
-
-    #   def project_of_the_week_path
-    #     File.expand_path('~/Dropbox/Data/WIP/project_of_the_week.txt')
-    #   end
-    #
-    #   # TODO: load past projects of the week to make sure we're not repeating.
-    #   # TODO: possibly store in tasks.todo as well.
-    #   # TODO: dry run with show-schedule rewrites the file.
-    #   def project_of_the_week
-    #     unless File.exists?(project_of_the_week_path)
-    #       File.open(project_of_the_week_path, 'w') { |f| f.puts(random_project) }
-    #     end
-    #     File.read(project_of_the_week_path).chomp
-    #   end
-    #
-    #   def switch_project_of_the_week
-    #     File.unlink(project_of_the_week_path)
-    #   rescue Errno::ENOENT
-    #   end
     end
   end
 end

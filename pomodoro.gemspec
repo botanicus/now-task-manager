@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name        = 'pomodoro'
-  s.version     = '0.0.1'
+  s.version     = '0.1.0'
   s.authors     = ['James C Russell']
   s.email       = 'james@101ideas.cz'
   s.homepage    = 'http://github.com/botanicus/pomodoro'

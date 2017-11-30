@@ -1,0 +1,8 @@
+*today.txt* Plugin for http://github.com/botanicus/pomodoro
+
+Blah blah desc do this later.
+
+Mappings:
+  ta: go to the active task.
+  td: mark the active task as done.
+  ts: start a new task.

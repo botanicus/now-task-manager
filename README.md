@@ -6,9 +6,9 @@ Simple command-line task management tool supporting time framing.
 
 Tasks are stored in readable plain text format.
 
-- ☑ Command-line interface.
-- ☑ Vim plugin.
-- ☑ BitBar plugin.
+- ✓ Command-line interface.
+- ✓ Vim plugin.
+- ✓ BitBar plugin.
 
 ## Why?
 

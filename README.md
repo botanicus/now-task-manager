@@ -6,7 +6,7 @@ Simple command-line task management tool supporting time framing.
 
 Simple command-line [pomodoro] client.
 
-![](https://raw.githubusercontent.com/botanicus/pomodoro/master/doc/today.png)
+![](https://raw.githubusercontent.com/botanicus/pomodoro/master/doc/today-annotated.png)
 
 ## Why?
 

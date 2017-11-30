@@ -2,11 +2,13 @@
 
 Simple command-line task management tool supporting time framing.
 
-[Pomodoro technique]((http://cirillocompany.de/pages/pomodoro-technique)) is great.
-
-Simple command-line [pomodoro] client.
-
 ![](https://raw.githubusercontent.com/botanicus/pomodoro/master/doc/today-annotated.png)
+
+Tasks are stored in readable plain text format.
+
+✔ Command-line interface.
+✔ Vim plugin.
+✔ BitBar plugin.
 
 ## Why?
 

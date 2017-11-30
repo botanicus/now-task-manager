@@ -1,3 +1,4 @@
 Tasks:
+- Online only if "Call|Interview ... on Skype" OR if the time frame is defined a priori with {online: true}.
 - Pomodoro: loop that runs and notifies about new time frames and shows notes.
 - Pomodoro: better support for project-specific TODOs, i. e. I shouldn't have to be switched to the project dir.

@@ -4,26 +4,53 @@ require 'pomodoro'
 require 'pomodoro/exts/hour'
 
 config  = Pomodoro::Config.new
-manager = Pomodoro::TaskManager.parse(config.task_list_path)
+# manager = Pomodoro::TaskManager.parse(config.task_list_path)
+today_tasks = Pomodoro::TaskList.parse(config.today_path)
 
 case ARGV.shift
-when 'postpone', 'skip', 'discard'
-  abort 'Currently found unnecessary. Pomodoro is trying to be simple and against skipping.'
-when 'next'
-  abort "No more tasks." if manager.today_tasks.empty?
-  task = manager.active_task
-
-  if task.command
-    puts task.text
-    puts %x{#{task.command}} # TODO: Time.timer -> update log-time.
+when 'edit', 'e'
+  exec("vim -O2 #{config.today_path} #{config.task_list_path}")
+when 'bitbar'
+  current_time_frame = today_tasks.get_current_time_frame
+  if current_time_frame.remaining_duration < Hour.new(0, 10)
+    color = 'red'
+  elsif current_time_frame.remaining_duration < Hour.new(0, 30)
+    color = 'blue'
   else
-    arguments = "#{task.text} #{task.tags.map { |tag| "##{tag}" }.join(' ')} #{task.duration}"
-    command = "log-time #{arguments.split(' ').map { |word| "'#{word}'" }.join(' ')}"
-    puts command; system command
+    color = 'green'
+  end
+  puts "#{current_time_frame.name} | color=#{color}", '---'
+  puts "#{current_time_frame.interval[0]}-#{current_time_frame.interval[1]} (#{current_time_frame.remaining_duration}h remaining) | color=#{color}"
+  puts current_time_frame.tasks
+  puts "TODO: Show current tasks | color=red"
+when 'postpone'
+  # TODO: postpone with a reason provided.
+when 'next'
+  current_time_frame = today_tasks.get_current_time_frame
+  active_task = current_time_frame.active_task
+
+  abort "No more tasks." unless active_task
+
+  # if active_task.command
+  #   puts task.text
+  #   puts %x{#{task.command}} # TODO: Time.timer -> update log-time.
+  # else
+    # arguments = "#{task.text} #{task.tags.map { |tag| "##{tag}" }.join(' ')} #{task.duration}"
+    # command = "log-time #{arguments.split(' ').map { |word| "'#{word}'" }.join(' ')}"
+    # puts command; system command
+  # end
+
+  start_time = active_task.start
+  # today_tasks.save
+
+  loop do
+    %x{clear}
+    puts "[#{active_task.remaining_duration(current_time_frame)}] #{active_task.text}"
+    sleep 1
   end
 
-  manager.mark_active_task_as_done
-  manager.save
+  active_task.finish
+  # today_tasks.save
 when 'next?'
   abort "No more tasks." if manager.today_tasks.empty?
   task = manager.active_task
@@ -155,6 +182,9 @@ end
 __END__
 
 <red.bold>:: Pomodoro ::</red.bold>
+
+<bright_black>pomodoro</bright_black> <magenta>edit</magenta>
+  Open todays tasks as well as tasks for other days.
 
 <bright_black>pomodoro</bright_black> <magenta>next</magenta>
   Start a new pomodoro from tasks.todo.

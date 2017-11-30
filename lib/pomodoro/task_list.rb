@@ -33,6 +33,17 @@ module Pomodoro
       end
     end
 
+    def get_current_time_frame(current_time = Time.now)
+      @time_frame_list.find do |time_frame|
+        starting_time, closing_time = time_frame.interval
+        starting_time < current_time && closing_time > current_time
+      end
+    end
+
+    # def has_unfinished_tasks?
+    #   @time_frame_list.any?(&:has_unfinished_tasks?)
+    # end
+
     def to_s
       self.time_frame_list.reduce(nil) do |buffer, time_frame|
         buffer ? "#{buffer}\n\n#{time_frame.to_s}" : "#{time_frame.to_s}"

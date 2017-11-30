@@ -4,13 +4,26 @@ class Hour
     self.new(hours.to_i, minutes.to_i)
   end
 
+  def self.now
+    now = Time.now
+    self.new(now.hour, now.min)
+  end
+
   attr_reader :minutes
   def initialize(hours, minutes = 0)
     @minutes = (hours * 60) + minutes
   end
 
-  def +(hour)
-    self.class.new(0, @minutes + hour.minutes)
+  [:+, :-].each do |method_name|
+    define_method(method_name) do |hour_or_minutes|
+      if hour_or_minutes.is_a?(self.class)
+        self.class.new(0, @minutes.send(method_name, hour_or_minutes.minutes))
+      elsif hour_or_minutes.is_a?(Integer)
+        self.class.new(0, @minutes.send(method_name, hour_or_minutes))
+      else
+        raise TypeError.new
+      end
+    end
   end
 
   def hours
@@ -26,9 +39,15 @@ class Hour
   #   (@minutes * (rate / 60.0)).round(2)
   # end
 
-  [:==, :eql?, :<, :<=, :>, :>=].each do |method_name|
+  [:==, :eql?, :<, :<=, :>, :>=, :<=>].each do |method_name|
     define_method(method_name) do |anotherHour|
-      self.minutes.send(method_name, anotherHour.minutes)
+      if anotherHour.is_a?(self.class)
+        self.minutes.send(method_name, anotherHour.minutes)
+      elsif anotherHour.is_a?(Time)
+        self.send(method_name, Hour.now)
+      else
+        raise TypeError.new("#{self.class}##{method_name} expects #{self.class} or Time object.")
+      end
     end
   end
 

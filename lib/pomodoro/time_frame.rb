@@ -68,6 +68,22 @@ module Pomodoro
       end
     end
 
+    def active_task
+      self.tasks.find do |task|
+        ! task.finished?
+      end
+    end
+
+    def remaining_duration
+      @interval[1] - Hour.now
+    end
+
+    # def has_unfinished_tasks?
+    #   self.tasks.any? do |task|
+    #     ! task.finished?
+    #   end
+    # end
+
 
     # def mark_active_task_as_done # TODO: WIP
     #   #Time.now.strftime('%H:%M')

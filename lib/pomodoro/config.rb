@@ -12,12 +12,13 @@ module Pomodoro
 
     {
       task_list: '~/pomodoro/tasks.todo',
-      today: '~/pomodoro/today',
+      today: '~/pomodoro/%Y-%m-%d.today',
       schedule: '~/pomodoro/schedule.rb',
       routine: '~/pomodoro/routine.rb'
     }.each do |key, default_value|
       define_method(:"#{key}_path") do
         path = @data[key.to_s] || default_value
+        path = File.expand_path(Time.now.strftime(path))
         if File.exist?(path)
           path
         else

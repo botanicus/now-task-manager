@@ -4,11 +4,14 @@ Simple command-line task management tool supporting time framing.
 
 ![](https://raw.githubusercontent.com/botanicus/pomodoro/master/doc/today-annotated.png)
 
-Tasks are stored in readable plain text format.
+- Tasks are stored in readable plain text format.
+- Command-line interface.
+- [Vim plugin](https://github.com/botanicus/pomodoro/tree/master/support/vim).
+- BitBar plugin.
 
-- ✓ Command-line interface.
-- ✓ Vim plugin.
-- ✓ BitBar plugin.
+## Time Framing
+
+
 
 ## Why?
 
@@ -118,17 +121,3 @@ This is why I wrote it in the first place.
 ```shell
 launchctl load -w ~/Library/LaunchAgents/botanicus.pomodoro_notification.plist
 ```
-
-# Features under consideration
-
-- Timeframing (is it necessary)?
-- [50] Pomodoro: add metadata (started, finished, waiting_for).
-- [15] Pomodoro: add postponing (with a reason).
-- [30] Pomodoro: add stats about total minutes expected and actual to the backup.
-
-Timeframing:
-Use alarm every day, get up at set time no matter what.
-Do what's important and sleep later.
-This way it's also easier to keep track of time frames.
-
-https://freedom.to/

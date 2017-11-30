@@ -16,10 +16,10 @@ module Pomodoro
       schedule: '~/pomodoro/schedule.rb',
       routine: '~/pomodoro/routine.rb'
     }.each do |key, default_value|
-      define_method(:"#{key}_path") do
+      define_method(:"#{key}_path") do |time = Time.now|
         path = @data[key.to_s] || default_value
-        path = File.expand_path(Time.now.strftime(path))
-        if File.exist?(path)
+        path = File.expand_path(time.strftime(path))
+        if File.exist?(File.expand_path("#{path}/.."))
           path
         else
           raise "No #{key} found. Either create #{default_value} or add #{key} into #{CONFIG_PATH} pointing the the actual path."

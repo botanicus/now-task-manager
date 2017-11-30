@@ -7,14 +7,16 @@ module Pomodoro
 
     # # Morning ritual (7:50 – 9:30) #online:
     def self.parse(data)
-      data.match(/^(.+)\((.+)\)( #online|):?\s*$/)
-      name = $1.strip
-      is_online = ($3.strip == '#online')
-      case $2
-      when /(\d+:\d+) – (\d+:\d+)/ then interval_from, interval_to = $1, $2
-      when /from (\d+:\d+)/        then interval_from, interval_to = $1, nil end
+      match = data.match(/^(.+)\((.+)\)\s*$/)
+      name = match[1].strip
+      case match[2]
+      when /(\d+:\d+)\s*[-–]\s*(\d+:\d+)/
+        interval_from, interval_to = $1, $2
+      when /(?:from|after)\s*(\d+:\d+)/
+        interval_from, interval_to = $1, nil
+      end
 
-      self.new(name, nil, interval_from, interval_to, online: is_online)
+      self.new(name, nil, interval_from, interval_to)
     end
 
     attr_reader :name, :tasks, :interval, :options
@@ -23,9 +25,9 @@ module Pomodoro
       @interval = [interval_from && Hour.parse(interval_from), interval_to && Hour.parse(interval_to)]
       @tasks = Array.new
 
-      if @options.has_key?(:writeable) && ! @options[:writeable]
-        @tasks.freeze
-      end
+      # if @options.has_key?(:writeable) && ! @options[:writeable]
+      #   @tasks.freeze
+      # end
 
       unless (unrecognised_options = options.keys - ALLOWED_OPTIONS).empty?
         raise ArgumentError.new("Unrecognised options: #{unrecognised_options.inspect}")
@@ -56,7 +58,7 @@ module Pomodoro
       if @tasks.empty?
         self.header
       else
-        ["#{self.header}:", self.tasks.map(&:to_s)].join("\n")
+        ["#{self.header}", self.tasks.map(&:to_s)].join("\n")
       end
     end
 
@@ -75,7 +77,20 @@ module Pomodoro
     end
 
     def remaining_duration
-      @interval[1] - Hour.now
+      @interval[1] && (@interval[1] - Hour.now)
+    end
+
+    include Enumerable
+    def each(&block)
+      @tasks.each do |task|
+        block.call(task)
+      end
+    end
+
+    def duration
+      self.tasks.reduce(0) do |sum, task|
+        (task.finished? && task.duration) ? sum + task.duration : sum
+      end
     end
 
     # def has_unfinished_tasks?

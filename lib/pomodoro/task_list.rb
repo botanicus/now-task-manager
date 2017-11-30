@@ -10,7 +10,8 @@ module Pomodoro
       time_frames = File.readlines(path, encoding: 'utf-8').reduce(Array.new) do |time_frames, line|
         case line
         when /^- /
-          time_frames.last.tasks << Task.parse(line.chomp)
+          task = Task.parse(line.chomp)
+          time_frames.last.tasks << task
           time_frames
         when /^(\s*|\s*#.*)$/
           time_frames
@@ -36,8 +37,21 @@ module Pomodoro
     def get_current_time_frame(current_time = Time.now)
       @time_frame_list.find do |time_frame|
         starting_time, closing_time = time_frame.interval
-        starting_time < current_time && closing_time > current_time
+        starting_time < current_time && (closing_time.nil? || closing_time > current_time)
       end
+    end
+
+    include Enumerable
+    def each(&block)
+      # @time_frame_list.each do |time_frame|
+      #   block.call(time_frame)
+      # end
+      @time_frame_list.each(&block)
+    end
+
+
+    def duration
+      self.time_frame_list.sum { |time_frame| time_frame.duration }
     end
 
     # def has_unfinished_tasks?

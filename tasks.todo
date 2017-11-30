@@ -2,3 +2,12 @@ Tasks:
 - Online only if "Call|Interview ... on Skype" OR if the time frame is defined a priori with {online: true}.
 - Pomodoro: loop that runs and notifies about new time frames and shows notes.
 - Pomodoro: better support for project-specific TODOs, i. e. I shouldn't have to be switched to the project dir.
+- [15] Pomodoro: add postponing (with a reason).
+- [30] Pomodoro: add stats about total minutes expected and actual to the backup.
+
+Timeframing:
+Use alarm every day, get up at set time no matter what.
+Do what's important and sleep later.
+This way it's also easier to keep track of time frames.
+
+https://freedom.to/

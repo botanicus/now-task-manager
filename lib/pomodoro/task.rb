@@ -5,13 +5,12 @@ module Pomodoro
     DEFAULT_DURATION = 10
 
     def self.parse(line)
-      match = line.match(/^- (?:\[(\d+|\d+:\d+-(?:\d+:\d+|now))\])([^#]+)$/)
-      return unless match
+      match = line.match(/^- (?:\[(\d+|\d+:\d+-(?:\d+:\d+|now))\])?([^#]+)(.*)$/)
 
-      if match[1].match(/^\d+$/)
+      if match[1] && match[1].match(/^\d+$/)
         duration = match[1].to_i
         interval = Array.new
-      else
+      elsif match[1]
         duration = nil
         interval = self.parse_interval(match[1])
       end
@@ -51,7 +50,7 @@ module Pomodoro
 
     attr_reader :text, :duration, :tags
     def initialize(text, duration = nil, interval = Array.new, tags = [])
-      @text, @duration, @tags, @interval = text, duration || DEFAULT_DURATION, tags, interval
+      @text, @duration, @tags, @interval = text, duration || DEFAULT_DURATION, tags, interval || Array.new
     end
 
     def to_s

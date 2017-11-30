@@ -1,6 +1,12 @@
 # About
 
-Simple command-line [pomodoro](http://cirillocompany.de/pages/pomodoro-technique) client.
+Simple command-line task management tool supporting time framing.
+
+[Pomodoro technique]((http://cirillocompany.de/pages/pomodoro-technique)) is great.
+
+Simple command-line [pomodoro] client.
+
+![](https://raw.githubusercontent.com/botanicus/pomodoro/master/doc/today.png)
 
 ## Why?
 

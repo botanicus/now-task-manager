@@ -6,3 +6,4 @@ Tasks:
 - Pomodoro: loop that runs and notifies about new time frames and shows notes.
 - BitBar: show each project TODO.
 - [30] Pomodoro: add stats about total minutes expected and actual to the backup.
+- Defined tasks: their commands are defined, but they are not in todays task since it's irrelevant.

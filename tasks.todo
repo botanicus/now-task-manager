@@ -1,14 +1,11 @@
 Tasks:
+- Add support for nested time frames.
 - pomodoro start-now: reframe based on durations
 - Online only if "Call|Interview ... on Skype" OR if the time frame is defined a priori with {online: true}.
+- Add duration
+  6   Expected duration: 20                                                                     |  6 - PESEL follow-up research (GP, self-employment).
+  7   Actual duration: 40                                                                       |  7 - Register for GP and as a self-employed.
+  8   Duration: {expected: 20, actual: 40}
 - Pomodoro: loop that runs and notifies about new time frames and shows notes.
-- Pomodoro: better support for project-specific TODOs, i. e. I shouldn't have to be switched to the project dir.
-- [15] Pomodoro: add postponing (with a reason).
+- BitBar: show each project TODO.
 - [30] Pomodoro: add stats about total minutes expected and actual to the backup.
-
-Timeframing:
-Use alarm every day, get up at set time no matter what.
-Do what's important and sleep later.
-This way it's also easier to keep track of time frames.
-
-https://freedom.to/

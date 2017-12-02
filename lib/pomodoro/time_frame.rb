@@ -44,11 +44,11 @@ module Pomodoro
 
     def header
       if @interval[0] && @interval[1]
-        [@name, "(#{@interval[0]} – #{@interval[1]})", @options[:online] && '#online'].compact.join(' ')
+        [@name, "(#{@interval[0]} – #{@interval[1]})"].compact.join(' ')
       elsif @interval[0] && ! @interval[1]
-        [@name, "(from #{@interval[0]})", @options[:online] && '#online'].compact.join(' ')
+        [@name, "(from #{@interval[0]})"].compact.join(' ')
       elsif ! @interval[0] && @interval[1]
-        raise "I don't think this makes sense."
+        [@name, "(until #{@interval[1]})"].compact.join(' ')
       else
         [@name, @options[:online] && '#online'].compact.join(' ')
       end

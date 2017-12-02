@@ -1,11 +1,8 @@
 Tasks:
+- Decide what's the approach to durations: either recommended duration or hard-core duration, that is run the timer and move on. Or both. Does it make sense to add expected/actual duration metadata? If hard-core duration is running, show the timer in the bitbar.
 - Add support for nested time frames.
 - pomodoro start-now: reframe based on durations
 - Online only if "Call|Interview ... on Skype" OR if the time frame is defined a priori with {online: true}.
-- Add duration
-  6   Expected duration: 20                                                                     |  6 - PESEL follow-up research (GP, self-employment).
-  7   Actual duration: 40                                                                       |  7 - Register for GP and as a self-employed.
-  8   Duration: {expected: 20, actual: 40}
 - Pomodoro: loop that runs and notifies about new time frames and shows notes.
 - BitBar: show each project TODO.
 - [30] Pomodoro: add stats about total minutes expected and actual to the backup.

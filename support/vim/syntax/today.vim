@@ -16,7 +16,7 @@ syn match hour '\d\+:\d\+'
 syn match scheduledHour '\[\d\+:\d\+\]'
 syn match time '\[\d\+\]'
 syn match tag '#\w\+'
-syn match finishedTask_1 '^-.*#done.*$'
+syn match finishedTask_1 '^✔.*$'
 syn match finishedTask_2 '^- \[\d\+:\d\+-\d\+:\d\+\].*$'
 syn match inProgressTask '^- \[\d\+:\d\+-now\].*$'
 syn region celDescBlock start=":$" end="\n\n" fold transparent

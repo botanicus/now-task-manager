@@ -5,7 +5,7 @@ module Pomodoro
     DEFAULT_DURATION = 10
 
     def self.parse(line)
-      match = line.match(/^- (?:\[(\d+|\d+:\d+-(?:\d+:\d+|now))\])?([^#]+)(.*)$/)
+      match = line.match(/^[-✔] (?:\[(\d+|\d+:\d+-(?:\d+:\d+|now))\])?([^#]+)(.*)$/)
 
       if match[1] && match[1].match(/^\d+$/)
         duration = match[1].to_i

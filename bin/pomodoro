@@ -5,27 +5,35 @@ require 'pomodoro/exts/hour'
 
 config  = Pomodoro::Config.new
 # manager = Pomodoro::TaskManager.parse(config.task_list_path)
-today_tasks = Pomodoro::TaskList.parse(config.today_path)
+if File.exist?(config.today_path)
+  today_tasks = Pomodoro::TaskList.parse(config.today_path)
+end
 
-case ARGV.shift
-when 'edit', 'e'
-  exec("vim -O2 #{config.today_path} #{config.task_list_path}")
-when 'plan-tomorrow'
+def generate_todays_tasks(date, config)
   require 'pomodoro/scheduler'
-  tomorrow = Date.today + 1
-  tomorrow_path = config.today_path(tomorrow)
 
-  scheduler = Pomodoro::Scheduler.load([config.schedule_path, config.routine_path], tomorrow)
+  date_path = config.today_path(date)
+
+  scheduler = Pomodoro::Scheduler.load([config.schedule_path, config.routine_path], date)
 
   schedule = scheduler.schedule_for_date(Date.today)
   task_list = schedule.call
   scheduler.populate_from_rules(task_list)
 
-  File.open(tomorrow_path, 'w') do |file|
+  File.open(date_path, 'w') do |file|
     file.puts(task_list.to_s)
   end
 
-  exec("vim -O2 #{tomorrow_path} #{config.task_list_path}")
+  return date_path
+end
+
+case ARGV.shift
+when 'edit', 'e'
+  date_path = generate_todays_tasks(Date.today, config) unless File.exist?(config.today_path)
+  exec("vim -O2 #{config.today_path} #{config.task_list_path}")
+when 'plan-tomorrow'
+  date_path = generate_todays_tasks(Date.today + 1, config)
+  exec("vim -O2 #{date_path} #{config.task_list_path}")
 when 'bitbar'
   require 'pomodoro/commands/bitbar'
 

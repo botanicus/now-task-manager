@@ -1,4 +1,5 @@
 Tasks:
+- Dirs by months. %Y/%m
 - The UTF-8 checkbox parses, but apart from that it's not supported, it does nothing.
 - Decide what's the approach to durations: either recommended duration or hard-core duration, that is run the timer and move on. Or both. Does it make sense to add expected/actual duration metadata? If hard-core duration is running, show the timer in the bitbar.
 - Add support for nested time frames.
@@ -8,3 +9,7 @@ Tasks:
 - BitBar: show each project TODO.
 - [30] Pomodoro: add stats about total minutes expected and actual to the backup.
 - Defined tasks: their commands are defined, but they are not in todays task since it's irrelevant.
+
+Resources:
+- Writing Vim plugins http://stevelosh.com/blog/2011/09/writing-vim-plugins/
+- Vim plugin documentation http://learnvimscriptthehardway.stevelosh.com/chapters/54.html

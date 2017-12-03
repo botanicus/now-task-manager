@@ -1,4 +1,4 @@
-# About
+# About [![](https://travis-ci.org/botanicus/pomodoro.svg?branch=master)](https://travis-ci.org/botanicus/pomodoro)
 
 Simple command-line task management tool supporting time framing.
 

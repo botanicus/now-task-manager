@@ -5,19 +5,6 @@ class Parslet::Slice
     self.to_s == slice_or_string.to_s
   end
 end
-# {
-#   time_frames: [
-#     {
-#       desc: "Morning routine",
-#       start_time: "7:50",
-#       end_time: "9:20",
-#       tasks: [
-#         {indent 1, desc 1},
-#         {indent 2, desc 2},
-#       ]
-#     }
-#   ]
-# }
 
 describe Pomodoro::TodayParser do
   def build_tree

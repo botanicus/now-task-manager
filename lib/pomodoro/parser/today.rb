@@ -7,7 +7,7 @@ module Pomodoro
     rule(:integer)         { match['0-9'].repeat(1) }
 
     rule(:nl)              { str("\n").repeat(1) }
-    rule(:nl?)             { nl.maybe }
+    rule(:nl_or_eof)       { any.absent? | nl.maybe }
 
     rule(:space)           { match('\s').repeat(1) }
     rule(:space?)          { space.maybe }
@@ -17,8 +17,8 @@ module Pomodoro
     rule(:time_delimiter)  { match['-–'] }
     rule(:colon)           { str(':') }
 
-    rule(:hour)            { integer.repeat >> (colon >> integer).maybe }
-    rule(:hour_strict)     { integer.repeat >> colon >> integer }
+    rule(:hour)            { (integer.repeat >> (colon >> integer).maybe).as(:hour) }
+    rule(:hour_strict)     { (integer.repeat >> colon >> integer).as(:hour) }
     rule(:indent)          { match['-✓✔✕✖✗✘'].as(:indent).repeat(1, 1) >> space }
     rule(:task_desc)       { (match['\n#'].absent? >> any).repeat.as(:desc) }
     rule(:time_frame_desc) { (match['(\n'].absent? >> any).repeat.as(:desc) }
@@ -42,16 +42,15 @@ module Pomodoro
     rule(:task_body) { indent >> task_time_info.maybe >> task_desc >> tag.repeat }
 
     rule(:task) do
-      (task_body >> (nl >> str('  ') >> metadata).repeat(0)).as(:task) >> nl?
+      (task_body >> (nl >> str('  ') >> metadata).repeat(0)).as(:task) >> nl_or_eof
     end
 
-    ###
     rule(:time_range) do
       hour.as(:start_time) >> space? >> time_delimiter >> space? >> hour.as(:end_time)
     end
 
     rule(:time_frame) do
-      time_frame_desc >> (lparen >> time_range >> rparen).maybe >> nl?
+      time_frame_desc >> (lparen >> time_range >> rparen).maybe >> nl_or_eof
     end
 
     rule(:time_frame_with_tasks) { time_frame >> task.repeat.as(:task_list) } # ...

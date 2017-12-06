@@ -49,7 +49,7 @@ module Pomodoro
     end
 
     attr_reader :text, :duration, :tags
-    def initialize(text, duration = nil, interval = Array.new, tags = [])
+    def initialize(desc:, duration: nil, interval: Array.new, tags: [], status: :initial)
       @text, @duration, @tags, @interval = text, duration || DEFAULT_DURATION, tags, interval || Array.new
     end
 

@@ -20,10 +20,12 @@ module Pomodoro
     end
 
     attr_reader :name, :tasks, :interval, :options
-    def initialize(name, tag, interval_from, interval_to, options = Hash.new)
-      @name, @tag, @options = name, tag, options
-      @interval = [interval_from && Hour.parse(interval_from), interval_to && Hour.parse(interval_to)]
-      @tasks = Array.new
+    def initialize(desc:, start_time: nil, end_time: nil, task_list: Array.new)
+      # tag, interval_from, interval_to, options = Hash.new
+      @name, @tag, @options = desc, nil, {}
+      @interval = [start_time, end_time]
+      # @interval = [interval_from && Hour.parse(interval_from), interval_to && Hour.parse(interval_to)]
+      @tasks = task_list
 
       # if @options.has_key?(:writeable) && ! @options[:writeable]
       #   @tasks.freeze

@@ -1,37 +1,65 @@
 require 'parslet'
 
+# .parse(input, reporter: Parslet::ErrorReporter::Deepest.new)
 module Pomodoro
   class TodayParser < Parslet::Parser
     # Primitives.
-    rule(:integer) { match['0-9'].repeat(1) }
+    rule(:integer)         { match['0-9'].repeat(1) }
 
-    rule(:nl)      { str("\n").repeat(1) }
-    rule(:nl?)     { nl.maybe }
+    rule(:nl)              { str("\n").repeat(1) }
+    rule(:nl?)             { nl.maybe }
 
-    rule(:space)      { match('\s').repeat(1) }
-    rule(:space?)     { space.maybe }
+    rule(:space)           { match('\s').repeat(1) }
+    rule(:space?)          { space.maybe }
 
-    rule(:lparen) { str('(') }
-    rule(:rparen) { str(')') }
+    rule(:lparen)          { str('(') }
+    rule(:rparen)          { str(')') }
     rule(:time_delimiter)  { match['-–'] }
-    rule(:colon)  { str(':') }
+    rule(:colon)           { str(':') }
 
-    rule(:hour) { integer >> colon >> integer }
+    rule(:hour)            { integer.repeat >> (colon >> integer).maybe }
+    rule(:hour_strict)     { integer.repeat >> colon >> integer }
+    rule(:indent)          { match['-✓✔✕✖✗✘'].as(:indent).repeat(1, 1) >> space }
+    rule(:task_desc)       { (match['\n#'].absent? >> any).repeat.as(:desc) }
+    rule(:time_frame_desc) { (match['(\n'].absent? >> any).repeat.as(:desc) }
 
-    rule(:indent)  { match['-✓✔✕✖✗✘'].as(:indent).repeat(1, 1) >> space }
-    rule(:desc) { match['^\n'].repeat(1) }
-    # rule(:desc) { match('[^\n#]').repeat(1) }
+    rule(:tag)             { str('#') >> match['^\s'].repeat.as(:tag) >> space? }
+
+    rule(:duration) do
+      # ✔ 9:20
+      # ✔ 9:20–10:00
+      # ✖ 9-10
+      #   There was an issue with parsing that compared to 9 as duration.
+      hour_strict.as(:start_time) >> (time_delimiter >> hour_strict.as(:end_time)).maybe
+    end
+
+    rule(:task_time_info) do
+      str('[') >> (duration | integer.as(:duration)) >> str(']') >> space
+    end
+
+    rule(:metadata) { (str("\n").absent? >> any).repeat.as(:line) }
+
+    rule(:task_body) { indent >> task_time_info.maybe >> task_desc >> tag.repeat }
+
+    rule(:task) do
+      (task_body >> (nl >> str('  ') >> metadata).repeat(0)).as(:task) >> nl?
+    end
 
     ###
-    # rule(:word) { match['a-zA-Z'].repeat(1).as(:word) >> space? }
-    # rule(:task)      { indent.as(:indent) >> time_info.maybe >> desc.as(:desc) >> tag.repeat.as(:tags) }
-    rule(:task) { (indent >> desc.as(:desc)).as(:task) >> nl? }
+    rule(:time_range) do
+      hour.as(:start_time) >> space? >> time_delimiter >> space? >> hour.as(:end_time)
+    end
 
-    ###
-    rule(:time_range) { hour.as(:start_time) >> space? >> time_delimiter >> space? >> hour.as(:end_time) }
-    rule(:time_frame) { match['\w\d '].repeat.as(:desc) >> (lparen >> time_range >> rparen).maybe >> nl? }
-    rule(:time_frame_with_tasks) { time_frame >> task.repeat.as(:task_list) } #  >> str("\n") \n\n is required.
+    rule(:time_frame) do
+      time_frame_desc >> (lparen >> time_range >> rparen).maybe >> nl?
+    end
+
+    rule(:time_frame_with_tasks) { time_frame >> task.repeat.as(:task_list) } # ...
+    # >> str("\n") \n\n is required.
     rule(:time_frames_with_tasks) { time_frame_with_tasks.repeat(0) }
+
+    rule(:test_line) { str('- ') >> match['\w\d '].repeat.as(:text) } #####
+    rule(:test_lines) { (test_line >> str("\n").repeat(0)).repeat(0) } ####
 
     root(:time_frame_with_tasks)
   end

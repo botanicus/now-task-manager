@@ -57,9 +57,6 @@ module Pomodoro
     # >> str("\n") \n\n is required.
     rule(:time_frames_with_tasks) { time_frame_with_tasks.repeat(0) }
 
-    rule(:test_line) { str('- ') >> match['\w\d '].repeat.as(:text) } #####
-    rule(:test_lines) { (test_line >> str("\n").repeat(0)).repeat(0) } ####
-
     root(:time_frame_with_tasks)
   end
 end

@@ -1,4 +1,4 @@
 #!/bin/sh
 
-message=$(log-time --commit-message)
-git commit -a -m "$message"
+message=$(pomodoro active git)
+git commit -m "$message"

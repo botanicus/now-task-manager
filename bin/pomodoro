@@ -38,6 +38,8 @@ def time_frame(config, &block)
   block.call(today_list, current_time_frame)
 end
 
+# TODO: change this to find the first active task, ignoring the time frame.
+# Only then complain about the time frame.
 def with_active_task(config, &block)
   time_frame(config) do |today_list, current_time_frame|
     if active_task = current_time_frame.active_task
@@ -103,10 +105,6 @@ when 'edit', 'e'
   else
     abort(DATA.read.colourise)
   end
-when 'console', 'c'
-  today = parse_today_list(config)
-  tasks = parse_task_list(config)
-  require 'pry'; binding.pry
 when 'next'
   time_frame(config) do |today_list, current_time_frame|
     if active_task = current_time_frame.active_task
@@ -122,16 +120,20 @@ when 'next'
   end
 when 'next?'
   time_frame(config) do |today_list, current_time_frame|
+    if active_task = current_time_frame.active_task
+      abort "<red>There is an active task already:</red>\n#{active_task}".colourise
+    end
+
     if task = current_time_frame.first_unstarted_task
       puts task
     else
       abort "<red>No more tasks in #{current_time_frame.desc}</red>".colourise
     end
   end
-when 'finish'
+when 'complete'
   with_active_task(config) do |active_task|
     require 'pry'; binding.pry ###
-    active_task.finish
+    active_task.complete
     puts active_task
   end
 when 'postpone'
@@ -155,6 +157,10 @@ when '+'
   task_list['Later'] ||= Array.new
   task_list['Later'] << ARGV.join(' ')
   task_list.save(config.task_list_path)
+when 'console', 'c'
+  today = parse_today_list(config)
+  tasks = parse_task_list(config)
+  require 'pry'; binding.pry
 when 'bitbar'
   require 'pomodoro/commands/bitbar'
   today_list = parse_today_list(config)
@@ -170,35 +176,21 @@ __END__
 
 <red.bold>:: Pomodoro ::</red.bold>
 
-pomodoro <magenta>edit</magenta>, pomodoro <magenta>e</magenta>
+pomodoro <green>edit</green>, pomodoro <green>e</green>
   <bright_black>pomodoro e</bright_black> Edit the today task file, creating it if it doesn't exist.
   <bright_black>pomodoro e <yellow>2</yellow></bright_black> Edit both the today task file and tasks (in a split screen).
   <bright_black>pomodoro e <yellow>tasks</yellow></bright_black> (or just <yellow>t</yellow>) Open the task file.
   <bright_black>pomodoro e <yellow>tomorrow</yellow></bright_black> Plan tomorrow.
 
-<bright_black>pomodoro</bright_black> <magenta>next</magenta>
-  Start a new task.
+pomodoro <magenta>next</magenta> <bright_black># Start a new task.</bright_black>
+pomodoro <magenta>complete</magenta> <bright_black># Complete the active task.</bright_black>
+pomodoro <magenta>postpone</magenta> <bright_black># Postpone the active task.</bright_black>
+pomodoro <magenta>move_on</magenta> <bright_black># Move on from the active task. Mark its end time, but don't set it as completed.</bright_black>
 
-<bright_black>pomodoro</bright_black> <magenta>next?</magenta>
-  Print the next task.
+pomodoro <green>next?</green> <bright_black># Print the next task.</bright_black>
+pomodoro <green>active</green> <bright_black># Print the active task.</bright_black>
 
-<bright_black>pomodoro</bright_black> <magenta>postpone</magenta>
-  Postpone the active task.
+pomodoro <red>+</red> [strings]<bright_black> # Add a task for later.</bright_black>
 
-<bright_black>pomodoro</bright_black> <magenta>finish</magenta>
-  Finish the active task.
-
-<bright_black>pomodoro</bright_black> <magenta>move_on</magenta>
-  Finish the active task.
-
-<bright_black>pomodoro</bright_black> <magenta>active</magenta>
-  Print the active task.
-
-pomodoro <yellow>+</yellow> <bright_black>[strings]</bright_black>
-  Add a task for later. I. e. <bright_black>pomodoro <yellow>+</yellow> MR: go swimming</bright_black>
-
-pomodoro <yellow>console</yellow>, pomodoro <yellow>c</yellow>
-  Load the tasks and launch IRB.
-
-pomodoro <yellow>bitbar</yellow>
-  Print output for BitBar.
+pomodoro <yellow>console</yellow>, pomodoro <yellow>c</yellow> <bright_black># Load the tasks and launch IRB.</bright_black>
+pomodoro <yellow>bitbar</yellow> <bright_black># Print output for BitBar.</bright_black>

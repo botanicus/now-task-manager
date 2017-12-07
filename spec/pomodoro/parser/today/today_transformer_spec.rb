@@ -1,6 +1,6 @@
 require 'pomodoro/parser/today_transformer'
 
-describe Pomodoro::ObjectTransformer do
+describe Pomodoro::TodayTransformer do
   it do
     time_frames = subject.apply(
       [

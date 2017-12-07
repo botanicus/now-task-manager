@@ -197,5 +197,8 @@ pomodoro <magenta>edit</magenta>, pomodoro <magenta>e</magenta>
 pomodoro <yellow>+</yellow> <bright_black>[strings]</bright_black>
   Add a task for later. I. e. <bright_black>pomodoro <yellow>+</yellow> MR: go swimming</bright_black>
 
+pomodoro <yellow>console</yellow>, pomodoro <yellow>c</yellow>
+  Load the tasks and launch IRB.
+
 pomodoro <yellow>bitbar</yellow>
   Print output for BitBar.

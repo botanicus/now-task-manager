@@ -11,7 +11,7 @@ Simple command-line task management tool supporting time framing.
 
 ## Time Framing
 
-[formats](https://raw.githubusercontent.com/botanicus/pomodoro/master/doc/spec/formats.md)
+[formats](https://github.com/botanicus/pomodoro/blob/master/doc/spec/formats.md)
 
 ## Why?
 
@@ -52,12 +52,12 @@ end
 # Configuration
 
 ```yaml
-# ~/.config/internet-usage-limiter.yml
+# ~/.config/pomodoro.yml
 ---
- log_file_path: ~/Dropbox/Data/WIP/Pomodoro.log
- work_day_work_schedule: ['9:30', '14:00']
- work_day_personal_schedule: ['14:00', '18:20']
- saturday_schedule: ['9:30', '18:20']
+schedule:  ~/Dropbox/Data/Data/Pomodoro/Schedules/schedules.rb
+routine:   ~/Dropbox/Data/Data/Pomodoro/Schedules/base.rb
+today:     ~/Dropbox/Data/Data/Pomodoro/Tasks/%Y-%m-%d.today
+task_list: ~/Dropbox/Data/WIP/tasks.todo
 ```
 
 ## BitBar plugin

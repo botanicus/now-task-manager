@@ -11,7 +11,7 @@ Simple command-line task management tool supporting time framing.
 
 ## Time Framing
 
-
+[formats](https://raw.githubusercontent.com/botanicus/pomodoro/master/doc/spec/formats.md)
 
 ## Why?
 

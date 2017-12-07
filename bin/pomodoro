@@ -145,10 +145,14 @@ when 'move_on'
   end
 when 'active'
   with_active_task(config) do |active_task|
-    if ARGV.first == 'git' # git-commit-pomodoro
-      puts active_task.text # TODO: subtasks as well.
+    case ARGV.shift
+     # git-commit-pomodoro
+     # TODO: Subtasks as well.
+    when 'git'    then puts active_task.text
+    when 'prompt' then puts active_task.text
+    when nil      then puts active_task
     else
-      puts active_task
+      # TODO: Format with %d etc.
     end
   end
 when '+'

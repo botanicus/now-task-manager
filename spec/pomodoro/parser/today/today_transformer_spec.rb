@@ -2,7 +2,7 @@ require 'pomodoro/parser/today_transformer'
 
 describe Pomodoro::ObjectTransformer do
   it do
-    ast = subject.apply(
+    time_frames = subject.apply(
       [
         {
           time_frame: {
@@ -21,6 +21,13 @@ describe Pomodoro::ObjectTransformer do
         }
       ]
     )
-    expect(ast).to eql({})
+    expect(time_frames.length).to eql(1)
+
+    time_frame = time_frames[0]
+    expect(time_frame.desc).to eql("Morning routine")
+    expect(time_frame.start_time).to eql(Hour.parse('7:50'))
+    expect(time_frame.end_time).to eql(Hour.parse('9:20'))
+
+    expect(time_frame.tasks.length).to be(1)
   end
 end

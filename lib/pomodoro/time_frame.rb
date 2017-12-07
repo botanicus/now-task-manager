@@ -5,25 +5,14 @@ module Pomodoro
   class TimeFrame
     ALLOWED_OPTIONS ||= [:online, :writeable, :note, :tags]
 
-    # # Morning ritual (7:50 – 9:30) #online:
-    def self.parse(data)
-      match = data.match(/^(.+)\((.+)\)\s*$/)
-      name = match[1].strip
-      case match[2]
-      when /(\d+:\d+)\s*[-–]\s*(\d+:\d+)/
-        interval_from, interval_to = $1, $2
-      when /(?:from|after)\s*(\d+:\d+)/
-        interval_from, interval_to = $1, nil
-      end
-
-      self.new(name, nil, interval_from, interval_to)
-    end
-
     attr_reader :name, :tasks, :interval, :options
-    def initialize(desc:, start_time: nil, end_time: nil, task_list: Array.new)
+    attr_reader :start_time, :end_time, :desc
+    def initialize(desc:, start_time: nil, end_time: nil, task_list: Array.new, **shit)
       # tag, interval_from, interval_to, options = Hash.new
       @name, @tag, @options = desc, nil, {}
       @interval = [start_time, end_time]
+      @start_time, @end_time = start_time, end_time
+      @desc = desc
       # @interval = [interval_from && Hour.parse(interval_from), interval_to && Hour.parse(interval_to)]
       @tasks = task_list
 
@@ -36,8 +25,8 @@ module Pomodoro
       end
     end
 
-    def create_task(*args)
-      @tasks << Task.new(*args)
+    def create_task(desc, duration = nil, tags = Array.new)
+      @tasks << Task.new(desc: desc, tags: tags)
     end
 
     def unshift_task(*args)
@@ -74,7 +63,13 @@ module Pomodoro
 
     def active_task
       self.tasks.find do |task|
-        ! task.finished?
+        ! task.in_progress?
+      end
+    end
+
+    def first_unstarted_task
+      self.tasks.find do |task|
+        task.unstarted?
       end
     end
 

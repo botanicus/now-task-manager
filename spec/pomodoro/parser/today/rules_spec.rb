@@ -81,22 +81,26 @@ describe Pomodoro::TodayParser do
     it "parses simple tasks" do
       tree = subject.time_frame_with_tasks.parse("Test\n- A\n- B\n")
       expect(tree).to eql({
-        desc: "Test",
-        task_list: [
-          {task: [{indent: "-"}, {desc: "A"}]},
-          {task: [{indent: "-"}, {desc: "B"}]}
-        ]
+        time_frame: {
+          desc: "Test",
+          task_list: [
+            {task: [{indent: "-"}, {desc: "A"}]},
+            {task: [{indent: "-"}, {desc: "B"}]}
+          ]
+        }
       })
     end
 
     it "parses tasks with metadata" do
       tree = subject.time_frame_with_tasks.parse("Test\n- A\n  Pekny kozy.\n- B\n")
       expect(tree).to eql({
-        desc: "Test",
-        task_list: [
-          {task: [{indent: "-"}, {desc: "A"}, {line: "Pekny kozy."}]},
-          {task: [{indent: "-"}, {desc: "B"}]}
-        ]
+        time_frame: {
+          desc: "Test",
+          task_list: [
+            {task: [{indent: "-"}, {desc: "A"}, {line: "Pekny kozy."}]},
+            {task: [{indent: "-"}, {desc: "B"}]}
+          ]
+        }
       })
     end
   end

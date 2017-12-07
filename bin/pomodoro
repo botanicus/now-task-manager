@@ -103,6 +103,10 @@ when 'edit', 'e'
   else
     abort(DATA.read.colourise)
   end
+when 'console', 'c'
+  today = parse_today_list(config)
+  tasks = parse_task_list(config)
+  require 'pry'; binding.pry
 when 'next'
   time_frame(config) do |today_list, current_time_frame|
     if active_task = current_time_frame.active_task
@@ -126,6 +130,7 @@ when 'next?'
   end
 when 'finish'
   with_active_task(config) do |active_task|
+    require 'pry'; binding.pry ###
     active_task.finish
     puts active_task
   end

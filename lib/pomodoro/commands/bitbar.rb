@@ -31,6 +31,55 @@ module Pomodoro
           'green'
         end
       end
+
+      def self.with_active_time_frame(current_time_frame)
+        if current_time_frame
+          if current_time_frame.interval[1]
+            puts "#{current_time_frame.interval[0]}-#{current_time_frame.interval[1]} (#{current_time_frame.remaining_duration}h remaining) | color=#{colour}"
+          else
+            puts "After #{current_time_frame.interval[0]} | color=gray"
+          end
+          current_time_frame.tasks.each do |task|
+            colour = {unstarted: 'blue', in_progress: 'red', finished: 'gray', postponed: 'gray'}[task.status]
+            puts "#{task} | color=#{colour}"
+          end
+        elsif Time.now.hour < 14
+          today_tasks.each do |time_frame|
+            task_lines = time_frame.to_s.split("\n")[1..-1]
+            puts "#{time_frame.header} | color=#{task_lines.empty? ? 'gray' : 'green'}"
+            puts task_lines.map { |line| "#{line} | color=black" }.join("\n").gsub(/^- /, '-- ')
+          end
+          puts "Total: XYZ | colour=gray"
+        else
+          puts "Hours worked: #{Hour.new(0, today_tasks.duration)}"
+        end
+      end
+
+      def self.main(today_tasks, task_list)
+        if today_tasks && current_time_frame = today_tasks.get_current_time_frame
+          colour, icon = self.heading(current_time_frame)
+          puts icon, '---'
+          self.with_active_time_frame(current_time_frame)
+        elsif today_tasks
+          colour, icon = self.heading(nil)
+          puts icon, '---'
+          puts 'TODO: Some day summary and possibly show tomorrow.'
+        else
+          colour, icon = self.heading(nil)
+          puts icon, '---'
+          puts "Run 'pomodoro e' to add some tasks. | color=green"
+        end
+
+        if task_list
+          puts "Scheduled tasks"
+          task_list.each do |task_group|
+            puts "-- #{task_group.name}"
+            task_group.tasks.each do |task|
+              puts "---- #{task}"
+            end
+          end
+        end
+      end
     end
   end
 end

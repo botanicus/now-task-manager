@@ -4,59 +4,28 @@ module Pomodoro
   class Task
     DEFAULT_DURATION = 10
 
-    def self.parse(line)
-      match = line.match(/^[-✔] (?:\[(\d+|\d+:\d+-(?:\d+:\d+|now))\])?([^#]+)(.*)$/)
-
-      if match[1] && match[1].match(/^\d+$/)
-        duration = match[1].to_i
-        interval = Array.new
-      elsif match[1]
-        duration = nil
-        interval = self.parse_interval(match[1])
-      end
-
-      tags = line.scan(/#\S+/).map { |tag| tag[1..-1].to_sym }
-      self.new(match[2].strip, duration, interval, tags)
-    end
-
-    def self.parse_interval(blob)
-      start_time_blob, finish_time_blob = blob.split('-')
-      interval = Array.new
-
-      if match = start_time_blob.match(/(\d+):(\d+)/)
-        interval[0] = Hour.new(match[1].to_i, match[2].to_i)
-      end
-
-      if match = finish_time_blob.match(/(\d+):(\d+)/)
-        interval[1] = Hour.new(match[1].to_i, match[2].to_i)
-      elsif finish_time_blob == 'now'
-        # void
-      end
-
-      interval
-    end
-
-    def self.format_interval(interval)
-      start_time, finish_time = interval
+    def self.format_interval(start_time, finish_time)
       if start_time && finish_time
         [start_time, finish_time].join('-')
       elsif start_time
-        [start_time, 'now'].join('-')
+        "started at #{start_time}"
       elsif finish_time
         raise 'nonsense'
       else # nil
       end
     end
 
-    attr_reader :text, :duration, :tags
-    def initialize(desc:, duration: nil, interval: Array.new, tags: [], status: :initial)
-      @text, @duration, @tags, @interval = text, duration || DEFAULT_DURATION, tags, interval || Array.new
+    attr_reader :status, :text, :duration, :start_time, :end_time, :tags
+    def initialize(desc:, status: :initial, start_time: nil, end_time: nil, duration: nil, tags: [], lines: [])
+      @text, @duration, @tags = desc, duration || DEFAULT_DURATION, tags || Array.new
+      @start_time, @end_time = start_time, end_time
     end
 
+    STATUS_SYMBOLS ||= {finished: '✔', not_done: '✘', postponed: '✘', unstarted: '-', in_progress: '-'}
     def to_s
-      output = ['-']
-      if self.finished? && ! @interval.empty?
-        output << "[#{self.class.format_interval(@interval)}]"
+      output = [STATUS_SYMBOLS[self.status]]
+      if @start_time || @end_time
+        output << "[#{self.class.format_interval(@start_time, @end_time)}]"
       else
         output << "[#{@duration}]" unless @duration == DEFAULT_DURATION
       end
@@ -70,11 +39,15 @@ module Pomodoro
     end
 
     def start
-      @interval[0] = Hour.now
+      @start_time = Hour.now
     end
 
     def finish
-      @interval[1] = Hour.now
+      if @start_time
+        @end_time = Hour.now
+      else
+        @status = :finished
+      end
     end
 
     def status
@@ -82,18 +55,19 @@ module Pomodoro
       return :in_progress if self.in_progress?
       return :finished if self.finished?
       return :postponed if self.postponed?
+      return :failed # ...
     end
 
     def unstarted?
-      @interval.empty? && ! self.finished?
+      ! @start_time && ! self.finished?
     end
 
     def in_progress?
-      @interval[0] && ! self.finished?
+      @start_time && ! self.finished?
     end
 
     def finished?
-      self.tags.include?(:done) || (@interval[0] && @interval[1])
+      (@start_time && @end_time) || @status == :finished
     end
 
     def postponed?
@@ -101,12 +75,10 @@ module Pomodoro
     end
 
     def remaining_duration(current_time_frame)
-      @interval[0] || raise("The task #{self.inspect} hasn't been started yet.")
+      @start_time || raise("The task #{self.inspect} hasn't been started yet.")
 
-      closing_time = @interval[0] + duration
+      closing_time = @start_time + duration
       interval_end_time = current_time_frame.interval[1]
-      # TODO: osetrit tohle:
-      # - [8:30-now] Work on Pomodoro. #done
     end
   end
 end

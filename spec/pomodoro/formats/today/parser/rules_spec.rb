@@ -1,11 +1,6 @@
+require 'spec_helper'
 require 'pomodoro/formats/today/parser/parser'
 require 'parslet/rig/rspec' # So we can use parser.rule.parse(...)
-
-class Parslet::Slice
-  def eql?(slice_or_string)
-    self.to_s == slice_or_string.to_s
-  end
-end
 
 describe Pomodoro::Formats::Today::Parser do
   describe 'rule :indent' do

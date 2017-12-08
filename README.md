@@ -1,5 +1,4 @@
-# About [![Travis](https://travis-ci.org/botanicus/pomodoro.svg?branch=master)](https://travis-ci.org/botanicus/pomodoro)
-[![Yard Docs](http://img.shields.io/badge/yard-docs-blue.svg)](http://www.rubydoc.info/github/botanicus/pomodoro/master)
+# About [![Travis](https://travis-ci.org/botanicus/pomodoro.svg?branch=master)](https://travis-ci.org/botanicus/pomodoro) [![Yard Docs](http://img.shields.io/badge/yard-docs-blue.svg)](http://www.rubydoc.info/github/botanicus/pomodoro/master)
 
 Simple command-line task management tool supporting time framing.
 

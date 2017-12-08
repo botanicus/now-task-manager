@@ -1,7 +1,8 @@
 require 'parslet'
+require 'pomodoro/formats/today'
 
-module Pomodoro
-  class TodayParser < Parslet::Parser
+module Pomodoro::Formats::Today
+  class Parser < Parslet::Parser
     # Primitives.
     rule(:integer)         { match['0-9'].repeat(1) }
 

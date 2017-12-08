@@ -9,6 +9,7 @@ Gem::Specification.new do |s|
   s.summary     = ''
   s.description = "#{s.summary}."
   s.license     = 'MIT'
+  s.metadata['yard.run'] = 'yri' # use 'yard' to build full HTML docs.
 
   s.files       = Dir.glob('{bin,lib}/**/*.rb') + ['README.md']
   s.executables = Dir['bin/*'].map(&File.method(:basename))

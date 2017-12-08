@@ -11,12 +11,12 @@ module Pomodoro
     end
 
     {
-      task_list: '~/pomodoro/tasks.todo',
-      today: '~/pomodoro/%Y-%m-%d.today',
-      schedule: '~/pomodoro/schedule.rb',
-      routine: '~/pomodoro/routine.rb'
+      task_list_path: '~/pomodoro/tasks.todo',
+      today_path: '~/pomodoro/%Y-%m-%d.today',
+      schedule_path: '~/pomodoro/schedule.rb',
+      routine_path: '~/pomodoro/routine.rb'
     }.each do |key, default_value|
-      define_method(:"#{key}_path") do |time = Time.now|
+      define_method(key) do |time = Time.now|
         path = @data[key.to_s] || default_value
         path = File.expand_path(time.strftime(path))
         if File.exist?(File.expand_path("#{path}/.."))

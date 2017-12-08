@@ -1,7 +1,7 @@
-require 'pomodoro/task'
 require 'pomodoro/exts/hour'
+require 'pomodoro/formats/today'
 
-module Pomodoro
+module Pomodoro::Formats::Today
   class TimeFrame
     ALLOWED_OPTIONS ||= [:online, :writeable, :note, :tags]
 
@@ -63,7 +63,7 @@ module Pomodoro
 
     def active_task
       self.tasks.find do |task|
-        ! task.in_progress?
+        task.in_progress?
       end
     end
 

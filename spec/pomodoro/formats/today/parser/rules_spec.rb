@@ -1,4 +1,4 @@
-require 'pomodoro/parser/today_parser'
+require 'pomodoro/formats/today/parser/parser'
 require 'parslet/rig/rspec' # So we can use parser.rule.parse(...)
 
 class Parslet::Slice
@@ -7,7 +7,7 @@ class Parslet::Slice
   end
 end
 
-describe Pomodoro::TodayParser do
+describe Pomodoro::Formats::Today::Parser do
   describe 'rule :indent' do
     it "parses dash" do
       tree = subject.indent.parse('- ')

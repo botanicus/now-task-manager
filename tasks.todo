@@ -1,39 +1,19 @@
-Tasks:
-- Investigate whether PEGs and parslet are useful.
-- consider Atom interface https://github.com/blog/2231-building-your-first-atom-plugin (Vim had problems: highligting by time stamp without modifying the file like time frame #wip).
-- Lose this file, replace by GH issues.
-- Finish the GH issues.
-- Investigate whether https://en.wikipedia.org/wiki/Parsing_expression_grammar and http://kschiess.github.io/parslet/get-started.html is useful.
+Version 1.0
 
-- Bring the functionality of punch-off back, add support for schedules (i. e. #ADM).
-- Bring back the next command, working with either time frame or a task if it has fixed duration.
-- Reporting tools (for clients etc).
+  Week 2 of December 2017
+  - Scheduled format parser, core classes, specs, API docs and format documentation.
+  - Today format parser, core classes, specs, API docs and format documentation.
+  - CLI interface (pomodoro, pomodoro-loop #14, git commit-pomodoro, ZSH prompt).
+  - BitBar interface.
 
-Count work days:
-(Date.new(2017, 12, 1)..Date.new(2017, 12, 31)).reduce(0) { |sum, date| sum += 1 unless date.saturday? || date.sunday?; sum }
+  Week 3 of December 2017
+  - Rules and routines DSL and engine.
+  - Offlining.
+  - Vim & Atom syntax highlighting.
 
-- Dirs by months. %Y/%m
-- The UTF-8 checkbox parses, but apart from that it's not supported, it does nothing.
-- Decide what's the approach to durations: either recommended duration or hard-core duration, that is run the timer and move on. Or both. Does it make sense to add expected/actual duration metadata? If hard-core duration is running, show the timer in the bitbar.
-- Add support for nested time frames.
-- pomodoro start-now: reframe based on durations
-- Online only if "Call|Interview ... on Skype" OR if the time frame is defined a priori with {online: true}.
-- Pomodoro: loop that runs and notifies about new time frames and shows notes.
-- BitBar: show each project TODO.
-- [30] Pomodoro: add stats about total minutes expected and actual to the backup.
-- Defined tasks: their commands are defined, but they are not in todays task since it's irrelevant.
+  Week 4 of December 2017
+  - Full specs and documentation.
+  - Rename before the release, it's no longer a pomodoro client.
 
-- Parse the new format:
-  - Full support for UTF-8 checks, full deprecation of #done. Interval doesn't imply that the task is finished, the check does.
-  - Parse metadata on tasks (indented key: value).
-- Support task transfer from the punch-off command including with tags #ADM.
-  If the time frame is not defined on tomorrow's schedule, put to the task file.
-- Organise the directory structure by years and months. %Y/%m
-- Start to work on an interactive CLI command.
-  - Keep an eye on time frames changing.
-  - Keep an eye on tasks scheduled for specific time.
-  - Run the timer for tasks with given duration.
-
-Resources:
-- Writing Vim plugins http://stevelosh.com/blog/2011/09/writing-vim-plugins/
-- Vim plugin documentation http://learnvimscriptthehardway.stevelosh.com/chapters/54.html
+  Week 5 of December 2017
+  - Testing.

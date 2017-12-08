@@ -1,4 +1,4 @@
-require 'pomodoro/parser/today_parser'
+require 'pomodoro/formats/today/parser/parser'
 
 class Parslet::Slice
   def eql?(slice_or_string)
@@ -7,7 +7,7 @@ class Parslet::Slice
 end
 
 # Important building rules of the parser are specified in the rules_spec.rb.
-describe Pomodoro::TodayParser do
+describe Pomodoro::Formats::Today::Parser do
   describe "The most basic syntax" do
     let(:syntax_file) do
       File.read('spec/data/formats/today/1_basic.today')

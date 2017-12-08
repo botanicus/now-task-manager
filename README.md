@@ -2,7 +2,7 @@
 
 Simple command-line task management tool supporting time framing.
 
-![](https://raw.githubusercontent.com/botanicus/pomodoro/master/doc/today-annotated.png)
+![](https://raw.githubusercontent.com/botanicus/pomodoro/master/doc/img/today-annotated.png)
 
 - Tasks are stored in readable plain text format.
 - Command-line interface.
@@ -11,7 +11,8 @@ Simple command-line task management tool supporting time framing.
 
 ## Time Framing
 
-[formats](https://github.com/botanicus/pomodoro/blob/master/doc/spec/formats.md)
+[today format](https://github.com/botanicus/pomodoro/blob/master/doc/formats/today.md)
+[schedule task list format](https://github.com/botanicus/pomodoro/blob/master/doc/formats/scheduled.md)
 
 ## Why?
 

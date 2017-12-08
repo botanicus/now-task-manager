@@ -1,0 +1,2 @@
+- BitBar: show each project TODO.
+- colour of a time frame based on how much time left.

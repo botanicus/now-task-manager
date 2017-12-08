@@ -1,4 +1,6 @@
-module Pomodoro
+require 'pomodoro/formats/today'
+
+module Pomodoro::Formats::Today
   class TaskList
     attr_reader :time_frame_list
     def initialize(time_frame_list)

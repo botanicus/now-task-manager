@@ -1,7 +1,5 @@
 require 'date'
-require 'pomodoro/task'
-require 'pomodoro/time_frame'
-require 'pomodoro/task_list'
+require 'pomodoro/formats/today'
 
 module Pomodoro
   module Schedule

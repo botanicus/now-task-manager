@@ -1,7 +1,9 @@
 require 'parslet'
+require 'pomodoro/formats/scheduled'
 
-module Pomodoro
-  class TaskListParser < Parslet::Parser
+module Pomodoro::Formats::Scheduled
+  # @api private
+  class Parser < Parslet::Parser
     rule(:task_group_header) {
       # match['^\n'].repeat # This makes it hang!
       (str("\n").absent? >> any).repeat(1).as(:task_group_header) >> str("\n")

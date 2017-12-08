@@ -46,6 +46,21 @@ def with_active_task(config, &block)
   end
 end
 
+def edit_next_task_when_no_task_active(config, &block)
+  time_frame(config) do |today_list, current_time_frame|
+    if active_task = current_time_frame.active_task
+      abort "<red>There is an active task already:</red>\n#{active_task}".colourise
+    end
+
+    if next_task = current_time_frame.first_unstarted_task
+      block.call(next_task)
+      today_list.save(config.today_path)
+    else
+      abort "<red>No more tasks in #{current_time_frame.desc}</red>".colourise
+    end
+  end
+end
+
 def generate_todays_tasks(date, config)
   require 'pomodoro/scheduler'
 
@@ -155,6 +170,24 @@ when 'active'
       # TODO: Format with %d etc.
     end
   end
+when 'tick-off-next'
+  edit_next_task_when_no_task_active(config) do |next_task|
+    next_task.complete
+  end
+when 'fail-next'
+  print "<bold>Why?</bold> ".colourise
+  reason = STDIN.readline.chomp
+  edit_next_task_when_no_task_active(config) do |next_task|
+    next_task.fail(reason)
+  end
+when 'postpone-next'
+  print "<bold>Why?</bold> ".colourise
+  reason = STDIN.readline.chomp
+  print "<bold>When do you want to review?</bold> Defaults to tomorrow. ".colourise
+  review_at = STDIN.readline.chomp
+  edit_next_task_when_no_task_active(config) do |next_task|
+    next_task.postpone(reason, review_at.empty? ? 'Tomorrow' : review_at)
+  end
 when '+'
   task_list = parse_task_list(config)
   task_list['Later'] ||= Array.new
@@ -164,6 +197,16 @@ when 'console', 'c'
   today = parse_today_list(config)
   tasks = parse_task_list(config)
   require 'pry'; binding.pry
+when 'tools'
+  if ARGV.shift == 'workdays'
+    start_date = Date.new(2018, 12, 1)
+    end_date   = Date.new(2018, 12, 31)
+    work_days = (start_date..end_date).reduce(0) do |sum, date|
+      sum += 1 unless date.saturday? || date.sunday?; sum
+    end
+    puts "~ There are #{work_days} (without any bank holidays) in 2018."
+    # TODO: Per-month breakdown.
+  end
 when 'bitbar'
   require 'pomodoro/commands/bitbar'
   today_list = parse_today_list(config)
@@ -192,6 +235,10 @@ pomodoro <magenta>move_on</magenta> <bright_black># Move on from the active task
 
 pomodoro <green>next?</green> <bright_black># Print the next task.</bright_black>
 pomodoro <green>active</green> <bright_black># Print the active task.</bright_black>
+
+pomodoro <magenta>tick-off-next</magenta> <bright_black># ...</bright_black>
+pomodoro <magenta>fail-next</magenta> <bright_black># ...</bright_black>
+pomodoro <magenta>postpone-next</magenta> <bright_black># ...</bright_black>
 
 pomodoro <red>+</red> [strings]<bright_black> # Add a task for later.</bright_black>
 

@@ -1,18 +1,3 @@
-# `Task` format
-
-This format is used to store **scheduled tasks**: tasks that will be done later
-or in a certain context.
-
-```
-Tomorrow
-- Buy milk.
-
-Prague
-- Pick up my shoes.
-```
-
-_There are detailed [unit specs](spec/pomodoro/parser) for the format._
-
 # `Today` format
 
 This format is used for tasks that are being worked on today.

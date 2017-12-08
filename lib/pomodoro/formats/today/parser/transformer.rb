@@ -1,10 +1,9 @@
 require 'parslet'
 require 'pomodoro/exts/hour'
-require 'pomodoro/task'
-require 'pomodoro/time_frame'
+require 'pomodoro/formats/today'
 
-module Pomodoro
-  class TodayTransformer < Parslet::Transform
+module Pomodoro::Formats::Today
+  class Transformer < Parslet::Transform
     STATUS_MAPPING ||= {
       finished: ['✓', '✔', '☑'],
       failed:   ['✕', '☓', '✖', '✗', '✘', '☒'],

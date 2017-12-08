@@ -70,12 +70,14 @@ module Pomodoro
           puts "Run 'pomodoro e' to add some tasks. | color=green"
         end
 
-        if task_list
+        if task_list && task_list.any? { |task_group| ! task_group.tasks.empty? }
           puts "Scheduled tasks"
           task_list.each do |task_group|
-            puts "-- #{task_group.name}"
-            task_group.tasks.each do |task|
-              puts "---- #{task}"
+            unless task_group.tasks.empty?
+              puts "-- #{task_group.name}"
+              task_group.tasks.each do |task|
+                puts "---- #{task} | color=black"
+              end
             end
           end
         end

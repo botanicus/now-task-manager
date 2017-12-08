@@ -1,7 +1,7 @@
 Version 1.0
 
   Week 2 of December 2017
-  - Scheduled format parser, core classes, specs, API docs and format documentation.
+  ✔ Scheduled format parser, core classes, specs, API docs and format documentation.
   - Today format parser, core classes, specs, API docs and format documentation.
   - CLI interface (pomodoro, pomodoro-loop #14, git commit-pomodoro, ZSH prompt).
   - BitBar interface.

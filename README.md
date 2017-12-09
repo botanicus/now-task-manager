@@ -1,5 +1,6 @@
 # About
 
+[![Gem version][GV img]][Gem version]
 [![Build status][BS img]][Build status]
 [![Coverage status][CS img]][Coverage status]
 [![YARD documentation][YD img]][YARD documentation]
@@ -127,10 +128,12 @@ This is why I wrote it in the first place.
 launchctl load -w ~/Library/LaunchAgents/botanicus.pomodoro_notification.plist
 ```
 
-[Build Status]: https://travis-ci.org/botanicus/pomodoro
-[Coverage Status]: https://coveralls.io/github/botanicus/pomodoro
+[Gem version]: https://rubygems.org/gems/pomodoro
+[Build status]: https://travis-ci.org/botanicus/pomodoro
+[Coverage status]: https://coveralls.io/github/botanicus/pomodoro
 [YARD documentation]: http://www.rubydoc.info/github/botanicus/pomodoro/master
 
+[GV img]: https://badge.fury.io/rb/pomodoro.svg
 [BS img]: https://travis-ci.org/botanicus/pomodoro.svg?branch=master
 [CS img]: https://img.shields.io/coveralls/botanicus/pomodoro.svg
 [YD img]: http://img.shields.io/badge/yard-docs-blue.svg

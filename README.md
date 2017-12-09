@@ -11,7 +11,11 @@ This is something between GTD and the pomodoro technique: it has part of the dep
 
 It does also time tracking which can be used to count actual time worked for clients.
 
+_TODO: a diagram with screenshots of schedule + postponed + generated = todays list._
+
 ## The workflow
+
+![Workflow diagram](https://raw.githubusercontent.com/botanicus/pomodoro/master/doc/diagram.png)
 
 ### Planning
 

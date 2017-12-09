@@ -5,7 +5,34 @@
 [![Coverage status][CS img]][Coverage status]
 [![YARD documentation][YD img]][YARD documentation]
 
-Simple command-line task management tool supporting time framing.
+Time management technique based on time framing and a command-line task management tool.
+
+## The technique
+
+There are two types of tasks: tasks to be done **today** and **scheduled tasks**.
+
+### Scheduled tasks
+
+Scheduled tasks are either scheduled for a certain **date** (tomorrow, next Friday etc), for a ceratin **context** (next time I'm in Prague etc) or just generally for **later**.
+
+```
+Tomorrow
+- Buy milk.
+
+Prague
+- Pick up my shoes.
+
+Later
+- Fix the expense gem.
+```
+
+That's all there is to it. It's a simple text file and you can edit it to your liking.
+
+The only shortcut you get is `pomodoro + Another task.` which will add a task to the list for later.
+
+### Today tasks
+
+Compared to the simplistic scheduled tasks, this format is more complex. The most important difference is the addition of **time frames**.
 
 ![](https://raw.githubusercontent.com/botanicus/pomodoro/master/doc/img/today-annotated.png)
 

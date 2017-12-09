@@ -1,3 +1,4 @@
+require 'spec_helper'
 require 'pomodoro/formats/scheduled'
 
 describe Pomodoro::Formats::Scheduled::TaskList do

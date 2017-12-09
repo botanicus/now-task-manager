@@ -1,5 +1,5 @@
-require 'pomodoro/formats/scheduled'
 require 'spec_helper'
+require 'pomodoro/formats/scheduled'
 
 describe Pomodoro::Formats::Scheduled::Parser do
   describe 'rules' do

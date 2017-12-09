@@ -6,13 +6,13 @@ module Pomodoro::Formats::Today
     ALLOWED_OPTIONS ||= [:online, :writeable, :note, :tags]
 
     attr_reader :name, :tasks, :interval, :options
-    attr_reader :start_time, :end_time, :desc
-    def initialize(desc:, start_time: nil, end_time: nil, task_list: Array.new, **shit)
+    attr_reader :start_time, :end_time, :header
+    def initialize(header:, start_time: nil, end_time: nil, task_list: Array.new, **shit)
       # tag, interval_from, interval_to, options = Hash.new
-      @name, @tag, @options = desc, nil, {}
+      @name, @tag, @options = header, nil, {}
       @interval = [start_time, end_time]
       @start_time, @end_time = start_time, end_time
-      @desc = desc
+      @header = header
       # @interval = [interval_from && Hour.parse(interval_from), interval_to && Hour.parse(interval_to)]
       @tasks = task_list
 
@@ -25,8 +25,8 @@ module Pomodoro::Formats::Today
       end
     end
 
-    def create_task(desc, duration = nil, tags = Array.new)
-      @tasks << Task.new(desc: desc, tags: tags)
+    def create_task(header, duration = nil, tags = Array.new)
+      @tasks << Task.new(header: header, tags: tags)
     end
 
     def unshift_task(*args)

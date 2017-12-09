@@ -69,12 +69,14 @@ Pomodoro.load('2017/{1,2,3}').each do |task_list|
 end
 ```
 
-[workflow](https://github.com/botanicus/pomodoro/blob/master/doc/workflow.md)
-[getting-started](https://github.com/botanicus/pomodoro/blob/master/doc/getting-started.md)
-[terms](https://github.com/botanicus/pomodoro/blob/master/doc/terms.md)
+# What's next?
 
-[today format](https://github.com/botanicus/pomodoro/blob/master/doc/formats/today.md)
-[schedule task list format](https://github.com/botanicus/pomodoro/blob/master/doc/formats/scheduled.md)
+- [workflow](https://github.com/botanicus/pomodoro/blob/master/doc/workflow.md)
+- [getting-started](https://github.com/botanicus/pomodoro/blob/master/doc/getting-started.md)
+- [terms](https://github.com/botanicus/pomodoro/blob/master/doc/terms.md)
+- [today format](https://github.com/botanicus/pomodoro/blob/master/doc/formats/today.md)
+- [schedule task list format](https://github.com/botanicus/pomodoro/blob/master/doc/formats/scheduled.md)
+
 
 
 [Gem version]: https://rubygems.org/gems/pomodoro

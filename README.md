@@ -1,5 +1,18 @@
 # About [![Travis](https://travis-ci.org/botanicus/pomodoro.svg?branch=master)](https://travis-ci.org/botanicus/pomodoro) [![Yard Docs](http://img.shields.io/badge/yard-docs-blue.svg)](http://www.rubydoc.info/github/botanicus/pomodoro/master)
 
+[![Build status][BS img]][Build status]
+[![Coverage status][CS img]][Coverage status]
+[![YARD documentation][YD img]][YARD documentation]
+
+
+[Build Status]: https://travis-ci.org/botanicus/pomodoro
+[Coverage Status]: https://coveralls.io/github/botanicus/pomodoro
+[YARD documentation]: http://www.rubydoc.info/github/botanicus/pomodoro/master
+
+[BS img]: https://travis-ci.org/botanicus/pomodoro.svg?branch=master
+[CS img]: https://img.shields.io/coveralls/botanicus/pomodoro.svg
+[YD img]: http://img.shields.io/badge/yard-docs-blue.svg
+
 Simple command-line task management tool supporting time framing.
 
 ![](https://raw.githubusercontent.com/botanicus/pomodoro/master/doc/img/today-annotated.png)

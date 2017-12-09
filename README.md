@@ -5,9 +5,40 @@
 [![Coverage status][CS img]][Coverage status]
 [![YARD documentation][YD img]][YARD documentation]
 
-Time management technique based on time framing and a command-line task management tool.
+_Time management technique based on time framing and a command-line task management tool._
 
-## The technique
+This is something between GTD and the pomodoro technique: it has part of the depth of GTD and part of the immediate action management approach of pomodoro. It is a full-circle task management method.
+
+It does also time tracking which can be used to count actual time worked for clients.
+
+## The workflow
+
+### Planning
+
+In the evening you'll do `pomodoro edit tomorrow`. This will check your schedules and picks one to use. Schedule is a list of time frames, for instance for a work day we could have something like this:
+
+```
+Morning routine (from 7:50)
+Work for client 1 (9:20 – 12:00)
+Lunch break (12:00 – 13)
+Work for client 2 (13 – 18)
+```
+
+Then it will try to prepopulate the schedule with tasks. There will be various sources:
+
+- The scheduled lists.
+- Automatically scheduled tasks.
+- Unfinished tasks from today and postponed tasks.
+
+## Doing
+
+3. Next day you simply start getting through your list using `pomodoro next` and `pomodoro complete` (as well as `pomodoro postpone` and `pomodoro move_on`).
+
+The tasks will be looked for in the current time frame. That is even if you have unfinished tasks, if a new time frame started, the tool will pick a task from the newly started one.
+
+## Getting started
+
+1. Define your schedules.
 
 There are two types of tasks: tasks to be done **today** and **scheduled tasks**.
 

@@ -3,10 +3,10 @@ require 'spec_helper'
 
 describe Pomodoro::Formats::Scheduled::Parser do
   describe 'rules' do
-    describe 'task_group_header' do
+    describe 'header' do
       it "parses anything followed by a new line" do
         expect {
-          subject.task_group_header.parse("Tomorrow\n")
+          subject.header.parse("Tomorrow\n")
         }.not_to raise_error
       end
     end
@@ -20,7 +20,7 @@ describe Pomodoro::Formats::Scheduled::Parser do
     end
 
     describe 'task_group' do
-      it "parses task_group_header followed by any number of tasks" do
+      it "parses header followed by any number of tasks" do
         expect {
           subject.task_group.parse("Tomorrow\n- Buy shoes #errands\n- [9:20] Call Tom.\n")
         }.not_to raise_error
@@ -58,7 +58,7 @@ describe Pomodoro::Formats::Scheduled::Parser do
       expect(tree).to eql([
         {
           task_group: {
-            task_group_header: 'Tomorrow',
+            header: 'Tomorrow',
             task_list: [
               {task: "Buy shoes #errands"},
               {task: "[9:20] Call Tom."}
@@ -66,7 +66,7 @@ describe Pomodoro::Formats::Scheduled::Parser do
           }
         }, {
           task_group: {
-            task_group_header: 'Prague',
+            header: 'Prague',
             task_list: [
               {task: "Task 1."}
             ]

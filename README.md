@@ -5,10 +5,65 @@
 [![Coverage status][CS img]][Coverage status]
 [![YARD documentation][YD img]][YARD documentation]
 
+FocusList is a daily planner & focus app based on Pomodoro technique. It helps you plan your day, stay focused and track your time. http://focuslist.co/
+
 Practical task management tool with time tracking based on:
 - Separating planning from execution.
 - Predictable schedules.
 - Task statuses. Where did you ended, why was it postponed and how long for?
+
+## What it's not
+
+Firstly, this is **not a project management** or **GTD system**: there is no concept of a project.
+Here it's all about chunks of time (days and time frames) and populating them with tasks
+from do-it-later lists as well as automatically.
+
+You might very well need such system and that's fine: I use GH issues just for that,
+in addition to using Pomodoro. But Pomodoro is the corner stone of my day organisation,
+GH issues are place to dump to tasks, then link them from Pomodoro.
+
+For the same reason it doesn't deal with **priorities**. If it's not a priority, why would you put it on today's todo list?
+
+## What it could be
+
+POMODOROTECHNIQUE - it can live alongside, using a plugin, an external system or a manual timer.
+
+NAMES: balance(not gem), routine, habit, focus (not gem) flow
+
+don't let your work and errands kill your personal objectives. Learning Spanish etc.
+
+plan, review
+scrum uses time framing as well (sprints)
+time framing here is different: it's not about deliverables (you can work on a project ad infinitum), it's about the routines and project scheduling (it's all bottom-up).
+
+USE POMODORO WITHIN for durations? This can be available via plugins.
+Example: pomodoros are not useful for everything. Like going to a bank,
+you never know how long it's going to take (esp. if you live in Poland).
+The only thing that is certain is that you have to fit it within a time frame,
+because you have to get your client's work done.
+
+- [14:00-15:30] Fix #86. # <= what needs to get done
+  - [14:00-14:25] Reproduce the bug. # <= time log using pomodoro
+  - [14:32-14:57] Reproduce the bug. # Pomodoro restarted. And I took a 7 min-long break.
+  - [15:05-15:30] Write a test.
+
+
+OR the [duration] is actually estimate and then we can see how we are doing and actually count how good our estimate is
+[ ]
+[-]
+[p]
+[✘]
+[✔]
+OR ✔/✘/- OR [p] etc
+
+PLUGIN structure important!
+
+pomodoro pomodoro_plugin restart
+Any task with #pomodoro
+
+Pluggable backend (dir/mysql ...)
+
+! POMODOROs: useful reports for clients. But the time is still reported via tiem frames.
 
 I'm not a time management expert, but this is the practical solution that made my life infinitely more organised.
 
@@ -40,6 +95,14 @@ personal goals and responsibilities.
 - Holistic. It's not just for the work or just for home.
 - Defaults. Don't think.
 - Automatically tracking time for clients.
+
+## It doesn't make you think
+
+Tasks are sequential. You cannot choose which task to work on next. The next task down the list is the one that's coming next.
+
+Schedules are automatic.
+
+Will power limited.
 
 ## Rich data
 

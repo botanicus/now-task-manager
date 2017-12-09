@@ -1,4 +1,4 @@
-require 'parslet/rig/rspec'
+# require 'parslet/rig/rspec'
 
 class Parslet::Slice
   def eql?(slice_or_string)

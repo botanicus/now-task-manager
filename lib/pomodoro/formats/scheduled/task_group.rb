@@ -1,9 +1,9 @@
 module Pomodoro::Formats::Scheduled
   class TaskGroup
     # @since 1.0
-    attr_reader :name, :tasks
+    attr_reader :header, :tasks
 
-    # @param name [String] label of the task group.
+    # @param header [String] header of the task group.
     # @param tasks [Array<String>] tasks of the group.
     # @since 1.0
     #
@@ -11,9 +11,9 @@ module Pomodoro::Formats::Scheduled
     #   require 'pomodoro/formats/scheduled'
     #
     #   tasks = ['Buy milk. #errands', '[9:20] Call with Mike.']
-    #   group = Pomodoro::Formats::Scheduled::TaskGroup.new(name: 'Tomorrow', tasks: tasks)
-    def initialize(name:, tasks: Array.new)
-      @name, @tasks = name, tasks
+    #   group = Pomodoro::Formats::Scheduled::TaskGroup.new(header: 'Tomorrow', tasks: tasks)
+    def initialize(header:, tasks: Array.new)
+      @header, @tasks = header, tasks
     end
 
     # Add a task to the task group.
@@ -34,7 +34,7 @@ module Pomodoro::Formats::Scheduled
     #
     # @since 1.0
     def to_s
-      [@name, @tasks.map { |task| "- #{task}" }, nil].flatten.join("\n")
+      [@header, @tasks.map { |task| "- #{task}" }, nil].flatten.join("\n")
     end
   end
 end

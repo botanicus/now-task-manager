@@ -1,3 +1,6 @@
+require 'parslet'
+require 'parslet/convenience' # parse_with_debug
+
 module Pomodoro
   module Formats
     # {include:file:doc/formats/scheduled.md}
@@ -20,7 +23,7 @@ module Pomodoro
       #   EOF
       # @since 1.0
       def self.parse(string)
-        tree = Parser.new.parse(string)
+        tree = Parser.new.parse_with_debug(string)
         nodes = Transformer.new.apply(tree)
         TaskList.new(nodes) unless nodes.empty?
       end

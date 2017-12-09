@@ -4,9 +4,9 @@ require 'pomodoro/formats/scheduled'
 module Pomodoro::Formats::Scheduled
   # @api private
   class Parser < Parslet::Parser
-    rule(:task_group_header) {
+    rule(:header) {
       # match['^\n'].repeat # This makes it hang!
-      (str("\n").absent? >> any).repeat(1).as(:task_group_header) >> str("\n")
+      (str("\n").absent? >> any).repeat(1).as(:header) >> str("\n")
     }
 
     rule(:task) {
@@ -14,7 +14,7 @@ module Pomodoro::Formats::Scheduled
     }
 
     rule(:task_group) {
-      (task_group_header >> task.repeat.as(:task_list)).as(:task_group)
+      (header >> task.repeat.as(:task_list)).as(:task_group)
     }
 
     rule(:task_groups) {

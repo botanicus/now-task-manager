@@ -100,6 +100,8 @@ This will turn into:
 
 Very often an action is interrupted by an other. If it takes 5 minutes, it's irrelevant to log it, but what if it took half of the afternoon?
 
+NOTE: http://kschiess.github.io/parslet/parser.html last to chapters explain how to create the recursion.
+
 ```
 Work for client 1 (13 – 17)
 - Issue#87.

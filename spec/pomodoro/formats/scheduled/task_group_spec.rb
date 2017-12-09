@@ -2,19 +2,19 @@ require 'pomodoro/formats/scheduled'
 
 describe Pomodoro::Formats::Scheduled::TaskGroup do
   describe '.new' do
-    it "requires the name keyword argument" do
+    it "requires the header keyword argument" do
       expect { described_class.new }.to raise_error(ArgumentError)
     end
 
-    it "succeeds when the name is provided" do
-      task_group = described_class.new(name: 'Tomorrow')
-      expect(task_group.name).to eql('Tomorrow')
+    it "succeeds when the header is provided" do
+      task_group = described_class.new(header: 'Tomorrow')
+      expect(task_group.header).to eql('Tomorrow')
       expect(task_group.tasks).to be_empty
     end
   end
 
   subject do
-    described_class.new(name: 'Tomorrow', tasks: ['Buy milk.'])
+    described_class.new(header: 'Tomorrow', tasks: ['Buy milk.'])
   end
 
   describe '#<<' do
@@ -42,7 +42,7 @@ describe Pomodoro::Formats::Scheduled::TaskGroup do
 
     context "without any tasks" do
       subject do
-        described_class.new(name: 'Tomorrow')
+        described_class.new(header: 'Tomorrow')
       end
 
       it "returns a valid scheduled task list formatted string" do

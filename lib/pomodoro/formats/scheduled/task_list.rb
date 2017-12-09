@@ -2,41 +2,41 @@ module Pomodoro::Formats::Scheduled
   class TaskList
     include Enumerable
 
-    # List of {TaskGroup task groups}. Or more precisely objects responding to `#name` and `#tasks`.
+    # List of {TaskGroup task groups}. Or more precisely objects responding to `#header` and `#tasks`.
     # @since 1.0
     attr_reader :data
 
     # @param [Array<TaskGroup>] data List of task groups.
-    #   Or more precisely objects responding to `#name` and `#tasks`.
+    #   Or more precisely objects responding to `#header` and `#tasks`.
     # @raise [ArgumentError] if data is not an array or if its content doesn't
-    #   respond to `#name` and `#tasks`.
+    #   respond to `#header` and `#tasks`.
     #
     # @example
     #   require 'pomodoro/formats/scheduled'
     #
     #   tasks = ['Buy milk. #errands', '[9:20] Call with Mike.']
-    #   group = Pomodoro::Formats::Scheduled::TaskGroup.new(name: 'Tomorrow', tasks: tasks)
+    #   group = Pomodoro::Formats::Scheduled::TaskGroup.new(header: 'Tomorrow', tasks: tasks)
     #   list  = Pomodoro::Formats::Scheduled::TaskList.new([group])
     # @since 1.0
     def initialize(data)
       @data = data
 
-      unless data.is_a?(Array) && data.all? { |item| item.respond_to?(:name) && item.respond_to?(:tasks) }
+      unless data.is_a?(Array) && data.all? { |item| item.respond_to?(:header) && item.respond_to?(:tasks) }
         raise ArgumentError.new("Data is supposed to be an array of TaskGroup instances.")
       end
     end
 
-    # Find a task group that matches given label.
+    # Find a task group that matches given header.
     #
-    # @return [TaskGroup, nil] matching the label.
+    # @return [TaskGroup, nil] matching the header.
     # @since 1.0
     #
     # @example
     #   # Using the code from the initialiser.
     #   list['Tomorrow']
-    def [](label)
+    def [](header)
       @data.find do |task_group|
-        task_group.name == label
+        task_group.header == header
       end
     end
 
@@ -46,8 +46,8 @@ module Pomodoro::Formats::Scheduled
     # @param [TaskGroup] task_group the task group.
     # @since 1.0
     def <<(task_group)
-      if self[task_group.name]
-        raise ArgumentError.new("Task group with label #{task_group.name} is already on the list.")
+      if self[task_group.header]
+        raise ArgumentError.new("Task group with header #{task_group.header} is already on the list.")
       end
 
       @data << task_group

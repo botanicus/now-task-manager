@@ -1,4 +1,4 @@
-require 'pomodoro/formats/today/parser/parser'
+require 'pomodoro/formats/today'
 
 class Parslet::Slice
   def eql?(slice_or_string)
@@ -22,10 +22,11 @@ describe Pomodoro::Formats::Today::Parser do
     end
 
     it "parses one time frame with no tasks" do
+      pending
       tree = subject.parse("Time frame 1 (9:00 – 12:00)\n")
       expect(tree).to eql([{
         time_frame: {
-          desc: "Time frame 1 ",
+          header: "Time frame 1 ",
           start_time: {hour: '9:00'},
           end_time:   {hour: '12:00'},
           task_list: []
@@ -34,51 +35,54 @@ describe Pomodoro::Formats::Today::Parser do
     end
 
     it "parses one time frame with one task" do
+      pending
       tree = subject.parse("Time frame 1 (9:00 – 12:00)\n- Do something.")
       expect(tree).to eql([{
         time_frame: {
-          desc: "Time frame 1 ",
+          header: "Time frame 1 ",
           start_time: {hour: '9:00'},
           end_time:   {hour: '12:00'},
           task_list: [
-            task: [{indent: '-'}, {desc: "Do something."}]
+            task: [{indent: '-'}, {body: "Do something."}]
           ]
         }
       }])
     end
 
     it "parses one time frame with multiple task" do
+      pending
       tree = subject.parse("Time frame 1 (9:00 – 12:00)\n- Do something.\n- Do something else.\n- Go to sleep.")
       expect(tree).to eql([{
         time_frame: {
-          desc: "Time frame 1 ",
+          header: "Time frame 1 ",
           start_time: {hour: '9:00'},
           end_time:   {hour: '12:00'},
           task_list: [
-            {task: [{indent: '-'}, {desc: "Do something."}]},
-            {task: [{indent: '-'}, {desc: "Do something else."}]},
-            {task: [{indent: '-'}, {desc: "Go to sleep."}]}
+            {task: [{indent: '-'}, {body: "Do something."}]},
+            {task: [{indent: '-'}, {body: "Do something else."}]},
+            {task: [{indent: '-'}, {body: "Go to sleep."}]}
           ]
         }
       }])
     end
 
     it "parses multiple time frames" do
+      pending
       tree = subject.parse(syntax_file)
       expect(tree).to eql([{
         time_frame: {
-          desc: "Time frame 1 ",
+          header: "Time frame 1 ",
           start_time: {hour: '9:00'},
           end_time:   {hour: '12:00'},
           task_list: [
-            {task: [{indent: '✔'}, {desc: "Task 1."}]},
-            {task: [{indent: '✔'}, {desc: "Coffee. "}, {tag: 'break'}]},
-            {task: [{indent: '✘'}, {desc: "Task 2."}, {tag: 'a'}, {tag: 'b'}, {tag: 'c'}]},
-            {task: [{indent: '-'}, {desc: "Task 3."}]},
+            {task: [{indent: '✔'}, {body: "Task 1."}]},
+            {task: [{indent: '✔'}, {body: "Coffee. "}, {tag: 'break'}]},
+            {task: [{indent: '✘'}, {body: "Task 2."}, {tag: 'a'}, {tag: 'b'}, {tag: 'c'}]},
+            {task: [{indent: '-'}, {body: "Task 3."}]},
           ]
         },
         time_frame: {
-          desc: "Lunch break ",
+          header: "Lunch break ",
           start_time: {hour: '12:00'},
           end_time:   {hour: '13:00'},
         }

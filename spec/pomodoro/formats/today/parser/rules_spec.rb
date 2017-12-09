@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'pomodoro/formats/today/parser/parser'
+require 'pomodoro/formats/today'
 require 'parslet/rig/rspec' # So we can use parser.rule.parse(...)
 
 describe Pomodoro::Formats::Today::Parser do

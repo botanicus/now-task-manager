@@ -6,7 +6,14 @@ require 'pomodoro/formats/today/task/metadata'
 
 module Pomodoro::Formats::Today
   class Task
-    STATUS_LIST ||= [:not_done, :done, :failed]
+    STATUS_MAPPING ||= {
+      not_done: ['-'],
+      done: ['✓', '✔', '☑'],
+      failed:   ['✕', '☓', '✖', '✗', '✘', '☒'],
+      # wip:      ['☐', '⛶', '⚬']
+    }
+
+    STATUS_LIST ||= STATUS_MAPPING.keys
 
     include TaskStatuses
     include DynamicAdditions

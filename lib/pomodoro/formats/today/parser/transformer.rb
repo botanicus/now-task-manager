@@ -10,8 +10,8 @@ module Pomodoro::Formats::Today
       wip:      ['☐', '⛶', '⚬']
     }
 
-    rule(desc: simple(:desc)) {
-      {desc: desc.to_s.strip}
+    rule(body: simple(:body)) {
+      {body: body.to_s.strip}
     }
 
     rule(duration: simple(:duration)) {
@@ -27,8 +27,8 @@ module Pomodoro::Formats::Today
     }
 
     rule(indent: simple(:char)) {
-      status, _ = STATUS_MAPPING.find { |status, i| i.include?(char) }
-      status ? {status: status} : Hash.new
+      status, _ = Task::STATUS_MAPPING.find { |status, i| i.include?(char) }
+      {status: status}
     }
 
     rule(task: subtree(:hashes)) {
@@ -50,7 +50,7 @@ module Pomodoro::Formats::Today
       end
 
       begin
-        Pomodoro::Task.new(**data)
+        Task.new(**data)
       rescue ArgumentError => error
         message = [error.message, "Arguments were: #{data.inspect}"].join("\n")
         raise ArgumentError.new(message)
@@ -58,8 +58,8 @@ module Pomodoro::Formats::Today
     }
 
     rule(time_frame: subtree(:data)) {
-      data[:desc] = data[:desc].to_s.strip # WTH? All the other nodes are processed correctly?
-      Pomodoro::TimeFrame.new(**data)
+      data[:body] = data.delete(:desc).to_s.strip # WTH? All the other nodes are processed correctly?
+      TimeFrame.new(**data)
     }
   end
 end

@@ -4,6 +4,7 @@ gemspec
 
 group(:development) do
   gem 'yard'
+  gem 'yard-rspec'
   gem 'redcarpet'
   gem 'github-markup'
 end

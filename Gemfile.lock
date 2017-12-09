@@ -36,6 +36,8 @@ GEM
       tins (~> 1.0)
     tins (1.16.0)
     yard (0.9.12)
+    yard-rspec (0.1)
+      yard
 
 PLATFORMS
   ruby
@@ -47,6 +49,7 @@ DEPENDENCIES
   redcarpet
   rspec
   yard
+  yard-rspec
 
 BUNDLED WITH
    1.16.0

@@ -1,5 +1,3 @@
-# `Today` format
-
 This format is used for tasks that are being worked on today.
 
 ```
@@ -112,4 +110,11 @@ Work for client 1 (13 – 17)
 - Task
 ```
 
-_There are detailed [unit specs](spec/pomodoro/parser) for the format._
+# Intentionally unsupported
+
+- **Comments**. These files are extremely useful for journaling about your work
+  progress and therefore there is space for such activity. That way we can retrieve
+  all the info later, which would be hard with free-flowing comments.
+
+_For more details about the format see
+{https://github.com/botanicus/now-task-manager/blob/master/spec/pomodoro/formats/today/parser/parser_spec.rb parser_spec.rb}._

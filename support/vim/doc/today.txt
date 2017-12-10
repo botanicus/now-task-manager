@@ -1,4 +1,4 @@
-*today.txt* Plugin for http://github.com/botanicus/pomodoro
+*today.txt* Plugin for http://github.com/botanicus/now-task-manager
 
 Blah blah desc do this later.
 

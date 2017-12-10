@@ -87,5 +87,5 @@ Or you can want to know how good your estimates are. You've been adding a custom
 metadata such as `Estimate: 4h` to your tasks. Now you can go and compare the estimate
 with the actual duration of the task.
 
-Read the [workflow](https://github.com/botanicus/pomodoro/blob/master/doc/workflow.md)
+Read the [workflow](https://github.com/botanicus/now-task-manager/blob/master/doc/workflow.md)
 to understand how it works.

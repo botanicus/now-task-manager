@@ -9,7 +9,7 @@
 you plan your day, stay focused and track your time.
 
 It doesn't replace either GTD or the pomodoro technique, it complements them.
-(In fact there will be a [Pomodoro plugin #18](https://github.com/botanicus/pomodoro/issues/18) at some point.)
+(In fact there will be a [Pomodoro plugin #18](https://github.com/botanicus/now-task-manager/issues/18) at some point.)
 
 At some point I must have tried every bloody time management app there is (and let
 me tell you, there's a lot of them) and I was still disorganised and eventually
@@ -36,9 +36,9 @@ and end time and within the block doing only tasks that are related to that bloc
 So <abbrev title="Now Task Manager">NTM</abbrev> is an automation based on my plain
 text task files where you define your schedule and then forces you to stick to it.
 
-![Workflow diagram](https://raw.githubusercontent.com/botanicus/pomodoro/master/doc/diagram.png)
+![Workflow diagram](https://raw.githubusercontent.com/botanicus/now-task-manager/master/doc/diagram.png)
 
-Read about the [benefits](https://github.com/botanicus/pomodoro/blob/master/doc/benefits.md).
+Read about the [benefits](https://github.com/botanicus/now-task-manager/blob/master/doc/benefits.md).
 
 ## What it's not
 
@@ -53,14 +53,14 @@ GH issues are place to dump to tasks, then link them from Pomodoro.
 For the same reason it doesn't deal with **priorities**. If it's not a priority,
 why would you put it on today's todo list?
 
-_**Read next**: the [workflow](https://github.com/botanicus/pomodoro/blob/master/doc/workflow.md)_
+_**Read next**: the [workflow](https://github.com/botanicus/now-task-manager/blob/master/doc/workflow.md)_
 
-[Gem version]: https://rubygems.org/gems/pomodoro
-[Build status]: https://travis-ci.org/botanicus/pomodoro
-[Coverage status]: https://coveralls.io/github/botanicus/pomodoro
-[YARD documentation]: http://www.rubydoc.info/github/botanicus/pomodoro/master
+[Gem version]: https://rubygems.org/gems/now-task-manager
+[Build status]: https://travis-ci.org/botanicus/now-task-manager
+[Coverage status]: https://coveralls.io/github/botanicus/now-task-manager
+[YARD documentation]: http://www.rubydoc.info/github/botanicus/now-task-manager/master
 
 [GV img]: https://badge.fury.io/rb/pomodoro.svg
-[BS img]: https://travis-ci.org/botanicus/pomodoro.svg?branch=master
-[CS img]: https://img.shields.io/coveralls/botanicus/pomodoro.svg
+[BS img]: https://travis-ci.org/botanicus/now-task-manager.svg?branch=master
+[CS img]: https://img.shields.io/coveralls/botanicus/now-task-manager.svg
 [YD img]: http://img.shields.io/badge/yard-docs-blue.svg

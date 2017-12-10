@@ -1,5 +1,5 @@
 " Pomodoro today syntax file
-" https://github.com/botanicus/pomodoro
+" https://github.com/botanicus/now-task-manager
 
 if exists("b:current_syntax")
   finish

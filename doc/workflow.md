@@ -2,9 +2,9 @@ _This document is WIP._
 
 ## The workflow
 
-_If you don't understand any term, read [terms](https://github.com/botanicus/pomodoro/blob/master/doc/terms.md)_
+_If you don't understand any term, read [terms](https://github.com/botanicus/now-task-manager/blob/master/doc/terms.md)_
 
-![Workflow diagram](https://raw.githubusercontent.com/botanicus/pomodoro/master/doc/diagram.png)
+![Workflow diagram](https://raw.githubusercontent.com/botanicus/now-task-manager/master/doc/diagram.png)
 
 ### Planning
 
@@ -31,11 +31,11 @@ The tasks will be looked for in the current time frame. That is even if you have
 
 ### Today tasks
 
-![](https://raw.githubusercontent.com/botanicus/pomodoro/master/doc/img/today-annotated.png)
+![](https://raw.githubusercontent.com/botanicus/now-task-manager/master/doc/img/today-annotated.png)
 
 - Tasks are stored in readable plain text format.
 - Command-line interface.
-- [Vim plugin](https://github.com/botanicus/pomodoro/tree/master/support/vim).
+- [Vim plugin](https://github.com/botanicus/now-task-manager/tree/master/support/vim).
 - BitBar plugin.
 
 ### Scheduled tasks
@@ -57,4 +57,4 @@ That's all there is to it. It's a simple text file and you can edit it to your l
 
 The only shortcut you get is `pomodoro + Another task.` which will add a task to the list for later.
 
-_**Read next**: [getting started](https://github.com/botanicus/pomodoro/blob/master/doc/getting-started.md)_
+_**Read next**: [getting started](https://github.com/botanicus/now-task-manager/blob/master/doc/getting-started.md)_

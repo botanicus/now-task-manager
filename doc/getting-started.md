@@ -2,7 +2,7 @@ _This document is WIP._
 
 # Getting started
 
-_If you don't understand any term, read [terms](https://github.com/botanicus/pomodoro/blob/master/doc/terms.md)_
+_If you don't understand any term, read [terms](https://github.com/botanicus/now-task-manager/blob/master/doc/terms.md)_
 
 1. Define your schedules.
 
@@ -37,5 +37,5 @@ today:     ~/Dropbox/Data/Data/Pomodoro/Tasks/%Y-%m-%d.today
 task_list: ~/Dropbox/Data/WIP/tasks.todo
 ```
 
-- [today format](https://github.com/botanicus/pomodoro/blob/master/doc/formats/today.md)
-- [schedule task list format](https://github.com/botanicus/pomodoro/blob/master/doc/formats/scheduled.md)
+- [today format](https://github.com/botanicus/now-task-manager/blob/master/doc/formats/today.md)
+- [schedule task list format](https://github.com/botanicus/now-task-manager/blob/master/doc/formats/scheduled.md)

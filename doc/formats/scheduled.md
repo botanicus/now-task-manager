@@ -13,7 +13,7 @@ Prague
 # Currently unsupported
 
 - **Labels**. Labels allow us to match tasks with _named_ time frames.
-  See [#8](https://github.com/botanicus/pomodoro/issues/8).
+  See [#8](https://github.com/botanicus/now-task-manager/issues/8).
 
 ```
 - ADM: Catch up with Eva.
@@ -29,4 +29,4 @@ Prague
   and tags.
 
 _For more details about the format see
-{https://github.com/botanicus/pomodoro/blob/master/spec/pomodoro/formats/scheduled/parser/parser_spec.rb parser_spec.rb}._
+{https://github.com/botanicus/now-task-manager/blob/master/spec/pomodoro/formats/scheduled/parser/parser_spec.rb parser_spec.rb}._

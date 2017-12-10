@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.version     = '0.1.0'
   s.authors     = ['James C Russell']
   s.email       = 'james@101ideas.cz'
-  s.homepage    = 'http://github.com/botanicus/pomodoro'
+  s.homepage    = 'http://github.com/botanicus/now-task-manager'
   s.summary     = ''
   s.description = "#{s.summary}."
   s.license     = 'MIT'

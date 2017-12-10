@@ -75,7 +75,7 @@ describe Pomodoro::Formats::Today::TimeFrame do
   end
 
   describe '#method_name' do
-    it do
+    it "returns a reasonable method name based on the name" do
       expect(subject.method_name).to eql(:morning_routine)
     end
   end

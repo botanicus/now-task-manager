@@ -9,7 +9,12 @@ module Pomodoro::Formats::Today
     attr_reader :name, :start_time, :end_time, :tasks
 
     # @param name [String] name of the task group.
-    # @param tasks [Array<String>] tasks of the group.
+    # @param start_time [Hour] of when the time frame starts.
+    # @param end_time [Hour] of when the time frame ends.
+    # @param tasks [Array<Task>] tasks of the group.
+    # @raise ArgumentError if name is not present, neither start_time or end_time
+    #   is present or one of the times is not an Hour instance or if tasks is not
+    #   an array of task-like objects.
     # @since 1.0
     #
     # @example

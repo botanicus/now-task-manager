@@ -7,8 +7,25 @@ module Pomodoro::Formats::Today
     # @since 1.0
     attr_reader :time_frames
 
-    def initialize(time_frames)
+    # TODO: CONTINUE HERE, write the documentation.
+    #
+    # @example
+    #   require 'pomodoro/formats/today'
+    #
+    #   task_list = Pomodoro::Formats::Today::TaskList.new(
+    #     Pomodoro::Formats::Today::TimeFrame.new(
+    #       name: 'Morning routine', start_time: Hour.parse('7:50'), tasks: [
+    #         Pomodoro::Formats::Today::Task.new(status: :done, body: 'Headspace.')
+    #       ]
+    #     )
+    #   )
+    def initialize(*time_frames)
       @time_frames = time_frames
+
+      time_frame_methods = [:method_name]
+      unless time_frames.is_a?(Array) && time_frames.all? { |item| time_frame_methods.all? { |method| item.respond_to?(method) }}
+        raise ArgumentError.new("Time frames is supposed to be an array of TimeFrame-like instances.")
+      end
 
       time_frames.each do |time_frame|
         self.define_singleton_method(time_frame.method_name) do
@@ -27,7 +44,6 @@ module Pomodoro::Formats::Today
     def each(&block)
       @time_frames.each(&block)
     end
-
 
     def duration
       self.time_frames.sum { |time_frame| time_frame.duration }

@@ -64,8 +64,12 @@ module Pomodoro::Formats::Today
     # Name of method that will be available on a task list to access a time frame.
     #
     # @example
-    #   time_frame = TimeFrame.new(name: "Morning routine", start_time: Time.parse('7:50'))
-    #   time_frame.method_name # => :morning_routine
+    #   Pomodoro::Formats::Today::TimeFrame.new(
+    #     name: "Morning routine",
+    #     start_time: Hour.parse('7:50')
+    #   ).method_name
+    #
+    #   # => :morning_routine
     # @since 1.0
     def method_name
       @name.downcase.tr(' ', '_').to_sym

@@ -53,7 +53,7 @@ GH issues are place to dump to tasks, then link them from Pomodoro.
 For the same reason it doesn't deal with **priorities**. If it's not a priority,
 why would you put it on today's todo list?
 
-_**Read next**: the [workflow](https://github.com/botanicus/now-task-manager/blob/master/doc/workflow.md)_
+_**Read next**: the [workflow](https://github.com/botanicus/now-task-manager/blob/master/doc/workflow.md)._
 
 [Gem version]: https://rubygems.org/gems/now-task-manager
 [Build status]: https://travis-ci.org/botanicus/now-task-manager

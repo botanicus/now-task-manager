@@ -60,7 +60,7 @@ _**Read next**: the [workflow](https://github.com/botanicus/now-task-manager/blo
 [Coverage status]: https://coveralls.io/github/botanicus/now-task-manager
 [YARD documentation]: http://www.rubydoc.info/github/botanicus/now-task-manager/master
 
-[GV img]: https://badge.fury.io/rb/pomodoro.svg
+[GV img]: https://badge.fury.io/rb/now-task-manager.svg
 [BS img]: https://travis-ci.org/botanicus/now-task-manager.svg?branch=master
 [CS img]: https://img.shields.io/coveralls/botanicus/now-task-manager.svg
 [YD img]: http://img.shields.io/badge/yard-docs-blue.svg

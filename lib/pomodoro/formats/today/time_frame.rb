@@ -26,6 +26,15 @@ module Pomodoro::Formats::Today
       if @start_time.nil? && @end_time.nil?
         raise ArgumentError.new("At least one of start_time and end_time has to be provided.")
       end
+
+      unless [@start_time, @end_time].compact.all? { |time| time.is_a?(Hour) }
+        raise ArgumentError.new("Start time and end time has to be an Hour instance.")
+      end
+
+      task_methods = [:status, :body, :start_time, :end_time, :metadata]
+      unless tasks.is_a?(Array) && tasks.all? { |item| task_methods.all? { |method| item.respond_to?(method) }}
+        raise ArgumentError.new("Data is supposed to be an array of Task instances.")
+      end
     end
 
     # Return a today task list formatted string.

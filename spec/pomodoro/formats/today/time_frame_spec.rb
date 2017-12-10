@@ -26,13 +26,13 @@ describe Pomodoro::Formats::Today::TimeFrame do
     it "fails if tasks is not an array" do
       expect {
         described_class.new(name: 'X', start_time: Hour.parse('7:50'), tasks: Hash.new)
-      }.to raise_error(ArgumentError, /Data is supposed to be an array of Task instances/)
+      }.to raise_error(ArgumentError, /Tasks is supposed to be an array of Task instances/)
     end
 
     it "fails if tasks is not an array of task-like objects" do
       expect {
         described_class.new(name: 'X', start_time: Hour.parse('7:50'), tasks: [Object.new])
-      }.to raise_error(ArgumentError, /Data is supposed to be an array of Task instances/)
+      }.to raise_error(ArgumentError, /Tasks is supposed to be an array of Task instances/)
     end
 
     it "succeeds when name and start_time is provided" do
@@ -65,6 +65,18 @@ describe Pomodoro::Formats::Today::TimeFrame do
       it "returns a valid today task list formatted string" do
         expect(subject.to_s).to eql("Morning routine (from 7:50)\n")
       end
+    end
+  end
+
+  describe '#each' do
+    it "returns an enumerator" do
+      expect(subject.each).to be_kind_of(Enumerator)
+    end
+  end
+
+  describe '#method_name' do
+    it do
+      expect(subject.method_name).to eql(:morning_routine)
     end
   end
 end

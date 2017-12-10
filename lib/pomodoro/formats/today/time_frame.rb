@@ -16,7 +16,7 @@ module Pomodoro::Formats::Today
     #   require 'pomodoro/formats/today'
     #
     #   time_frame = Pomodoro::Formats::Today::TimeFrame.new(
-    #     name: 'Morning routine', tasks: [
+    #     name: 'Morning routine', start_time: Hour.parse('7:50'), tasks: [
     #       Pomodoro::Formats::Today::Task.new(status: :done, body: 'Headspace.')
     #     ]
     #   )
@@ -33,7 +33,7 @@ module Pomodoro::Formats::Today
 
       task_methods = [:status, :body, :start_time, :end_time, :metadata]
       unless tasks.is_a?(Array) && tasks.all? { |item| task_methods.all? { |method| item.respond_to?(method) }}
-        raise ArgumentError.new("Data is supposed to be an array of Task instances.")
+        raise ArgumentError.new("Tasks is supposed to be an array of Task instances.")
       end
     end
 
@@ -53,9 +53,17 @@ module Pomodoro::Formats::Today
     # @yieldparam [Task] task
     # @since 1.0
     def each(&block)
-      @tasks.each do |task|
-        block.call(task)
-      end
+      @tasks.each(&block)
+    end
+
+    # Name of method that will be available on a task list to access a time frame.
+    #
+    # @example
+    #   time_frame = TimeFrame.new(name: "Morning routine", start_time: Time.parse('7:50'))
+    #   time_frame.method_name # => :morning_routine
+    # @since 1.0
+    def method_name
+      @name.downcase.tr(' ', '_').to_sym
     end
 
     protected

@@ -1,4 +1,8 @@
+_This document is WIP._
+
 ## The workflow
+
+_If you don't understand any term, read [terms](https://github.com/botanicus/pomodoro/blob/master/doc/terms.md)_
 
 ![Workflow diagram](https://raw.githubusercontent.com/botanicus/pomodoro/master/doc/diagram.png)
 
@@ -52,3 +56,5 @@ Later
 That's all there is to it. It's a simple text file and you can edit it to your liking.
 
 The only shortcut you get is `pomodoro + Another task.` which will add a task to the list for later.
+
+_**Read next**: [getting started](https://github.com/botanicus/pomodoro/blob/master/doc/getting-started.md)_

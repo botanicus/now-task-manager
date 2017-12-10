@@ -1,6 +1,31 @@
+require 'parslet'
+require 'parslet/convenience' # parse_with_debug
+
 module Pomodoro
   module Formats
+    # {include:file:doc/formats/today.md}
     module Today
+      # The entry point method for parsing this format.
+      #
+      # @param string [String] string in the today task list format
+      # @return [TaskList, nil]
+      #
+      # @example
+      #   require 'pomodoro/formats/today'
+      #
+      #   task_list = Pomodoro::Formats::Today.parse <<-EOF.gsub(/^\s*/, '')
+      #     Morning routine (from 7:50)
+      #     - Headspace. #meditation
+      #
+      #     Admin (9:20 – 10:00)
+      #     - [9:20] Call with Mike.
+      #   EOF
+      # @since 1.0
+      def self.parse(string)
+        tree = Parser.new.parse_with_debug(string)
+        nodes = Transformer.new.apply(tree)
+        TaskList.new(nodes) unless nodes.empty?
+      end
     end
   end
 end

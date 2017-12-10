@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    pomodoro (0.1.0)
+    now-task-manager (0.1.0)
       parslet (~> 1.8)
       refined-refinements (~> 0.0)
       term-ansicolor (~> 1.4)
@@ -59,7 +59,7 @@ PLATFORMS
 DEPENDENCIES
   coveralls
   github-markup
-  pomodoro!
+  now-task-manager!
   pry
   redcarpet
   rspec

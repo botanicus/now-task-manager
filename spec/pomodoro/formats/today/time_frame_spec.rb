@@ -92,13 +92,14 @@ describe Pomodoro::Formats::Today::TimeFrame do
         described_class.new(name: 'Morning routine')
       end
 
-      it "raises an error unless the prev_time_frame_end_time and next_time_frame_end_time is provided" do
+      it "raises an error unless the prev_time_frame_end_time and next_time_frame_end_time are both provided" do
         expect { subject.duration }.to raise_error(
           Pomodoro::Formats::Today::TimeFrameInsufficientTimeInfoError)
-      end
 
-      it "raises an error unless the prev_time_frame_end_time is provided" do
         expect { subject.duration(nil, Hour.parse('9:20')) }.to raise_error(
+          Pomodoro::Formats::Today::TimeFrameInsufficientTimeInfoError)
+
+        expect { subject.duration(Hour.parse('9:20'), nil) }.to raise_error(
           Pomodoro::Formats::Today::TimeFrameInsufficientTimeInfoError)
       end
 
@@ -162,6 +163,45 @@ describe Pomodoro::Formats::Today::TimeFrame do
 
       it "returns a boolean if the prev_time_frame_end_time is provided" do
         expect(subject.active?(Hour.parse('8:00'), Hour.parse('7:50'))).to be(true)
+      end
+    end
+
+    context "with neither provided" do
+      subject do
+        described_class.new(name: 'Morning routine')
+      end
+
+      it "raises an error unless the prev_time_frame_end_time and next_time_frame_end_time are both provided" do
+        expect { subject.active? }.to raise_error(
+          Pomodoro::Formats::Today::TimeFrameInsufficientTimeInfoError)
+
+        expect { subject.active?(Hour.now, nil, Hour.parse('9:20')) }.to raise_error(
+          Pomodoro::Formats::Today::TimeFrameInsufficientTimeInfoError)
+
+        expect { subject.active?(Hour.now, Hour.parse('9:20'), nil) }.to raise_error(
+          Pomodoro::Formats::Today::TimeFrameInsufficientTimeInfoError)
+      end
+
+      it "fails if the first argument is not an Hour instance" do
+        expect { subject.active?(Time.now) }.to raise_error(
+          ArgumentError, /Current time has to be an Hour instance, was Time/)
+      end
+
+      it "returns a boolean if the the arguments are correct" do
+        expect(subject.active?(Hour.parse('8:00'), Hour.parse('7:50'), Hour.parse('9:20'))).to be(true)
+        expect(subject.active?(Hour.parse('9:50'), Hour.parse('7:50'), Hour.parse('9:20'))).to be(false)
+      end
+
+      it "raises an error if the start_time is bigger than the end_time" do
+        incorrect_start_time = Hour.parse('10:50')
+        next_time_frame_end_time = Hour.parse('9:20')
+        expect { subject.active?(Hour.now, incorrect_start_time, next_time_frame_end_time) }.to raise_error(
+          ArgumentError, /Start time cannot be bigger than end time/)
+      end
+
+      it "raises an error if the start_time is equal to the end_time" do
+        expect { subject.active?(Hour.now, Hour.parse('10:50'), Hour.parse('10:50')) }.to raise_error(
+          ArgumentError, /Start time cannot be bigger than end time/)
       end
     end
   end

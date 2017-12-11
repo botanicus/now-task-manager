@@ -63,24 +63,35 @@ module Pomodoro::Formats::Today
     # @return [Hour]
     # @since 1.0
     def duration
-      enumerator = self.time_frames.each.with_index
-      enumerator.reduce(0) do |sum, (time_frame, index)|
-        # TODO: is there some better solution using enumerator.next? I can't find
-        # any enumerator.prev.
-        if index == 0
-          prev_time_frame_end_time = Hour.parse('0:00')
-        else
-          prev_time_frame_end_time = @time_frames[index - 1].end_time
-        end
-
-        if index == (@time_frames.length - 1)
-          next_time_frame_start_time = Hour.parse('23:59')
-        else
-          next_time_frame_start_time = @time_frames[index + 1].start_time
-        end
-
+      self.with_prev_and_next.reduce(0) do |sum, (prev_time_frame, time_frame, next_time_frame)|
+        prev_time_frame_end_time   = prev_time_frame ? prev_time_frame.end_time   : Hour.parse('0:00')
+        next_time_frame_start_time = next_time_frame ? next_time_frame.start_time : Hour.parse('23:59')
         time_frame.duration(prev_time_frame_end_time, next_time_frame_start_time) + sum
       end
+    end
+
+    # @example
+    #   task_list.with_prev_and_next.each do |prev_time_frame, time_frame, next_time_frame|
+    #   end
+    def with_prev_and_next
+      Enumerator.new do |yielder|
+        if @time_frames.length == 1
+          yielder << [nil, @time_frames[0], nil]
+        elsif @time_frames.length > 1
+          yielder << [nil, @time_frames[0], @time_frames[1]]
+          @time_frames[1..-2].each.with_index do |time_frame, index|
+            yielder << [@time_frames[index], time_frame, @time_frames[index + 2]]
+          end
+          yielder << [@time_frames[-2], @time_frames[-1], nil]
+        end
+      end
+    end
+
+    # @example
+    #   task_list.with_prev_and_next_times.each do |time_frame, prev_time_frame_end_time, next_time_frame_start_time|
+    #   end
+    def with_prev_and_next_times
+      # TODO
     end
 
     # Return a today task list formatted string.
@@ -96,6 +107,7 @@ module Pomodoro::Formats::Today
 
     # Return the currently active task, regardless of the time frame we are in.
     #
+    # @return [Task, nil]
     # @since 1.0
     def active_task
       self.each_task.find(&:in_progress?)
@@ -103,11 +115,16 @@ module Pomodoro::Formats::Today
 
     # Return the currently active time frame.
     #
+    # @return [TimeFrame, nil]
     # @since 1.0
-    def current_time_frame(current_time = Time.now)
-      @time_frames.find do |time_frame|
-        time_frame.active?(current_time)
+    def current_time_frame(current_time = Hour.now)
+      result = self.with_prev_and_next.find do |prev_time_frame, time_frame, next_time_frame|
+        prev_time_frame_end_time = prev_time_frame && prev_time_frame.end_time
+        next_time_frame_start_time = next_time_frame && next_time_frame.start_time
+        time_frame.active?(current_time, prev_time_frame_end_time, next_time_frame_start_time)
       end
+
+      result && result[1]
     end
 
     # def has_unfinished_tasks?

@@ -209,7 +209,6 @@ describe Pomodoro::Formats::Today::TimeFrame do
   describe '#to_s' do
     context "with tasks" do
       it "returns a valid today task list formatted string" do
-        pending "Task is broken"
         expect(subject.to_s).to eql("Morning routine (from 7:50)\n✔ Headspace.\n")
       end
     end

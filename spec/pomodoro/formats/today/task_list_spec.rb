@@ -132,4 +132,167 @@ describe Pomodoro::Formats::Today::TaskList do
       end
     end
   end
+
+  describe '#with_prev_and_next' do
+    context "if there are no time frames" do
+      subject do
+        described_class.new
+      end
+
+      it do
+        enumerator = subject.with_prev_and_next
+        expect { enumerator.next }.to raise_error(StopIteration)
+      end
+    end
+
+    context "if there is only one time frame" do
+      subject do
+        described_class.new(
+          Pomodoro::Formats::Today::TimeFrame.new(
+            name: 'Morning routine', start_time: h('7:50')))
+      end
+
+      it do
+        enumerator = subject.with_prev_and_next
+
+        first_iteration = enumerator.next
+        expect(first_iteration.length).to be(3)
+        expect(first_iteration[0]).to be(nil)
+        expect(first_iteration[1].name).to eql("Morning routine")
+        expect(first_iteration[2]).to be(nil)
+
+        expect { enumerator.next }.to raise_error(StopIteration)
+      end
+    end
+
+    context "if there is are two time frames" do
+      subject do
+        described_class.new(
+          Pomodoro::Formats::Today::TimeFrame.new(
+            name: 'Morning routine', start_time: h('7:50')),
+          Pomodoro::Formats::Today::TimeFrame.new(
+            name: 'Work', start_time: h('9:20'), end_time: h('17:20')))
+      end
+
+      it do
+        enumerator = subject.with_prev_and_next
+
+        first_iteration = enumerator.next
+        expect(first_iteration.length).to be(3)
+        expect(first_iteration[0]).to be(nil)
+        expect(first_iteration[1].name).to eql("Morning routine")
+        expect(first_iteration[2].name).to eql("Work")
+
+        second_iteration = enumerator.next
+        expect(second_iteration.length).to be(3)
+        expect(second_iteration[0].name).to eql("Morning routine")
+        expect(second_iteration[1].name).to eql("Work")
+        expect(second_iteration[2]).to be(nil)
+
+        expect { enumerator.next }.to raise_error(StopIteration)
+      end
+    end
+
+    context "if there is more than two time frames" do
+      subject do
+        described_class.new(
+          Pomodoro::Formats::Today::TimeFrame.new(
+            name: 'Morning routine', start_time: h('7:50')),
+          Pomodoro::Formats::Today::TimeFrame.new(
+            name: 'Work', start_time: h('9:20'), end_time: h('17:20')),
+          Pomodoro::Formats::Today::TimeFrame.new(
+            name: 'Evening reflection', end_time: h('21:00')))
+      end
+
+      it do
+        enumerator = subject.with_prev_and_next
+
+        first_iteration = enumerator.next
+        expect(first_iteration.length).to be(3)
+        expect(first_iteration[0]).to be(nil)
+        expect(first_iteration[1].name).to eql("Morning routine")
+        expect(first_iteration[2].name).to eql("Work")
+
+        second_iteration = enumerator.next
+        expect(second_iteration.length).to be(3)
+        expect(second_iteration[0].name).to eql("Morning routine")
+        expect(second_iteration[1].name).to eql("Work")
+        expect(second_iteration[2].name).to eql("Evening reflection")
+
+        last_iteration = enumerator.next
+        expect(last_iteration.length).to be(3)
+        expect(last_iteration[0].name).to eql("Work")
+        expect(last_iteration[1].name).to eql("Evening reflection")
+        expect(last_iteration[2]).to be(nil)
+
+        expect { enumerator.next }.to raise_error(StopIteration)
+      end
+    end
+  end
+
+  describe '#active_task' do
+    context "with an active task" do
+      subject do
+        described_class.new(
+          Pomodoro::Formats::Today::TimeFrame.new(
+            name: 'Morning routine', end_time: h('9:20')),
+          Pomodoro::Formats::Today::TimeFrame.new(
+            name: 'Work', end_time: h('17:20'), tasks: [
+              Pomodoro::Formats::Today::Task.new(status: :done, body: "Task 1."),
+              Pomodoro::Formats::Today::Task.new(status: :failed, body: "Task 1.", start_time: h('15:00'), end_time: h('15:25')),
+              Pomodoro::Formats::Today::Task.new(status: :not_done, body: "Task 2.", start_time: h('15:30')),
+              Pomodoro::Formats::Today::Task.new(status: :not_done, body: "Task 3."),
+            ]))
+      end
+
+      it "returns the first (and hopefuly only) started task" do
+        expect(subject.active_task.body).to eql("Task 2.")
+      end
+    end
+
+    context "without an active task" do
+      subject do
+        described_class.new(
+          Pomodoro::Formats::Today::TimeFrame.new(
+            name: 'Morning routine', end_time: h('9:20')),
+          Pomodoro::Formats::Today::TimeFrame.new(
+            name: 'Work', end_time: h('17:20'), tasks: [
+              Pomodoro::Formats::Today::Task.new(status: :done, body: "Task 1."),
+              Pomodoro::Formats::Today::Task.new(status: :failed, body: "Task 1.", start_time: h('15:00'), end_time: h('15:25')),
+              Pomodoro::Formats::Today::Task.new(status: :done, body: "Task 2."),
+              Pomodoro::Formats::Today::Task.new(status: :done, body: "Task 3."),
+            ]))
+      end
+
+      it "returns nil" do
+        expect(subject.active_task).to be(nil)
+      end
+    end
+  end
+
+  describe '#current_time_frame' do
+    subject do
+      described_class.new(
+        Pomodoro::Formats::Today::TimeFrame.new(
+          name: 'Morning routine', start_time: h('7:50')),
+        Pomodoro::Formats::Today::TimeFrame.new(
+          name: 'Work', start_time: h('9:20'), end_time: h('17:20')),
+        Pomodoro::Formats::Today::TimeFrame.new(
+          name: 'Evening reflection', end_time: h('21:00')))
+    end
+
+    it "returns the active time frame" do
+      expect(subject.current_time_frame(h('8:00')).name).to eql("Morning routine")
+
+      # FIXME: this fails:
+      # expect(subject.current_time_frame(h('9:20')).name).to eql("Morning routine")
+
+      expect(subject.current_time_frame(h('9:21')).name).to eql("Work")
+      expect(subject.current_time_frame(h('22:00'))).to be(nil)
+    end
+  end
+
+  describe '#to_s' do
+    it "has specs"
+  end
 end

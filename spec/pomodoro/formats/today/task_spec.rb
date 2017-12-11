@@ -7,16 +7,14 @@ describe Pomodoro::Formats::Today::Task do
 
   describe '.new' do
     it "allows start_time to be set" do
-      pending
       task = described_class.new(
-        body: "Buy milk.", status: :in_progress, start_time: start_time)
+        body: "Buy milk.", status: :not_done, start_time: start_time)
       expect(task.start_time).to eql(start_time)
     end
 
     it "allows start_time and end_time to be set" do
-      pending
       task = described_class.new(
-        body: "Buy milk.", status: :completed,
+        body: "Buy milk.", status: :done,
         start_time: start_time, end_time: end_time)
 
       expect(task.start_time).to eql(start_time)
@@ -25,67 +23,63 @@ describe Pomodoro::Formats::Today::Task do
 
     it "does not allow only end_time to be set" do
       expect {
-        described_class.new(body: "Buy milk.", status: :in_progress, end_time: end_time)
+        described_class.new(body: "Buy milk.", status: :not_done, end_time: end_time)
       }.to raise_error(ArgumentError, /Setting end_time without start_time is invalid/)
     end
 
     it "does not allow start_time to be bigger to the end_time" do
       expect {
         described_class.new(body: "Buy milk.",
-          status: :completed, start_time: end_time, end_time: start_time)
+          status: :done, start_time: end_time, end_time: start_time)
       }.to raise_error(ArgumentError, /start_time has to be smaller than end_time/)
     end
 
     it "does not allow start_time to be same as the end_time" do
       expect {
         described_class.new(body: "Buy milk.",
-          status: :in_progress, start_time: start_time, end_time: start_time)
+          status: :not_done, start_time: start_time, end_time: start_time)
       }.to raise_error(ArgumentError, /start_time has to be smaller than end_time/)
     end
 
     it "allows duration to be set" do
-      pending
-      task = described_class.new(body: "Buy milk.", status: :in_progress, duration: 5)
+      task = described_class.new(body: "Buy milk.", status: :not_done, duration: 5)
       expect(task.duration).to eql(5)
     end
 
     # NOTE: We could totally allow it to be an Hour instance.
     it "does not allow duration to be anything but integer" do
       expect {
-        described_class.new(body: "Buy milk.", status: :in_progress, duration: h('0:10'))
+        described_class.new(body: "Buy milk.", status: :not_done, duration: h('0:10'))
       }.to raise_error(ArgumentError, /Duration has to be an integer/)
     end
 
     it "does not allow duration to be smaller than 5 minutes" do
       expect {
-        described_class.new(body: "Buy milk.", status: :in_progress, duration: 2)
+        described_class.new(body: "Buy milk.", status: :not_done, duration: 2)
       }.to raise_error(ArgumentError, /Duration has between 5 and 90 minutes/)
     end
 
     it "does not allow duration to be bigger than 90 minutes" do
       expect {
-        described_class.new(body: "Buy milk.", status: :in_progress, duration: 95)
+        described_class.new(body: "Buy milk.", status: :not_done, duration: 95)
       }.to raise_error(ArgumentError, /Duration has between 5 and 90 minutes/)
     end
 
     it "allows status to be set" do
-      pending
-      task = described_class.new(body: "Buy milk.", status: :completed)
-      expect(task.status).to eql(:completed)
+      task = described_class.new(body: "Buy milk.", status: :done)
+      expect(task.status).to eql(:done)
     end
 
     it "does not allow unknown statuses" do
-      pending
       expect {
         described_class.new(body: "Buy milk.", status: :error)
       }.to raise_error(ArgumentError, /Status has to be one of/)
     end
 
     it "does not allow unknown statuses" do
-      pending
       expect {
         described_class.new(body: "Buy milk.", status: :unstarted, start_time: start_time, end_time: end_time)
-      }.to raise_error(ArgumentError, /An unstarted task cannot have an end_time/)
+      }.to raise_error(ArgumentError, /Status has to be one of/)
     end
   end
 end

@@ -24,7 +24,7 @@ class Hour
       elsif hour_or_minutes.is_a?(Integer)
         self.class.new(0, @minutes.send(method_name, hour_or_minutes))
       else
-        raise TypeError.new
+        raise TypeError.new("Hour or Integer (for minutes) expected, got #{hour_or_minutes.class}.")
       end
     end
   end

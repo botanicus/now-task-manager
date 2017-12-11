@@ -40,13 +40,13 @@ describe Pomodoro::Formats::Today::TaskList do
     described_class.new(time_frame)
   end
 
-  describe '#each_time_frame' do
+  describe '#each' do
     it "returns an enumerator" do
-      expect(subject.each_time_frame).to be_kind_of(Enumerator)
+      expect(subject.each).to be_kind_of(Enumerator)
     end
 
     it "yields time frames" do
-      expect(subject.each_time_frame.to_a).to eql([time_frame])
+      expect(subject.each.to_a).to eql([time_frame])
     end
   end
 
@@ -57,6 +57,30 @@ describe Pomodoro::Formats::Today::TaskList do
 
     it "yields tasks" do
       expect(subject.each_task.to_a).to eql([task])
+    end
+  end
+
+  describe '#duration' do
+    context "all the time frames have start_time and end_time" do
+      subject do
+        described_class.new(
+          Pomodoro::Formats::Today::TimeFrame.new(
+            name: 'Morning routine', start_time: Hour.parse('7:50'), end_time: Hour.parse('9:20')),
+          Pomodoro::Formats::Today::TimeFrame.new(
+            name: 'Work', start_time: Hour.parse('9:20'), end_time: Hour.parse('17:20')))
+      end
+
+      it "returns the overall duration" do
+        expect(subject.duration).to eql(Hour.parse('9:30'))
+      end
+    end
+
+    context "with only start_time" do
+      it "should be spec'd"
+    end
+
+    context "with only end_time" do
+      it "should be spec'd"
     end
   end
 end

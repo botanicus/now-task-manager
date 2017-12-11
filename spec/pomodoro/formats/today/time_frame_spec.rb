@@ -49,6 +49,39 @@ describe Pomodoro::Formats::Today::TimeFrame do
     ])
   end
 
+  describe '#duration' do
+    context "with both start_time and end_time" do
+      it "returns the difference of start_time and end_time"
+    end
+
+    context "with only start_time" do
+      it "should be spec'd"
+    end
+
+    context "with only end_time" do
+      it "should be spec'd"
+    end
+  end
+
+  describe '#active?' do
+    context "with both start_time and end_time" do
+      it "returns true if the current time frame is active" do
+        expect(subject).to be_active(Time.new(2017, 12, 11, 8))
+      end
+
+      it "returns false if the current time frame is not active" do
+      end
+    end
+
+    context "with only start_time" do
+      it "should be spec'd"
+    end
+
+    context "with only end_time" do
+      it "should be spec'd"
+    end
+  end
+
   describe '#to_s' do
     context "with tasks" do
       it "returns a valid today task list formatted string" do

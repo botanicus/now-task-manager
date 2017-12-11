@@ -56,6 +56,10 @@ class Hour
   end
   alias_method :to_s, :inspect
 
+  def to_time(today = Time.now)
+    Time.new(today.year, today.month, today.day, self.hours, self.minutes_over_the_hour)
+  end
+
   protected
   def minutes_over_the_hour
     @minutes - (self.hours * 60)

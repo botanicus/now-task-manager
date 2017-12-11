@@ -46,7 +46,7 @@ module Pomodoro::Formats::Today
     #
     # @yieldparam [TimeFrame] time_frame
     # @since 1.0
-    def each_time_frame(&block)
+    def each(&block)
       @time_frames.each(&block)
     end
 
@@ -63,7 +63,7 @@ module Pomodoro::Formats::Today
     # @return [Hour]
     # @since 1.0
     def duration
-      self.time_frames.sum(&:duration)
+      self.time_frames.reduce(0) { |sum, time_frame| time_frame.duration + sum }
     end
 
     # Return a today task list formatted string.
@@ -77,16 +77,19 @@ module Pomodoro::Formats::Today
 
     # @!group Finders
 
+    # Return the currently active task, regardless of the time frame we are in.
+    #
     # @since 1.0
-    def get_active_task
+    def active_task
       self.each_task.find(&:in_progress?)
     end
 
+    # Return the currently active time frame.
+    #
     # @since 1.0
-    def get_current_time_frame(current_time = Time.now)
+    def current_time_frame(current_time = Time.now)
       @time_frames.find do |time_frame|
-        starting_time, closing_time = time_frame.interval
-        starting_time < current_time && (closing_time.nil? || closing_time > current_time)
+        time_frame.active?(current_time)
       end
     end
 

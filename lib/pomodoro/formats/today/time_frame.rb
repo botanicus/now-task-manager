@@ -42,6 +42,24 @@ module Pomodoro::Formats::Today
       end
     end
 
+    # Return overall duration of the time frame.
+    #
+    # @return [Hour]
+    # @since 1.0
+    def duration
+      @end_time - @start_time
+    end
+
+    # Return true or false based on whether the time frame is active
+    # in the provided current_time.
+    #
+    # @param [Time] current_time
+    # @return [Boolean]
+    # @since 1.0
+    def active?(current_time = Time.now)
+      @start_time.to_time < current_time && (@end_time.nil? || @end_time.to_time > current_time)
+    end
+
     # Return a today task list formatted string.
     #
     # @since 1.0

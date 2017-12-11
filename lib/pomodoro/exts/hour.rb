@@ -14,6 +14,9 @@ class Hour
     @minutes = (hours * 60) + minutes
   end
 
+  # Doesn't work if it's smaller - larger:
+  # Hour.parse('0:58') - Hour.parse('1:00')
+  # => -1:58
   [:+, :-].each do |method_name|
     define_method(method_name) do |hour_or_minutes|
       if hour_or_minutes.is_a?(self.class)

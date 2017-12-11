@@ -75,16 +75,5 @@ module Pomodoro::Formats::Scheduled
     def to_s
       @data.map(&:to_s).join("\n")
     end
-
-    # Save scheduled task list formatted string into a file.
-    #
-    # @param [String] destination_path
-    # @since 1.0
-    def save(destination_path)
-      data = self.to_s
-      File.open(destination_path, 'w') do |file|
-        file.puts(data)
-      end
-    end
   end
 end

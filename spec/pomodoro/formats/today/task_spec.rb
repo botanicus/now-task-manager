@@ -2,8 +2,8 @@ require 'spec_helper'
 require 'pomodoro/formats/today'
 
 describe Pomodoro::Formats::Today::Task do
-  let(:start_time) { Hour.parse('10:00') }
-  let(:end_time)   { Hour.parse('12:00') }
+  let(:start_time) { h('10:00') }
+  let(:end_time)   { h('12:00') }
 
   describe '.new' do
     it "allows start_time to be set" do
@@ -52,7 +52,7 @@ describe Pomodoro::Formats::Today::Task do
     # NOTE: We could totally allow it to be an Hour instance.
     it "does not allow duration to be anything but integer" do
       expect {
-        described_class.new(body: "Buy milk.", status: :in_progress, duration: Hour.parse('0:10'))
+        described_class.new(body: "Buy milk.", status: :in_progress, duration: h('0:10'))
       }.to raise_error(ArgumentError, /Duration has to be an integer/)
     end
 

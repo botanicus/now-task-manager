@@ -8,7 +8,7 @@ describe Pomodoro::Formats::Today::TaskList do
 
   let(:time_frame) do
     Pomodoro::Formats::Today::TimeFrame.new(
-      name: 'Morning routine', start_time: Hour.parse('7:50'), tasks: [task])
+      name: 'Morning routine', start_time: h('7:50'), tasks: [task])
   end
 
   describe '.new' do
@@ -67,13 +67,13 @@ describe Pomodoro::Formats::Today::TaskList do
       subject do
         described_class.new(
           Pomodoro::Formats::Today::TimeFrame.new(
-            name: 'Morning routine', start_time: Hour.parse('7:50'), end_time: Hour.parse('9:20')),
+            name: 'Morning routine', start_time: h('7:50'), end_time: h('9:20')),
           Pomodoro::Formats::Today::TimeFrame.new(
-            name: 'Work', start_time: Hour.parse('9:20'), end_time: Hour.parse('17:20')))
+            name: 'Work', start_time: h('9:20'), end_time: h('17:20')))
       end
 
       it "returns the overall duration" do
-        expected_duration = Hour.parse('17:20') - Hour.parse('7:50')
+        expected_duration = h('17:20') - h('7:50')
         expect(subject.duration).to eql(expected_duration)
       end
     end
@@ -86,15 +86,15 @@ describe Pomodoro::Formats::Today::TaskList do
         subject do
           described_class.new(
             Pomodoro::Formats::Today::TimeFrame.new(
-              name: 'Morning routine', start_time: Hour.parse('7:50')),
+              name: 'Morning routine', start_time: h('7:50')),
             Pomodoro::Formats::Today::TimeFrame.new(
-              name: 'Work', start_time: Hour.parse('9:20'), end_time: Hour.parse('17:20')),
+              name: 'Work', start_time: h('9:20'), end_time: h('17:20')),
             Pomodoro::Formats::Today::TimeFrame.new(
-              name: 'Evening reflection', end_time: Hour.parse('21:00')))
+              name: 'Evening reflection', end_time: h('21:00')))
         end
 
         it "returns the overall duration" do
-          expected_duration = Hour.parse('21:00') - Hour.parse('7:50')
+          expected_duration = h('21:00') - h('7:50')
           expect(subject.duration).to eql(expected_duration)
         end
       end
@@ -105,13 +105,13 @@ describe Pomodoro::Formats::Today::TaskList do
         subject do
           described_class.new(
             Pomodoro::Formats::Today::TimeFrame.new(
-              name: 'Morning routine', end_time: Hour.parse('9:20')),
+              name: 'Morning routine', end_time: h('9:20')),
             Pomodoro::Formats::Today::TimeFrame.new(
-              name: 'Work', end_time: Hour.parse('17:20')))
+              name: 'Work', end_time: h('17:20')))
         end
 
         it "returns the overall duration" do
-          expected_duration = Hour.parse('17:20') - Hour.parse('0:00')
+          expected_duration = h('17:20') - h('0:00')
           expect(subject.duration).to eql(expected_duration)
         end
       end
@@ -122,7 +122,7 @@ describe Pomodoro::Formats::Today::TaskList do
             Pomodoro::Formats::Today::TimeFrame.new(
               name: 'Morning routine'),
             Pomodoro::Formats::Today::TimeFrame.new(
-              name: 'Work', end_time: Hour.parse('17:20')))
+              name: 'Work', end_time: h('17:20')))
         end
 
         it "fails with a DataInconsistencyError" do

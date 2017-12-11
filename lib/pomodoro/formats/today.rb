@@ -5,6 +5,10 @@ module Pomodoro
   module Formats
     # {include:file:doc/formats/today.md}
     module Today
+      # TODO: spec me.
+      class DataInconsistencyError < StandardError
+      end
+
       # The entry point method for parsing this format.
       #
       # @param string [String] string in the today task list format

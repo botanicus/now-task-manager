@@ -63,7 +63,24 @@ module Pomodoro::Formats::Today
     # @return [Hour]
     # @since 1.0
     def duration
-      self.time_frames.reduce(0) { |sum, time_frame| time_frame.duration + sum }
+      enumerator = self.time_frames.each.with_index
+      enumerator.reduce(0) do |sum, (time_frame, index)|
+        # TODO: is there some better solution using enumerator.next? I can't find
+        # any enumerator.prev.
+        if index == 0
+          prev_time_frame_end_time = Hour.parse('0:00')
+        else
+          prev_time_frame_end_time = @time_frames[index - 1].end_time
+        end
+
+        if index == (@time_frames.length - 1)
+          next_time_frame_start_time = Hour.parse('23:59')
+        else
+          next_time_frame_start_time = @time_frames[index + 1].start_time
+        end
+
+        time_frame.duration(prev_time_frame_end_time, next_time_frame_start_time) + sum
+      end
     end
 
     # Return a today task list formatted string.

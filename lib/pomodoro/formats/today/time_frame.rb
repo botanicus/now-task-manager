@@ -46,8 +46,9 @@ module Pomodoro::Formats::Today
     #
     # @return [Hour]
     # @since 1.0
-    def duration
-      @end_time - @start_time
+    # TODO: update docs and specs.
+    def duration(prev_time_frame_end_time = nil, next_time_frame_start_time = nil)
+      (@end_time || next_time_frame_start_time) - (@start_time || prev_time_frame_end_time)
     end
 
     # Return true or false based on whether the time frame is active
@@ -56,8 +57,24 @@ module Pomodoro::Formats::Today
     # @param [Time] current_time
     # @return [Boolean]
     # @since 1.0
-    def active?(current_time = Time.now)
-      @start_time.to_time < current_time && (@end_time.nil? || @end_time.to_time > current_time)
+    def active?(prev_time_frame_end_time = nil, next_time_frame_start_time = nil, current_time = Time.now)
+      start_time = @start_time || prev_time_frame_end_time
+      end_time = @end_time || next_time_frame_start_time
+
+      # This is very useful, do it elsewhere for validations as well.
+      values = {start_time: start_time, end_time: end_time}
+      missing_values = values.select { |_, value| value.nil? }
+
+      unless missing_values.empty?
+        raise DataInconsistencyError.new <<-EOF.gsub(/^\s*/, '')
+          The following values were not present: #{missing_values.inspect}
+
+          Every time frame has to have a start_time and end_time: if not explicitly,
+          then by the previous or next time frame time limit.
+        EOF
+      end
+
+      @start_time.to_time < current_time && @end_time.to_time > current_time
     end
 
     # Return a today task list formatted string.

@@ -2,6 +2,18 @@ require 'pomodoro/exts/hour'
 require 'pomodoro/formats/today'
 
 module Pomodoro::Formats::Today
+  # TODO: spec me.
+  class TimeFrameInsufficientTimeInfoError < DataInconsistencyError
+    def initialize(missing_values)
+      super <<-EOF.gsub(/^\s*/, '')
+       The following values were not present: #{missing_values.inspect}
+
+       Every time frame has to have a start_time and end_time: if not explicitly,
+       then by the previous or next time frame time limit.
+     EOF
+    end
+  end
+
   class TimeFrame
     include Enumerable
 
@@ -28,9 +40,11 @@ module Pomodoro::Formats::Today
     def initialize(name:, start_time: nil, end_time: nil, tasks: Array.new)
       @name, @start_time, @end_time, @tasks = name, start_time, end_time, tasks
 
-      if @start_time.nil? && @end_time.nil?
-        raise ArgumentError.new("At least one of start_time and end_time has to be provided.")
-      end
+      # This is not true, because it can be determined by the next/previous time frame.
+      # https://github.com/botanicus/now-task-manager/issues/20
+      # if @start_time.nil? && @end_time.nil?
+      #   raise ArgumentError.new("At least one of start_time and end_time has to be provided.")
+      # end
 
       unless [@start_time, @end_time].compact.all? { |time| time.is_a?(Hour) }
         raise ArgumentError.new("Start time and end time has to be an Hour instance.")
@@ -48,7 +62,21 @@ module Pomodoro::Formats::Today
     # @since 1.0
     # TODO: update docs and specs.
     def duration(prev_time_frame_end_time = nil, next_time_frame_start_time = nil)
-      (@end_time || next_time_frame_start_time) - (@start_time || prev_time_frame_end_time)
+      start_time = @start_time || prev_time_frame_end_time
+      end_time = @end_time || next_time_frame_start_time
+
+      values = {start_time: start_time, end_time: end_time}
+      missing_values = values.select { |_, value| value.nil? }
+
+      unless missing_values.empty?
+        raise TimeFrameInsufficientTimeInfoError.new(missing_values)
+      end
+
+      unless start_time < end_time
+        raise ArgumentError.new("Start time cannot be bigger than end time.")
+      end
+
+      end_time - start_time
     end
 
     # Return true or false based on whether the time frame is active
@@ -66,12 +94,7 @@ module Pomodoro::Formats::Today
       missing_values = values.select { |_, value| value.nil? }
 
       unless missing_values.empty?
-        raise DataInconsistencyError.new <<-EOF.gsub(/^\s*/, '')
-          The following values were not present: #{missing_values.inspect}
-
-          Every time frame has to have a start_time and end_time: if not explicitly,
-          then by the previous or next time frame time limit.
-        EOF
+        raise TimeFrameInsufficientTimeInfoError.new(missing_values)
       end
 
       @start_time.to_time < current_time && @end_time.to_time > current_time

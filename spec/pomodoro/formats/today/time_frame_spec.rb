@@ -8,11 +8,6 @@ describe Pomodoro::Formats::Today::TimeFrame do
         ArgumentError, /missing keyword: name/)
     end
 
-    it "requires the name keyword argument" do
-      expect { described_class.new(name: 'Morning routine') }.to raise_error(
-        ArgumentError, /At least one of start_time and end_time has to be provided./)
-    end
-
     it "fails if start time or end time is not an Hour instance" do
       expect {
         described_class.new(name: 'X', start_time: Time.now, tasks: Hash.new)
@@ -51,23 +46,78 @@ describe Pomodoro::Formats::Today::TimeFrame do
 
   describe '#duration' do
     context "with both start_time and end_time" do
-      it "returns the difference of start_time and end_time"
+      subject do
+        described_class.new(name: 'Morning routine',
+          start_time: Hour.parse('7:50'), end_time: Hour.parse('9:20'))
+      end
+
+      it "returns the difference of start_time and end_time" do
+        expected_duration = Hour.parse('9:20') - Hour.parse('7:50')
+        expect(subject.duration).to eql(expected_duration)
+      end
     end
 
     context "with only start_time" do
-      it "should be spec'd"
+      it "raises an error unless the next_time_frame_start_time is provided" do
+        expect { subject.duration }.to raise_error(
+          Pomodoro::Formats::Today::TimeFrameInsufficientTimeInfoError
+        )
+      end
+
+      it "returns the duration if the next_time_frame_start_time is provided" do
+        expected_duration = Hour.parse('9:20') - subject.start_time
+        expect(subject.duration(nil, Hour.parse('9:20'))).to eql(expected_duration)
+      end
     end
 
     context "with only end_time" do
-      it "should be spec'd"
+      subject do
+        described_class.new(name: 'Morning routine', end_time: Hour.parse('9:20'))
+      end
+
+      it "raises an error unless the prev_time_frame_end_time is provided" do
+        expect { subject.duration }.to raise_error(
+          Pomodoro::Formats::Today::TimeFrameInsufficientTimeInfoError
+        )
+      end
+
+      it "returns the duration if the prev_time_frame_end_time is provided" do
+        expected_duration = subject.end_time - Hour.parse('7:50')
+        expect(subject.duration(Hour.parse('7:50'))).to eql(expected_duration)
+      end
+    end
+
+    context "with neither provided" do
+      subject do
+        described_class.new(name: 'Morning routine')
+      end
+
+      it "raises an error unless the prev_time_frame_end_time and next_time_frame_end_time is provided" do
+        expect { subject.duration }.to raise_error(
+          Pomodoro::Formats::Today::TimeFrameInsufficientTimeInfoError)
+      end
+
+      it "raises an error unless the prev_time_frame_end_time is provided" do
+        # expect { subject.duration(XXX) }.to raise_error(
+          # Pomodoro::Formats::Today::TimeFrameInsufficientTimeInfoError)
+      end
+
+      it "returns the duration if the prev_time_frame_end_time is provided" do
+        prev_time_frame_end_time = Hour.parse('7:50')
+        next_time_frame_end_time = Hour.parse('9:20')
+        expected_duration = next_time_frame_end_time - prev_time_frame_end_time
+        expect(subject.duration(prev_time_frame_end_time, next_time_frame_end_time)).to eql(expected_duration)
+      end
+
+      it "raises an error if the start_time is bigger than the end_time"
     end
   end
 
   describe '#active?' do
     context "with both start_time and end_time" do
-      it "returns true if the current time frame is active" do
-        expect(subject).to be_active(Time.new(2017, 12, 11, 8))
-      end
+      # it "returns true if the current time frame is active" do
+      #   expect(subject).to be_active(Time.new(2017, 12, 11, 8))
+      # end
 
       it "returns false if the current time frame is not active" do
       end

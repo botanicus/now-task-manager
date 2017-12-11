@@ -62,6 +62,8 @@ describe Pomodoro::Formats::Today::TaskList do
 
   describe '#duration' do
     context "all the time frames have start_time and end_time" do
+      # Morning routine (7:50 – 9:20)
+      # Work (9:20 – 17:20)
       subject do
         described_class.new(
           Pomodoro::Formats::Today::TimeFrame.new(
@@ -71,16 +73,63 @@ describe Pomodoro::Formats::Today::TaskList do
       end
 
       it "returns the overall duration" do
-        expect(subject.duration).to eql(Hour.parse('9:30'))
+        expected_duration = Hour.parse('17:20') - Hour.parse('7:50')
+        expect(subject.duration).to eql(expected_duration)
       end
     end
 
-    context "with only start_time" do
-      it "should be spec'd"
-    end
+    context "with some start_times and end_times missing" do
+      context "all the times can be determined" do
+        # Morning routine (from 7:50)
+        # Work (9:20 – 17:20)
+        # Evening reflection (until 21:00)
+        subject do
+          described_class.new(
+            Pomodoro::Formats::Today::TimeFrame.new(
+              name: 'Morning routine', start_time: Hour.parse('7:50')),
+            Pomodoro::Formats::Today::TimeFrame.new(
+              name: 'Work', start_time: Hour.parse('9:20'), end_time: Hour.parse('17:20')),
+            Pomodoro::Formats::Today::TimeFrame.new(
+              name: 'Evening reflection', end_time: Hour.parse('21:00')))
+        end
 
-    context "with only end_time" do
-      it "should be spec'd"
+        it "returns the overall duration" do
+          expected_duration = Hour.parse('21:00') - Hour.parse('7:50')
+          expect(subject.duration).to eql(expected_duration)
+        end
+      end
+
+      context "all the times can be determined or defaults used" do
+        # Morning routine (until 9:20)
+        # Work (until 17:20)
+        subject do
+          described_class.new(
+            Pomodoro::Formats::Today::TimeFrame.new(
+              name: 'Morning routine', end_time: Hour.parse('9:20')),
+            Pomodoro::Formats::Today::TimeFrame.new(
+              name: 'Work', end_time: Hour.parse('17:20')))
+        end
+
+        it "returns the overall duration" do
+          expected_duration = Hour.parse('17:20') - Hour.parse('0:00')
+          expect(subject.duration).to eql(expected_duration)
+        end
+      end
+
+      context "some of the the times cannot be determined" do
+        subject do
+          described_class.new(
+            Pomodoro::Formats::Today::TimeFrame.new(
+              name: 'Morning routine'),
+            Pomodoro::Formats::Today::TimeFrame.new(
+              name: 'Work', end_time: Hour.parse('17:20')))
+        end
+
+        it "fails with a DataInconsistencyError" do
+          expect { subject.duration }.to raise_error(
+            Pomodoro::Formats::Today::DataInconsistencyError)
+        end
+      end
     end
   end
 end

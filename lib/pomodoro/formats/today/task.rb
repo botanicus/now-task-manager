@@ -3,13 +3,24 @@ require 'pomodoro/formats/today'
 require 'pomodoro/formats/today/task/statuses'
 require 'pomodoro/formats/today/task/dynamic_additions'
 require 'pomodoro/formats/today/task/metadata'
+require 'pomodoro/formats/today/task/formatter'
 
 module Pomodoro::Formats::Today
   class Task
+    # STATUS_SYMBOLS ||= {
+    #   # Unfinished statuses.
+    #   # Unstarted can be either tasks to be started,
+    #   # or tasks skipped when time frame changed.
+    #   unstarted: '-', in_progress: '-',
+    #
+    #   # maybe status :finished and :unfinished, but :unfinished would require Postponed/Deleted etc. (check dynamically)
+    #   # Finished, as in done for the day.
+    #   completed: '✔', progress_made: '✔', postponed: '✘', deleted: '✘'
+    # }
     STATUS_MAPPING ||= {
       not_done: ['-'],
-      done: ['✓', '✔', '☑'],
-      failed:   ['✕', '☓', '✖', '✗', '✘', '☒'],
+      done: ['✔', '✓', '☑'],
+      failed:   ['✘', '✗', '✕', '☓', '✖', '☒'],
       # wip:      ['☐', '⛶', '⚬']
     }
 
@@ -75,7 +86,7 @@ module Pomodoro::Formats::Today
       end
 
       unless STATUS_LIST.include?(@status)
-        raise ArgumentError.new("Status has to be one of #{STATUS_SYMBOLS.keys.inspect}.")
+        raise ArgumentError.new("Status has to be one of #{STATUS_MAPPING.keys.inspect}.")
       end
 
       # Unstarted or in progress.

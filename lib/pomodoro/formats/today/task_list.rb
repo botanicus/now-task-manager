@@ -7,7 +7,12 @@ module Pomodoro::Formats::Today
     # @since 1.0
     attr_reader :time_frames
 
-    # TODO: CONTINUE HERE, write the documentation.
+    # Create a list of time frames and define a shortcut method on the task list
+    # for accessing them by {TimeFrame#method_name their #method_name}.
+    #
+    # @param [Array<TimeFrame>] time_frames
+    # @see TimeFrame#method_name
+    # @since 1.0
     #
     # @example
     #   require 'pomodoro/formats/today'
@@ -19,6 +24,9 @@ module Pomodoro::Formats::Today
     #       ]
     #     )
     #   )
+    #
+    #   # Now you can access the time frame by their method name.
+    #   task_list.morning_routine
     def initialize(*time_frames)
       @time_frames = time_frames
 
@@ -34,6 +42,47 @@ module Pomodoro::Formats::Today
       end
     end
 
+    # Iterate over the time frames.
+    #
+    # @yieldparam [TimeFrame] time_frame
+    # @since 1.0
+    def each_time_frame(&block)
+      @time_frames.each(&block)
+    end
+
+    # Iterate over the tasks of each time frame.
+    #
+    # @yieldparam [Task] task
+    # @since 1.0
+    def each_task(&block)
+      @time_frames.map(&:tasks).flatten.each(&block)
+    end
+
+    # Return overall duration.
+    #
+    # @return [Hour]
+    # @since 1.0
+    def duration
+      self.time_frames.sum(&:duration)
+    end
+
+    # Return a today task list formatted string.
+    #
+    # @since 1.0
+    def to_s
+      self.time_frames.reduce(nil) do |buffer, time_frame|
+        buffer ? "#{buffer}\n\n#{time_frame.to_s}" : "#{time_frame.to_s}"
+      end
+    end
+
+    # @!group Finders
+
+    # @since 1.0
+    def get_active_task
+      self.each_task.find(&:in_progress?)
+    end
+
+    # @since 1.0
     def get_current_time_frame(current_time = Time.now)
       @time_frames.find do |time_frame|
         starting_time, closing_time = time_frame.interval
@@ -41,29 +90,10 @@ module Pomodoro::Formats::Today
       end
     end
 
-    def each(&block)
-      @time_frames.each(&block)
-    end
-
-    def duration
-      self.time_frames.sum { |time_frame| time_frame.duration }
-    end
-
     # def has_unfinished_tasks?
     #   @time_frames.any?(&:has_unfinished_tasks?)
     # end
 
-    def to_s
-      self.time_frames.reduce(nil) do |buffer, time_frame|
-        buffer ? "#{buffer}\n\n#{time_frame.to_s}" : "#{time_frame.to_s}"
-      end
-    end
-
-    def save(path)
-      data = self.to_s
-      File.open(path, 'w') do |file|
-        file.puts(data)
-      end
-    end
+    # @!endgroup
   end
 end

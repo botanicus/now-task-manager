@@ -2,7 +2,7 @@ require 'pomodoro/exts/hour'
 require 'pomodoro/formats/today'
 
 module Pomodoro::Formats::Today
-  # TODO: spec me.
+  # TODO: Document the purpose.
   class TimeFrameInsufficientTimeInfoError < DataInconsistencyError
     def initialize(missing_values)
       super <<-EOF.gsub(/^ */, '')
@@ -58,9 +58,14 @@ module Pomodoro::Formats::Today
 
     # Return overall duration of the time frame.
     #
+    # @param [Hour] prev_time_frame_end_time
+    # @param [Hour] next_time_frame_end_time
+    # @raise [ArgumentError]
+    # @raise [TimeFrameInsufficientTimeInfoError]
     # @return [Hour]
     # @since 1.0
-    # TODO: update docs.
+    # @example
+    #   # TODO
     def duration(prev_time_frame_end_time = nil, next_time_frame_start_time = nil)
       start_time = @start_time || prev_time_frame_end_time
       end_time = @end_time || next_time_frame_start_time
@@ -74,8 +79,14 @@ module Pomodoro::Formats::Today
     # in the provided current_time.
     #
     # @param [Hour] current_time
+    # @param [Hour] prev_time_frame_end_time
+    # @param [Hour] next_time_frame_end_time
+    # @raise [ArgumentError]
+    # @raise [TimeFrameInsufficientTimeInfoError]
     # @return [Boolean]
     # @since 1.0
+    # @example
+    #   # TODO
     def active?(current_time = Hour.now, prev_time_frame_end_time = nil, next_time_frame_start_time = nil)
       unless current_time.is_a?(Hour)
         raise ArgumentError.new("Current time has to be an Hour instance, was #{current_time.class}.")
@@ -108,7 +119,7 @@ module Pomodoro::Formats::Today
       @tasks.each(&block)
     end
 
-    # Name of method that will be available on a task list to access a time frame.
+    # Name of method that will be available on a {TaskList task list} to access a time frame.
     #
     # @example
     #   Pomodoro::Formats::Today::TimeFrame.new(

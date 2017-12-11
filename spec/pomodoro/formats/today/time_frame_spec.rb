@@ -216,11 +216,11 @@ describe Pomodoro::Formats::Today::TimeFrame do
 
     context "without any tasks" do
       subject do
-        described_class.new(name: 'Morning routine', start_time: h('7:50'))
+        described_class.new(name: 'Morning routine', start_time: h('7:50'), end_time: h('9:20'))
       end
 
       it "returns a valid today task list formatted string" do
-        expect(subject.to_s).to eql("Morning routine (from 7:50)\n")
+        expect(subject.to_s).to eql("Morning routine (7:50 – 9:20)\n")
       end
     end
   end

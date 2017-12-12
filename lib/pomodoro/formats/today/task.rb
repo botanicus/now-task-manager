@@ -31,7 +31,7 @@ module Pomodoro::Formats::Today
 
     attr_reader :status, :body, :start_time, :end_time, :fixed_start_time, :duration, :tags, :lines, :metadata
     def initialize(status:, body:, start_time: nil, end_time: nil, fixed_start_time: nil, duration: nil, tags: [], lines: [])
-      @status, @body, @tags, @duration = status, body, tags, duration
+      @status, @body, @tags, @duration, @lines = status, body, tags, duration, lines
       @start_time, @end_time, @fixed_start_time = start_time, end_time, fixed_start_time
       validate_data_integrity
     end
@@ -48,17 +48,6 @@ module Pomodoro::Formats::Today
     end
 
     private
-    def format_duration
-      if @start_time && @end_time
-        [@start_time, @end_time].join('-')
-      elsif @start_time
-        "started at #{@start_time}"
-      elsif @end_time
-        raise 'nonsense'
-      else # nil
-      end
-    end
-
     def validate_nil_or_instance_of(expected_class, instance, var_name)
       instance && (instance.is_a?(expected_class) ||
         raise(ArgumentError.new("#{var_name} has to be an instance of #{expected_class}.")))

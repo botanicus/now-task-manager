@@ -107,7 +107,7 @@ module Pomodoro::Formats::Today
       if @tasks.empty?
         "#{self.format_header}\n"
       else
-        ["#{self.format_header}", self.tasks.map(&:to_s)].join("\n")
+        "#{self.format_header}\n#{self.tasks.map(&:to_s).join}"
       end
     end
 
@@ -131,6 +131,30 @@ module Pomodoro::Formats::Today
     # @since 1.0
     def method_name
       @name.downcase.tr(' ', '_').to_sym
+    end
+
+    def create_task(body, duration = nil, tags = Array.new)
+      @tasks << Task.new(status: :not_done, body: body, tags: tags)
+    end
+
+    def clear
+      @tasks.clear
+    end
+
+    def remaining_duration
+      @end_time && (@end_time - Hour.now)
+    end
+
+    def first_unstarted_task
+      self.tasks.find do |task|
+        task.unstarted?
+      end
+    end
+
+    def active_task
+      self.tasks.find do |task|
+        task.in_progress?
+      end
     end
 
     protected

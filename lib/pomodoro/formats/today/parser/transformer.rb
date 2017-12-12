@@ -14,6 +14,10 @@ module Pomodoro::Formats::Today
       {body: body.to_s.strip}
     }
 
+    rule(name: simple(:name)) {
+      {name: desc.to_s.strip}
+    }
+
     rule(duration: simple(:duration)) {
       {duration: Integer(duration)}
     }
@@ -58,8 +62,13 @@ module Pomodoro::Formats::Today
     }
 
     rule(time_frame: subtree(:data)) {
-      data[:body] = data.delete(:desc).to_s.strip # WTH? All the other nodes are processed correctly?
-      TimeFrame.new(**data)
+      data[:name] = data.delete(:name).to_s.strip # WTH? All the other nodes are processed correctly?
+      begin
+        TimeFrame.new(**data)
+      rescue ArgumentError => error
+        message = [error.message, "Arguments were: #{data.inspect}"].join("\n")
+        raise ArgumentError.new(message)
+      end
     }
   end
 end

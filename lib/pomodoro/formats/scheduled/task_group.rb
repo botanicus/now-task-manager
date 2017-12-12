@@ -36,5 +36,23 @@ module Pomodoro::Formats::Scheduled
     def to_s
       [@header, @tasks.map { |task| "- #{task}" }, nil].flatten.join("\n")
     end
+
+    def save(path)
+      data = self.to_s
+      File.open(path, 'w:utf-8') do |file|
+        file.puts(data)
+      end
+    end
+
+    # labels = ['Tomorrow', date.strftime('%A'), date.strftime('%-d/%m'), date.strftime('%-d/%m/%Y')]
+    def scheduled_date
+      return Date.today + 1 if @header == 'Tomorrow'
+      return Date.parse(@header)
+    rescue ArgumentError
+    end
+
+    def tomorrow?
+      self.scheduled_date == Date.today + 1
+    end
   end
 end

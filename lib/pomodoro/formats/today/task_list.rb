@@ -73,7 +73,9 @@ module Pomodoro::Formats::Today
     # @example
     #   task_list.with_prev_and_next.each do |prev_time_frame, time_frame, next_time_frame|
     #   end
-    def with_prev_and_next
+    def with_prev_and_next(&block)
+      return enum_for(:each) if block.nil?
+
       Enumerator.new do |yielder|
         if @time_frames.length == 1
           yielder << [nil, @time_frames[0], nil]

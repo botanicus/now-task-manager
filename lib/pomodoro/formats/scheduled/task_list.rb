@@ -75,5 +75,12 @@ module Pomodoro::Formats::Scheduled
     def to_s
       @data.map(&:to_s).join("\n")
     end
+
+    def save(path)
+      data = self.to_s
+      File.open(path, 'w:utf-8') do |file|
+        file.puts(data)
+      end
+    end
   end
 end

@@ -21,8 +21,8 @@ module Pomodoro::Formats::Today
     rule(:hour_strict)     { (integer.repeat >> colon >> integer).as(:hour) }
     rule(:indent)          { match['-✓✔✕✖✗✘'].as(:indent).repeat(1, 1) >> space }
 
-    rule(:task_desc)       { (match['#\n'].absent? >> any).repeat.as(:desc) }
-    rule(:time_frame_desc) { (match['(\n'].absent? >> any).repeat.as(:desc) }
+    rule(:task_desc)       { (match['#\n'].absent? >> any).repeat.as(:body) }
+    rule(:time_frame_desc) { (match['(\n'].absent? >> any).repeat.as(:name) }
     # rule(:task_desc)       { (str(' #').absent? >> match['^\n']).repeat.as(:desc) }
     # rule(:time_frame_desc) { (str(' (').absent? >> match['^\n']).repeat.as(:desc) }
     # rule(:task_desc)       { (str("\n").absent? >> str(' #').absent? >> any).repeat.as(:desc) }
@@ -33,10 +33,10 @@ module Pomodoro::Formats::Today
     rule(:duration) do
       # ✔ 9:20
       # ✔ 9:20–10:00
-      # ✔ started at 9:20 (this is not the same as just 9:20)
       # ✖ 9-10
       #   There was an issue with parsing that compared to 9 as duration.
-      (hour_strict.as(:start_time) >> (time_delimiter >> hour_strict.as(:end_time)).maybe) | str('started at') >> hour_strict.as(:start_time)
+      (hour_strict.as(:start_time) >> (
+        time_delimiter >> (hour_strict.as(:end_time) | str('?').repeat(1))).maybe)
     end
 
     rule(:task_time_info) do
@@ -61,11 +61,15 @@ module Pomodoro::Formats::Today
       (str('from') | str('after')) >> space >> hour.as(:start_time)
     end
 
-    rule(:time_frame_header) do
-      time_frame_desc >> (lparen >> (time_range | time_from) >> rparen).maybe >> nl # replaced nl_or_eof to fix the hang.
+    rule(:time_until) do
+      (str('until') | str('till')) >> space >> hour.as(:end_time)
     end
 
-    rule(:time_frame_with_tasks) { (time_frame_header >> task.repeat.as(:task_list)).as(:time_frame) } # ...
+    rule(:time_frame_header) do
+      time_frame_desc >> (lparen >> (time_range | time_from | time_until) >> rparen).maybe >> nl # replaced nl_or_eof to fix the hang.
+    end
+
+    rule(:time_frame_with_tasks) { (time_frame_header >> task.repeat.as(:tasks)).as(:time_frame) } # ...
     rule(:time_frames_with_tasks) { time_frame_with_tasks.repeat(0) }
 
     root(:time_frames_with_tasks)

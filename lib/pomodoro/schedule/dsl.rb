@@ -23,7 +23,7 @@ module Pomodoro
     class Schedule < Thing
       def call
         list = @callable.call
-        TaskList.new(list)
+        Pomodoro::Formats::Today::TaskList.new(*list)
       end
     end
 

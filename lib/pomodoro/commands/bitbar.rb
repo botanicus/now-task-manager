@@ -1,5 +1,6 @@
 require 'pomodoro/exts/hour'
 
+# TODO: click: mark as completed / start.
 module Pomodoro
   module Commands
     class BitBar
@@ -34,20 +35,25 @@ module Pomodoro
 
       def self.with_active_time_frame(current_time_frame)
         if current_time_frame
-          if current_time_frame.interval[1]
-            puts "#{current_time_frame.interval[0]}-#{current_time_frame.interval[1]} (#{current_time_frame.remaining_duration}h remaining) | color=#{colour}"
+          if current_time_frame.end_time
+            puts "#{current_time_frame.start_time}-#{current_time_frame.end_time} (#{current_time_frame.remaining_duration}h remaining) | color=green"
           else
-            puts "After #{current_time_frame.interval[0]} | color=gray"
+            puts "After #{current_time_frame.start_time} | color=gray"
           end
           current_time_frame.tasks.each do |task|
-            colour = {unstarted: 'blue', in_progress: 'red', finished: 'gray', postponed: 'gray'}[task.status]
-            puts "#{task} | color=#{colour}"
+            hash = {unstarted: 'blue', in_progress: 'red'}
+            hash.default_proc = Proc.new { 'gray' }
+            colour = hash[task.status_x]
+            puts "#{task.body.chomp} | color=#{colour}"
           end
         elsif Time.now.hour < 14
           today_tasks.each do |time_frame|
             task_lines = time_frame.to_s.split("\n")[1..-1]
             puts "#{time_frame.header} | color=#{task_lines.empty? ? 'gray' : 'green'}"
-            puts task_lines.map { |line| "#{line} | color=black" }.join("\n").gsub(/^- /, '-- ')
+            task_lines.each do |line|
+              colour = {not_done: 'black', done: 'gray', failed: 'black'}[task.status]
+              puts "#{line.gsub(/^- /, '-- ')} | color=#{colour}"
+            end
           end
           puts "Total: XYZ | colour=gray"
         else
@@ -56,7 +62,7 @@ module Pomodoro
       end
 
       def self.main(today_tasks, task_list)
-        if today_tasks && current_time_frame = today_tasks.get_current_time_frame
+        if today_tasks && current_time_frame = today_tasks.current_time_frame
           colour, icon = self.heading(current_time_frame)
           puts icon, '---'
           self.with_active_time_frame(current_time_frame)
@@ -74,9 +80,19 @@ module Pomodoro
           puts "Scheduled tasks"
           task_list.each do |task_group|
             unless task_group.tasks.empty?
-              puts "-- #{task_group.name}"
+              colour = if task_group.scheduled_date == (Date.today + 1)
+                'red'
+              elsif task_group.scheduled_date.nil? || ! task_group.header == 'Later' # TODO: Fix later being blue.
+                'blue' # Context.
+              elsif ((Date.today + 1)..(Date.today + 4)).include?(task_group.scheduled_date)
+                'black'
+              else
+                'gray'
+              end
+              puts "-- #{task_group.header} | color=#{colour}"
               task_group.tasks.each do |task|
-                puts "---- #{task} | color=black"
+                # TODO: After the parser is updated: task.fixed_start_time
+                puts "---- #{task} | color=#{task.to_s.match(/\[\d+:\d+\]/) ? 'red': 'black'}"
               end
             end
           end

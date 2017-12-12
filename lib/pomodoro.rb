@@ -1,6 +1,3 @@
 require 'pomodoro/config'
-require 'pomodoro/parser/today_parser'
-require 'pomodoro/parser/today_transformer'
-require 'pomodoro/parser/task_list_parser'
-require 'pomodoro/parser/task_list_transformer'
-require 'pomodoro/task_list'
+require 'pomodoro/formats/today'
+require 'pomodoro/formats/scheduled'

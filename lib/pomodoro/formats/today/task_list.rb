@@ -32,7 +32,7 @@ module Pomodoro::Formats::Today
 
       time_frame_methods = [:method_name]
       unless time_frames.is_a?(Array) && time_frames.all? { |item| time_frame_methods.all? { |method| item.respond_to?(method) }}
-        raise ArgumentError.new("Time frames is supposed to be an array of TimeFrame-like instances.")
+        raise ArgumentError.new("Time frames is supposed to be an array of TimeFrame-like instances, was #{@time_frames.inspect}.")
       end
 
       time_frames.each do |time_frame|
@@ -74,7 +74,7 @@ module Pomodoro::Formats::Today
     #   task_list.with_prev_and_next.each do |prev_time_frame, time_frame, next_time_frame|
     #   end
     def with_prev_and_next(&block)
-      return enum_for(:each) if block.nil?
+      # return enum_for(:with_prev_and_next) if block.nil?
 
       Enumerator.new do |yielder|
         if @time_frames.length == 1
@@ -101,7 +101,14 @@ module Pomodoro::Formats::Today
     # @since 1.0
     def to_s
       self.time_frames.reduce(nil) do |buffer, time_frame|
-        buffer ? "#{buffer}\n\n#{time_frame.to_s}" : "#{time_frame.to_s}"
+        buffer ? "#{buffer}\n#{time_frame.to_s}" : "#{time_frame.to_s}"
+      end
+    end
+
+    def save(path)
+      data = self.to_s
+      File.open(path, 'w:utf-8') do |file|
+        file.puts(data)
       end
     end
 

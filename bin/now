@@ -1,54 +1,51 @@
 #!/usr/bin/env ruby
 
+# Generate extra spaces, first run is invalid, doesn't remove it from scheduled tasks.
 require 'pomodoro'
 require 'refined-refinements/colours'
 
 using RR::ColourExts
 
-def parse(parser_class, transformer_class, result_class, file_path)
-  input = File.read(file_path, encoding: 'utf-8')
-  tree  = parser_class.new.parse(input)
-  # .parse(input, reporter: Parslet::ErrorReporter::Deepest.new)
-  nodes = transformer_class.new.apply(tree)
-  result_class.new(nodes) unless nodes.empty?
-rescue Errno::ENOENT
-  abort "<red>File #{file_path} doesn't exist.</red>".colourise
-end
-
 def parse_today_list(config)
-  parse(Pomodoro::TodayParser, Pomodoro::TodayTransformer, Pomodoro::TaskList, config.today_path)
+  list = Pomodoro::Formats::Today.parse(File.new(config.today_path, encoding: 'utf-8'))
+
+  if (active_tasks = list.each_task.select(&:in_progress?)).length > 1
+    raise "There are 2 active tasks: #{active_tasks}"
+  end
+
+  list
 end
 
 def parse_task_list(config)
-  parse(Pomodoro::TaskListParser, Pomodoro::SimpleFormat::TaskListTransformer, Pomodoro::SimpleFormat::TaskList, config.task_list_path)
+  Pomodoro::Formats::Scheduled.parse(File.new(config.task_list_path, encoding: 'utf-8'))
 end
 
 def time_frame(config, &block)
   today_list = parse_today_list(config)
 
-  unless current_time_frame = today_list.get_current_time_frame
+  unless current_time_frame = today_list.current_time_frame
     abort "<red>There is no active time frame.</red>".colourise
   end
 
   block.call(today_list, current_time_frame)
 end
 
-# TODO: change this to find the first active task, ignoring the time frame.
-# Only then complain about the time frame.
+# TODO: What if the current_time_frame is no longer active?
 def with_active_task(config, &block)
-  time_frame(config) do |today_list, current_time_frame|
-    if active_task = current_time_frame.active_task
-      block.call(active_task)
-      today_list.save(config.today_path)
-    else
-      abort "<red>No more tasks in #{current_time_frame.desc}</red>".colourise
-    end
+  today_list = parse_today_list(config)
+  if active_task = today_list.active_task
+    block.call(active_task)
+    today_list.save(config.today_path)
+  # elsif today_list.current_time_frame.each.any? { |task| ! task.ended? } ## TODO: the task might be from a different time frame ^
+  #   abort "<red>No more tasks in #{today_list.current_time_frame.name}</red>".colourise
+  # else
+  #   abort "<red>No more tasks in #{today_list.current_time_frame.name}</red>".colourise
   end
 end
 
 def edit_next_task_when_no_task_active(config, &block)
   time_frame(config) do |today_list, current_time_frame|
-    if active_task = current_time_frame.active_task
+    if active_task = today_list.active_task
       abort "<red>There is an active task already:</red>\n#{active_task}".colourise
     end
 
@@ -74,24 +71,20 @@ def generate_todays_tasks(date, config)
   task_list = schedule.call
   scheduler.populate_from_rules(task_list)
 
-  main_task_list = parse_task_list(config)
-  labels = ['Tomorrow', date.strftime('%A'), date.strftime('%-d/%m'), date.strftime('%-d/%m/%Y')]
+  scheduled_task_list = parse_task_list(config)
 
-  labels.each do |label|
-    if main_task_list[label]
-      main_task_list[label].tasks.each do |task|
+  scheduled_task_list.each do |task_group|
+    if task_group.scheduled_date == date
+      task_group.tasks.each do |task|
         puts "~ #{task}"
-        task_list.morning_ritual.create_task(task)
-        main_task_list.delete(main_task_list[label])
+        task_list.morning_routine.create_task(task) # CHANGE TO FIRST TIMEFRAME
+        scheduled_task_list.delete(task_group)
       end
     end
   end
 
-  File.open(date_path, 'w') do |file|
-    file.puts(task_list.to_s)
-  end
-
-  main_task_list.save(config.task_list_path)
+  task_list.save(date_path)
+  scheduled_task_list.save(config.task_list_path)
 
   return date_path
 end
@@ -115,20 +108,32 @@ when 'edit', 'e'
   else
     abort(DATA.read.colourise)
   end
-when 'next'
-  time_frame(config) do |today_list, current_time_frame|
-    if active_task = current_time_frame.active_task
-      abort "<red>There is an active task already:</red>\n#{active_task}".colourise
-    end
-
-    if task = current_time_frame.first_unstarted_task
-      task.start
-      today_list.save(config.today_path)
-    else
-      abort "<red>No more tasks in #{current_time_frame.desc}</red>".colourise
-    end
+when 'start'
+  unless File.exist?(config.today_path)
+    abort "<red>! File #{config.today_path.sub(ENV['HOME'], '~')} doesn't exist</red>".colourise
   end
-when 'next?'
+
+  with_active_task(config) do |active_task|
+    abort "<red>There is an active task already:</red>\n#{active_task}".colourise
+  end
+
+  edit_next_task_when_no_task_active(config) do |next_task|
+    next_task.start!
+  end
+
+  # time_frame(config) do |today_list, current_time_frame|
+  #   if task = current_time_frame.first_unstarted_task
+  #     task.start
+  #     today_list.save(config.today_path)
+  #   else
+  #     abort "<red>No more tasks in #{current_time_frame.desc}</red>".colourise
+  #   end
+  # end
+when 'next'
+  unless File.exist?(config.today_path)
+    abort "<red>! File #{config.today_path.sub(ENV['HOME'], '~')} doesn't exist</red>".colourise
+  end
+
   time_frame(config) do |today_list, current_time_frame|
     if active_task = current_time_frame.active_task
       abort "<red>There is an active task already:</red>\n#{active_task}".colourise
@@ -140,26 +145,43 @@ when 'next?'
       abort "<red>No more tasks in #{current_time_frame.desc}</red>".colourise
     end
   end
-when 'complete'
+when 'done'
+  unless File.exist?(config.today_path)
+    abort "<red>! File #{config.today_path.sub(ENV['HOME'], '~')} doesn't exist</red>".colourise
+  end
+
   with_active_task(config) do |active_task|
-    require 'pry'; binding.pry ###
-    active_task.complete
+    active_task.complete!
     puts active_task
   end
 when 'postpone'
+  unless File.exist?(config.today_path)
+    abort "<red>! File #{config.today_path.sub(ENV['HOME'], '~')} doesn't exist</red>".colourise
+  end
+
   # Ask for metadata and comments.
   with_active_task(config) do |active_task|
-    active_task.postpone
+    active_task.postpone!
     puts active_task
   end
 when 'move_on'
+  unless File.exist?(config.today_path)
+    abort "<red>! File #{config.today_path.sub(ENV['HOME'], '~')} doesn't exist</red>".colourise
+  end
+
   # Ask for metadata and comments.
   with_active_task(config) do |active_task|
-    active_task.move_on
+    active_task.move_on!
     puts active_task
   end
 when 'active'
-  with_active_task(config) do |active_task|
+  unless File.exist?(config.today_path)
+    abort "<red>! File #{config.today_path.sub(ENV['HOME'], '~')} doesn't exist</red>".colourise
+  end
+
+  today_list = parse_today_list(config)
+  require 'pry'; binding.pry ###
+  if  active_task = today_list.active_task
     case ARGV.shift
      # git-commit-pomodoro
      # TODO: Subtasks as well.
@@ -167,26 +189,43 @@ when 'active'
     when 'prompt' then puts active_task.text
     when nil      then puts active_task
     else
+      puts 'xxx'
       # TODO: Format with %d etc.
     end
+  else
+    abort "<red>No active tasks.</red>".colourise
   end
 when 'tick-off-next'
+  unless File.exist?(config.today_path)
+    abort "<red>! File #{config.today_path.sub(ENV['HOME'], '~')} doesn't exist</red>".colourise
+  end
+
   edit_next_task_when_no_task_active(config) do |next_task|
-    next_task.complete
+    next_task.complete!
   end
 when 'fail-next'
+  # Before we start asking, so we cannot wait for the exception.
+  unless File.exist?(config.today_path)
+    abort "<red>! File #{config.today_path.sub(ENV['HOME'], '~')} doesn't exist</red>".colourise
+  end
+
   print "<bold>Why?</bold> ".colourise
   reason = STDIN.readline.chomp
   edit_next_task_when_no_task_active(config) do |next_task|
-    next_task.fail(reason)
+    next_task.fail!(reason)
   end
 when 'postpone-next'
+  # Before we start asking, so we cannot wait for the exception.
+  unless File.exist?(config.today_path)
+    abort "<red>! File #{config.today_path.sub(ENV['HOME'], '~')} doesn't exist</red>".colourise
+  end
+
   print "<bold>Why?</bold> ".colourise
   reason = STDIN.readline.chomp
   print "<bold>When do you want to review?</bold> Defaults to tomorrow. ".colourise
   review_at = STDIN.readline.chomp
   edit_next_task_when_no_task_active(config) do |next_task|
-    next_task.postpone(reason, review_at.empty? ? 'Tomorrow' : review_at)
+    next_task.postpone!(reason, review_at.empty? ? 'Tomorrow' : review_at)
   end
 when '+'
   task_list = parse_task_list(config)
@@ -194,10 +233,11 @@ when '+'
   task_list['Later'] << ARGV.join(' ')
   task_list.save(config.task_list_path)
 when 'console', 'c'
-  today = parse_today_list(config)
-  tasks = parse_task_list(config)
+  today = parse_today_list(config) if File.exist?(config.today_path)
+  tasks = parse_task_list(config)  if File.exist?(config.task_list_path)
   require 'pry'; binding.pry
 when 'tools'
+  # TODO
   if ARGV.shift == 'workdays'
     start_date = Date.new(2018, 12, 1)
     end_date   = Date.new(2018, 12, 31)
@@ -209,8 +249,8 @@ when 'tools'
   end
 when 'bitbar'
   require 'pomodoro/commands/bitbar'
-  today_list = parse_today_list(config)
-  task_list  = parse_task_list(config)
+  today_list = parse_today_list(config) if File.exist?(config.today_path)
+  task_list  = parse_task_list(config)  if File.exist?(config.task_list_path)
   Pomodoro::Commands::BitBar.main(today_list, task_list)
 when 'help', '-h', '--help'
   puts(DATA.read.colourise)
@@ -220,27 +260,27 @@ end
 
 __END__
 
-<red.bold>:: Pomodoro ::</red.bold>
+<red.bold>:: Now task manager ::</red.bold>
 
-pomodoro <green>edit</green>, pomodoro <green>e</green>
-  <bright_black>pomodoro e</bright_black> Edit the today task file, creating it if it doesn't exist.
-  <bright_black>pomodoro e <yellow>2</yellow></bright_black> Edit both the today task file and tasks (in a split screen).
-  <bright_black>pomodoro e <yellow>tasks</yellow></bright_black> (or just <yellow>t</yellow>) Open the task file.
-  <bright_black>pomodoro e <yellow>tomorrow</yellow></bright_black> Plan tomorrow.
+now <green>edit</green>, now <green>e</green>
+  <bright_black>now e</bright_black> Edit the today task file, creating it if it doesn't exist.
+  <bright_black>now e <yellow>2</yellow></bright_black> Edit both the today task file and tasks (in a split screen).
+  <bright_black>now e <yellow>tasks</yellow></bright_black> (or just <yellow>t</yellow>) Open the task file.
+  <bright_black>now e <yellow>tomorrow</yellow></bright_black> Plan tomorrow.
 
-pomodoro <magenta>next</magenta> <bright_black># Start a new task.</bright_black>
-pomodoro <magenta>complete</magenta> <bright_black># Complete the active task.</bright_black>
-pomodoro <magenta>postpone</magenta> <bright_black># Postpone the active task.</bright_black>
-pomodoro <magenta>move_on</magenta> <bright_black># Move on from the active task. Mark its end time, but don't set it as completed.</bright_black>
+now <magenta>start</magenta> <bright_black># Start a new task.</bright_black>
+now <magenta>done</magenta> <bright_black># Complete the active task.</bright_black>
+now <magenta>postpone</magenta> <bright_black># Postpone the active task.</bright_black>
+now <magenta>move_on</magenta> <bright_black># Move on from the active task. Mark its end time, but don't set it as completed.</bright_black>
 
-pomodoro <green>next?</green> <bright_black># Print the next task.</bright_black>
-pomodoro <green>active</green> <bright_black># Print the active task.</bright_black>
+now <green>next</green> <bright_black># Print the next task.</bright_black>
+now <green>active</green> <bright_black># Print the active task.</bright_black>
 
-pomodoro <magenta>tick-off-next</magenta> <bright_black># ...</bright_black>
-pomodoro <magenta>fail-next</magenta> <bright_black># ...</bright_black>
-pomodoro <magenta>postpone-next</magenta> <bright_black># ...</bright_black>
+now <magenta>tick-off-next</magenta> <bright_black># ...</bright_black>
+now <magenta>fail-next</magenta> <bright_black># ...</bright_black>
+now <magenta>postpone-next</magenta> <bright_black># ...</bright_black>
 
-pomodoro <red>+</red> [strings]<bright_black> # Add a task for later.</bright_black>
+now <red>+</red> [strings]<bright_black> # Add a task for later.</bright_black>
 
-pomodoro <yellow>console</yellow>, pomodoro <yellow>c</yellow> <bright_black># Load the tasks and launch IRB.</bright_black>
-pomodoro <yellow>bitbar</yellow> <bright_black># Print output for BitBar.</bright_black>
+now <yellow>console</yellow>, now <yellow>c</yellow> <bright_black># Load the tasks and launch IRB.</bright_black>
+now <yellow>bitbar</yellow> <bright_black># Print output for BitBar.</bright_black>

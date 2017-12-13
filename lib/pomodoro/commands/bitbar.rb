@@ -50,9 +50,9 @@ module Pomodoro
             end
 
             if task.in_progress?
-              puts "-- Finish | bash='now done' color=black"
+              puts "-- Finish   | bash='now done'     color=black"
               puts "-- Postpone | bash='now postpone' color=black"
-              puts "-- Fail | bash='now fail' color=black"
+              puts "-- Move on  | bash='now move_on'  color=black"
               $ACTIVE_TASK = true
             end
 

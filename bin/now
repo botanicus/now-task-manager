@@ -180,7 +180,6 @@ when 'active'
   end
 
   today_list = parse_today_list(config)
-  require 'pry'; binding.pry ###
   if  active_task = today_list.active_task
     case ARGV.shift
      # git-commit-pomodoro

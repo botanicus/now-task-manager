@@ -97,7 +97,7 @@ module Pomodoro::Formats::Today
 
       validate_time_info_consistency(start_time, end_time)
 
-      start_time < current_time && end_time > current_time
+      start_time <= current_time && end_time > current_time
     end
 
     # Return a today task list formatted string.

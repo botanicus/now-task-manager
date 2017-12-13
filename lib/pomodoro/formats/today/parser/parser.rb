@@ -35,12 +35,11 @@ module Pomodoro::Formats::Today
       # ✔ 9:20–10:00
       # ✖ 9-10
       #   There was an issue with parsing that compared to 9 as duration.
-      (hour_strict.as(:start_time) >> (
-        time_delimiter >> (hour_strict.as(:end_time) | str('?').repeat(1))).maybe)
+      (hour_strict.as(:start_time) >> time_delimiter >> (hour_strict.as(:end_time) | str('?').repeat(1)))
     end
 
     rule(:task_time_info) do
-      str('[') >> (duration | integer.as(:duration)) >> str(']') >> space
+      str('[') >> (duration | hour_strict.as(:fixed_start_time) | integer.as(:duration)) >> str(']') >> space
     end
 
     rule(:metadata) { (str("\n").absent? >> any).repeat.as(:line) }

@@ -62,7 +62,7 @@ module Pomodoro::Formats::Today
       @status = :done
     end
 
-    def postpone!(reason, next_review)
+    def postpone!(reason, next_review = (Date.today + 1).strftime('%Y/%m/%d'))
       @end_time = Hour.now if @start_time
       @status = :failed
       @lines << "Postponed: #{reason}"

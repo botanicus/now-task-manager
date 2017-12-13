@@ -1,6 +1,5 @@
 require 'pomodoro/exts/hour'
 
-# TODO: click: mark as completed / start.
 module Pomodoro
   module Commands
     class BitBar
@@ -41,10 +40,25 @@ module Pomodoro
             puts "After #{current_time_frame.start_time} | color=gray"
           end
           current_time_frame.tasks.each do |task|
-            hash = {unstarted: 'blue', in_progress: 'red'}
-            hash.default_proc = Proc.new { 'gray' }
-            colour = hash[task.status_x]
-            puts "#{task.body.chomp} | color=#{colour}"
+            if task.fixed_start_time
+              puts "#{task.fixed_start_time} #{task.body.chomp} | color=red"
+            else
+              hash = {unstarted: 'blue', in_progress: 'red'}
+              hash.default_proc = Proc.new { 'gray' }
+              colour = hash[task.status_x]
+              puts "#{task.body.chomp} | color=#{colour}"
+            end
+
+            if task.in_progress?
+              puts "-- Finish | bash='now done' color=black"
+              puts "-- Postpone | bash='now postpone' color=black"
+              puts "-- Fail | bash='now fail' color=black"
+              $ACTIVE_TASK = true
+            end
+
+            if current_time_frame.first_unstarted_task == task && ! $ACTIVE_TASK
+              puts "-- Start | bash='now start' color=black"
+            end
           end
         elsif Time.now.hour < 14
           today_tasks.each do |time_frame|
@@ -77,7 +91,7 @@ module Pomodoro
         end
 
         if task_list && task_list.any? { |task_group| ! task_group.tasks.empty? }
-          puts "Scheduled tasks"
+          puts '---', "Scheduled tasks"
           task_list.each do |task_group|
             unless task_group.tasks.empty?
               colour = if task_group.scheduled_date == (Date.today + 1)

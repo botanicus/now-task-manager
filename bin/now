@@ -225,7 +225,7 @@ when 'postpone-next'
   print "<bold>When do you want to review?</bold> Defaults to tomorrow. ".colourise
   review_at = STDIN.readline.chomp
   edit_next_task_when_no_task_active(config) do |next_task|
-    next_task.postpone!(reason, review_at.empty? ? 'Tomorrow' : review_at)
+    next_task.postpone!(reason, review_at.empty? ? nil : review_at)
   end
 when '+'
   task_list = parse_task_list(config)

@@ -62,14 +62,12 @@ module Pomodoro::Formats::Today
       @status = :done
     end
 
-    def postpone!(reason, next_review = (Date.today + 1).strftime('%Y/%m/%d'))
+    def postpone!(reason, next_review = (Date.today + 1).iso8601)
       @end_time = Hour.now if @start_time
       @status = :failed
       @lines << "Postponed: #{reason}"
-      # TODO: Add year if it's not the current one.
-      next_review_date = Date.parse(next_review) # FIXME: a/b je b/a!
-      next_review_date_str = (next_review_date.year == Date.today.year) ? next_review_date.strftime('%-d/%-m') : next_review_date.strftime('%-d/%-m/%Y')
-      @lines << "Review at: #{next_review_date_str}"
+      next_review_date = Date.parse(next_review)
+      @lines << "Review at: #{next_review_date.iso8601}"
     end
 
     def fail!(reason)

@@ -46,14 +46,14 @@ end
 def edit_next_task_when_no_task_active(config, &block)
   time_frame(config) do |today_list, current_time_frame|
     if active_task = today_list.active_task
-      abort "<red>There is an active task already:</red>\n#{active_task}".colourise
+      abort "<red>There is an active task already:</red> #{active_task.body}".colourise
     end
 
     if next_task = current_time_frame.first_unstarted_task
       block.call(next_task)
       today_list.save(config.today_path)
     else
-      abort "<red>No more tasks in #{current_time_frame.desc}</red>".colourise
+      abort "<red>No more tasks in #{current_time_frame.name}</red>".colourise
     end
   end
 end
@@ -114,10 +114,11 @@ when 'start'
   end
 
   with_active_task(config) do |active_task|
-    abort "<red>There is an active task already:</red>\n#{active_task}".colourise
+    abort "<red>There is an active task already:</red> #{active_task.body}".colourise
   end
 
   edit_next_task_when_no_task_active(config) do |next_task|
+    puts "<bold>~</bold> <green>#{next_task.body}</green> has been started.".colourise
     next_task.start!
   end
 
@@ -136,11 +137,11 @@ when 'next'
 
   time_frame(config) do |today_list, current_time_frame|
     if active_task = current_time_frame.active_task
-      abort "<red>There is an active task already:</red>\n#{active_task}".colourise
+      abort "<red>There is an active task already:</red> #{active_task.body}".colourise
     end
 
-    if task = current_time_frame.first_unstarted_task
-      puts task
+    if next_task = current_time_frame.first_unstarted_task
+      puts "<bold>~</bold> <green>#{next_task.body}</green>".colourise
     else
       abort "<red>No more tasks in #{current_time_frame.desc}</red>".colourise
     end
@@ -152,17 +153,22 @@ when 'done'
 
   with_active_task(config) do |active_task|
     active_task.complete!
-    puts active_task
+    puts "<bold>~</bold> <green>#{active_task.body}</green> has been finished.".colourise
   end
 when 'postpone'
   unless File.exist?(config.today_path)
     abort "<red>! File #{config.today_path.sub(ENV['HOME'], '~')} doesn't exist</red>".colourise
   end
 
+  print "<bold>Why?</bold> ".colourise
+  reason = STDIN.readline.chomp
+  print "<bold>When do you want to review?</bold> Defaults to tomorrow. ".colourise
+  review_at = STDIN.readline.chomp
+
   # Ask for metadata and comments.
   with_active_task(config) do |active_task|
-    active_task.postpone!
-    puts active_task
+    review_at.empty? ? active_task.postpone!(reason) : active_task.postpone!(reason, review_at)
+    puts "<bold>~</bold> <green>#{active_task.body}</green> has been postponed.".colourise
   end
 when 'move_on'
   unless File.exist?(config.today_path)
@@ -172,7 +178,7 @@ when 'move_on'
   # Ask for metadata and comments.
   with_active_task(config) do |active_task|
     active_task.move_on!
-    puts active_task
+    puts "<bold>~</bold> You moved on from <green>#{active_task.body}</green>.".colourise
   end
 when 'active'
   unless File.exist?(config.today_path)
@@ -224,7 +230,7 @@ when 'postpone-next'
   print "<bold>When do you want to review?</bold> Defaults to tomorrow. ".colourise
   review_at = STDIN.readline.chomp
   edit_next_task_when_no_task_active(config) do |next_task|
-    next_task.postpone!(reason, review_at.empty? ? nil : review_at)
+    review_at.empty? ? next_task.postpone!(reason) : next_task.postpone!(reason, review_at)
   end
 when '+'
   task_list = parse_task_list(config)

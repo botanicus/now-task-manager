@@ -1,3 +1,5 @@
+require 'date'
+
 module Pomodoro::Formats::Scheduled
   class TaskGroup
     # @since 1.0

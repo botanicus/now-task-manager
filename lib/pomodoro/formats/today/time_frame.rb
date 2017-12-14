@@ -75,6 +75,17 @@ module Pomodoro::Formats::Today
       end_time - start_time
     end
 
+    def duration_ # TODO: Rename neco jako cistyho casu.
+      self.tasks.reduce(0) do |sum, task|
+        (task.ended? && task.actual_duration) ? task.actual_duration + sum : sum
+      end
+    end
+
+    def actual_duration
+      last_finished_task = self.tasks.reverse.find(&:end_time)
+      last_finished_task.end_time - self.tasks.first.start_time
+    end
+
     # Return true or false based on whether the time frame is active
     # in the provided current_time.
     #
@@ -105,9 +116,9 @@ module Pomodoro::Formats::Today
     # @since 1.0
     def to_s
       if @tasks.empty?
-        "#{self.format_header}\n"
+        "#{self.header}\n"
       else
-        "#{self.format_header}\n#{self.tasks.map(&:to_s).join}"
+        "#{self.header}\n#{self.tasks.map(&:to_s).join}"
       end
     end
 
@@ -157,6 +168,16 @@ module Pomodoro::Formats::Today
       end
     end
 
+    def header
+      if @start_time && @end_time
+        [@name, "(#{@start_time} – #{@end_time})"].compact.join(' ')
+      elsif @start_time && ! @end_time
+        [@name, "(from #{@start_time})"].compact.join(' ')
+      elsif ! @start_time && @end_time
+        [@name, "(until #{@end_time})"].compact.join(' ')
+      end
+    end
+
     protected
     def validate_time_info_consistency(start_time, end_time)
       values = {start_time: start_time, end_time: end_time}
@@ -168,16 +189,6 @@ module Pomodoro::Formats::Today
 
       unless start_time < end_time
         raise ArgumentError.new("Start time cannot be bigger than end time.")
-      end
-    end
-
-    def format_header
-      if @start_time && @end_time
-        [@name, "(#{@start_time} – #{@end_time})"].compact.join(' ')
-      elsif @start_time && ! @end_time
-        [@name, "(from #{@start_time})"].compact.join(' ')
-      elsif ! @start_time && @end_time
-        [@name, "(until #{@end_time})"].compact.join(' ')
       end
     end
   end

@@ -33,45 +33,45 @@ module Pomodoro
       end
 
       def self.with_active_time_frame(current_time_frame)
-        if current_time_frame
-          if current_time_frame.end_time
-            puts "#{current_time_frame.start_time}-#{current_time_frame.end_time} (#{current_time_frame.remaining_duration}h remaining) | color=green"
+        puts "#{current_time_frame.header} | color=green"
+        puts "#{current_time_frame.remaining_duration}h remaining"
+
+        current_time_frame.tasks.each do |task|
+          if task.fixed_start_time && ! task.ended? && ! task.started?
+            puts "#{task.fixed_start_time} #{task.body.chomp} | color=red"
+          end
+
+          if task.in_progress?
+            puts "#{task.body.chomp} | color=blue"
+            # We don't have support for having both start/end time and duration #31.
+            # if task.duration
+            #   print " #{task.remaining_duration(current_time_frame)}"
+            # end
+            puts "-- Finish   | bash='now done'     color=black"
+            puts "-- Postpone | bash='now postpone' color=black"
+            puts "-- Move on  | bash='now move_on'  color=black"
+            $ACTIVE_TASK_PRESENT = true
+          elsif current_time_frame.first_unstarted_task == task && ! $ACTIVE_TASK_PRESENT
+            puts "#{task.body.chomp} | color=blue"
+            puts "-- Start | bash='now start' color=black"
           else
-            puts "After #{current_time_frame.start_time} | color=gray"
+            puts "#{task.body.chomp} | color=gray"
           end
-          current_time_frame.tasks.each do |task|
-            if task.fixed_start_time
-              puts "#{task.fixed_start_time} #{task.body.chomp} | color=red"
-            else
-              hash = {unstarted: 'blue', in_progress: 'red'}
-              hash.default_proc = Proc.new { 'gray' }
-              colour = hash[task.status_x]
-              puts "#{task.body.chomp} | color=#{colour}"
-            end
+        end
+      end
 
-            if task.in_progress?
-              puts "-- Finish   | bash='now done'     color=black"
-              puts "-- Postpone | bash='now postpone' color=black"
-              puts "-- Move on  | bash='now move_on'  color=black"
-              $ACTIVE_TASK = true
-            end
+      def self.show_upcoming_time_frames(today_tasks)
+        x_upcoming_time_frames = today_tasks.with_prev_and_next.select do |prev_time_frame, time_frame, next_time_frame|
+          (time_frame.start_time || prev_time_frame.end_time) > Hour.now
+        end
 
-            if current_time_frame.first_unstarted_task == task && ! $ACTIVE_TASK
-              puts "-- Start | bash='now start' color=black"
-            end
+        upcoming_time_frames = x_upcoming_time_frames.map { |pair_of_three| pair_of_three && pair_of_three[1] }
+        unless upcoming_time_frames.empty?
+          puts '---'
+          puts "Rest of the today's schedule | color=green"
+          upcoming_time_frames.each do |upcoming_time_frame|
+            puts "#{upcoming_time_frame.header} | color=black"
           end
-        elsif Time.now.hour < 14
-          today_tasks.each do |time_frame|
-            task_lines = time_frame.to_s.split("\n")[1..-1]
-            puts "#{time_frame.header} | color=#{task_lines.empty? ? 'gray' : 'green'}"
-            task_lines.each do |line|
-              colour = {not_done: 'black', done: 'gray', failed: 'black'}[task.status]
-              puts "#{line.gsub(/^- /, '-- ')} | color=#{colour}"
-            end
-          end
-          puts "Total: XYZ | colour=gray"
-        else
-          puts "Hours worked: #{Hour.new(0, today_tasks.duration)}"
         end
       end
 
@@ -80,14 +80,15 @@ module Pomodoro
           colour, icon = self.heading(current_time_frame)
           puts icon, '---'
           self.with_active_time_frame(current_time_frame)
+          self.show_upcoming_time_frames(today_tasks)
         elsif today_tasks
           colour, icon = self.heading(nil)
           puts icon, '---'
-          puts 'TODO: Some day summary and possibly show tomorrow.'
+          puts 'TODO: Some day summary and possibly show tomorrow.' #33
         else
           colour, icon = self.heading(nil)
           puts icon, '---'
-          puts "Run 'pomodoro e' to add some tasks. | color=green"
+          puts "Click here to add some tasks. | bash='now edit' color=green"
         end
 
         if task_list && task_list.any? { |task_group| ! task_group.tasks.empty? }
@@ -95,8 +96,8 @@ module Pomodoro
           task_list.each do |task_group|
             unless task_group.tasks.empty?
               colour = if task_group.scheduled_date == (Date.today + 1)
-                'red'
-              elsif task_group.scheduled_date.nil? || ! task_group.header == 'Later' # TODO: Fix later being blue.
+                'green'
+              elsif task_group.scheduled_date.nil? && task_group.header != 'Later'
                 'blue' # Context.
               elsif ((Date.today + 1)..(Date.today + 4)).include?(task_group.scheduled_date)
                 'black'
@@ -105,7 +106,7 @@ module Pomodoro
               end
               puts "-- #{task_group.header} | color=#{colour}"
               task_group.tasks.each do |task|
-                # TODO: After the parser is updated: task.fixed_start_time
+                # After the parser is updated: task.fixed_start_time #32
                 puts "---- #{task} | color=#{task.to_s.match(/\[\d+:\d+\]/) ? 'red': 'black'}"
               end
             end

@@ -36,11 +36,26 @@ module Pomodoro::Formats::Today
       validate_data_integrity
     end
 
+    def metadata
+      @metadata ||= @lines.reduce(Hash.new) do |hash, line|
+        if line.match(/^(.+):(.+)$/)
+          hash.merge($1 => $2)
+        end
+        hash
+      end
+    end
+
     def remaining_duration(current_time_frame)
       @start_time || raise("The task #{self.inspect} hasn't been started yet.")
 
       closing_time = @start_time + duration
-      interval_end_time = current_time_frame.interval[1]
+      time_frame_end_time = current_time_frame.end_time
+      [closing_time, time_frame_end_time].min - @start_time
+    end
+
+    # This works even when the task is only ticked off without having the times.
+    def actual_duration
+      @end_time - @start_time if @start_time && @end_time
     end
 
     def to_s

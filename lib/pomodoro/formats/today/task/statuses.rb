@@ -4,7 +4,7 @@ module Pomodoro::Formats::Today
     def status_x
       if self.unstarted? then :unstarted
       # elsif self.skipped? then :skipped
-      elsif self.ended? then :ended
+      # elsif self.ended? then :ended
       elsif self.in_progress? then :in_progress
       elsif self.completed? then :completed
       elsif self.progress_made_but_not_finished? then :progress_made_but_not_finished

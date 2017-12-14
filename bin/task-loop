@@ -8,6 +8,10 @@ require 'refined-refinements/colours'
 
 using RR::ColourExts
 
+def debug(message)
+  warn message
+end
+
 # 1. Scheduled tasks ([10:10] Skype call).
 # 2. Start/end of all time frames.
 def set_schedules(today_list_path)
@@ -20,9 +24,10 @@ def set_schedules(today_list_path)
   end
 
   scheduled_tasks.each do |scheduled_task|
-    puts "<bold>~</bold> Scheduling <green>#{scheduled_task.body}</green> for <yellow>#{scheduled_task.fixed_start_time}</yellow>.".colourise
+    debug "<bold>~</bold> Scheduling <green>#{scheduled_task.body}</green> for <yellow>#{scheduled_task.fixed_start_time}</yellow>.".colourise
     scheduler.at(scheduled_task.fixed_start_time.to_s) do
-      puts "<bold>~</bold> #{Time.now} Task <green>#{scheduled_task.body}</green> is due.".colourise
+      puts "<bold>~</bold> [<cyan>#{Hour.now}</cyan>] Task <green>#{scheduled_task.body}</green> is due.".colourise
+      system(%Q{osascript -e 'display notification "#{scheduled_task.body} is due." with title "Now task manager" sound name "Morse"'})
     end
   end
 
@@ -33,9 +38,10 @@ def set_schedules(today_list_path)
     begin
       start_time = time_frame.start_time || prev_time_frame_end_time
       if start_time >= Hour.now
-        puts "<bold>~</bold> Scheduling <green>#{time_frame.name}</green> <magenta>start</magenta> notification for <yellow>#{start_time}</yellow>.".colourise
+        debug "<bold>~</bold> Scheduling <green>#{time_frame.name}</green> <magenta>start</magenta> notification for <yellow>#{start_time}</yellow>.".colourise
         scheduler.at(start_time.to_s) do
           puts "<bold>~</bold> [<cyan>#{Hour.now}</cyan>] Time frame <green>#{time_frame.name}</green> has started.".colourise
+          system(%Q{osascript -e 'display notification "#{time_frame.name} has started." with title "#{time_frame.header}" sound name "Morse"'})
         end
       end
     rescue => error
@@ -45,17 +51,18 @@ def set_schedules(today_list_path)
     begin
       end_time = time_frame.end_time || next_time_frame_start_time
       if end_time >= Hour.now
-        puts "<bold>~</bold> Scheduling <blue.bold>#{time_frame.name}</blue.bold> <magenta>end</magenta> notification for <yellow>#{end_time}</yellow>.".colourise
+        debug "<bold>~</bold> Scheduling <blue.bold>#{time_frame.name}</blue.bold> <magenta>end</magenta> notification for <yellow>#{end_time}</yellow>.".colourise
         scheduler.at(end_time.to_s) do
           puts "<bold>~</bold> [<cyan>#{Hour.now}</cyan>] Time frame <blue.bold>#{time_frame.name}</blue.bold> has ended.".colourise
+          system(%Q{osascript -e 'display notification "#{time_frame.name} has ended." with title "Now task manager" sound name "Pop"'})
         end
       end
     rescue => error
       warn "<bold>~</bold> <red>#{error.class}</red> occured on <red>#{time_frame.name}</red>.".colourise
     end
   end
-rescue Parslet::ParseFailed => error
-  warn "<bold>~</bold> <red>Parsing has failed.</red>".colourise
+
+  scheduler
 end
 
 today_list_path = Pomodoro::Config.new.today_path
@@ -65,7 +72,7 @@ set_schedules(today_list_path)
 Filewatcher.new([today_list_path]).watch do |filename, event|
   begin
     puts "\n~ File has changed.\n\n"
-    set_schedules(today_list_path)
+    $scheduler = set_schedules(today_list_path) # We have to keep the variable, otherwise the scheduler gets lost.
   rescue Parslet::ParseFailed => error
     warn "<bold>~</bold> <red>Parsing has failed.</red>".colourise
   end

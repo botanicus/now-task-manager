@@ -1,0 +1,72 @@
+#!/usr/bin/env ruby
+
+require 'pomodoro/config'
+require 'pomodoro/formats/today'
+require 'filewatcher'
+require 'rufus-scheduler'
+require 'refined-refinements/colours'
+
+using RR::ColourExts
+
+# 1. Scheduled tasks ([10:10] Skype call).
+# 2. Start/end of all time frames.
+def set_schedules(today_list_path)
+  tasks = Pomodoro::Formats::Today.parse(File.new(today_list_path, encoding: 'utf-8'))
+
+  scheduler = Rufus::Scheduler.new
+
+  scheduled_tasks = tasks.each_task.select do |task|
+    task.fixed_start_time && task.fixed_start_time >= Hour.now
+  end
+
+  scheduled_tasks.each do |scheduled_task|
+    puts "<bold>~</bold> Scheduling <green>#{scheduled_task.body}</green> for <yellow>#{scheduled_task.fixed_start_time}</yellow>.".colourise
+    scheduler.at(scheduled_task.fixed_start_time.to_s) do
+      puts "<bold>~</bold> #{Time.now} Task <green>#{scheduled_task.body}</green> is due.".colourise
+    end
+  end
+
+  tasks.with_prev_and_next.each do |prev_time_frame, time_frame, next_time_frame|
+    prev_time_frame_end_time   = prev_time_frame ? prev_time_frame.end_time   : Hour.parse('0:00')
+    next_time_frame_start_time = next_time_frame ? next_time_frame.start_time : Hour.parse('23:59')
+
+    begin
+      start_time = time_frame.start_time || prev_time_frame_end_time
+      if start_time >= Hour.now
+        puts "<bold>~</bold> Scheduling <green>#{time_frame.name}</green> <magenta>start</magenta> notification for <yellow>#{start_time}</yellow>.".colourise
+        scheduler.at(start_time.to_s) do
+          puts "<bold>~</bold> [<cyan>#{Hour.now}</cyan>] Time frame <green>#{time_frame.name}</green> has started.".colourise
+        end
+      end
+    rescue => error
+      warn "<bold>~</bold> #{error.class} occured on #{time_frame.name}".colourise
+    end
+
+    begin
+      end_time = time_frame.end_time || next_time_frame_start_time
+      if end_time >= Hour.now
+        puts "<bold>~</bold> Scheduling <blue.bold>#{time_frame.name}</blue.bold> <magenta>end</magenta> notification for <yellow>#{end_time}</yellow>.".colourise
+        scheduler.at(end_time.to_s) do
+          puts "<bold>~</bold> [<cyan>#{Hour.now}</cyan>] Time frame <blue.bold>#{time_frame.name}</blue.bold> has ended.".colourise
+        end
+      end
+    rescue => error
+      warn "<bold>~</bold> <red>#{error.class}</red> occured on <red>#{time_frame.name}</red>.".colourise
+    end
+  end
+rescue Parslet::ParseFailed => error
+  warn "<bold>~</bold> <red>Parsing has failed.</red>".colourise
+end
+
+today_list_path = Pomodoro::Config.new.today_path
+
+puts "<bold>~</bold> Watching <bright_black>#{today_list_path.sub(ENV['HOME'], '~')}</bright_black>.".colourise
+set_schedules(today_list_path)
+Filewatcher.new([today_list_path]).watch do |filename, event|
+  begin
+    puts "\n~ File has changed.\n\n"
+    set_schedules(today_list_path)
+  rescue Parslet::ParseFailed => error
+    warn "<bold>~</bold> <red>Parsing has failed.</red>".colourise
+  end
+end

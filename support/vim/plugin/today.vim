@@ -1,10 +1,14 @@
 " TODO: Using vim-ruby we can use the library.
-nmap ta /-now\]/<Enter>:nohl<Enter>f<Space>l
-nmap td ta:s/now/\=strftime('%H:%M')<Enter>
-nmap ts $/^- /<Enter>:s/- /- [%-now] <Enter>:s/%/\=strftime('%H:%M')<Enter>:nohl<Enter>
-nmap <Enter> :call ToggleTaskStatus()<Enter><Enter><C-l>
 
-function! ToggleTaskStatus()
+" Reload file on change (once the editor takes focus).
+set autoread
+
+"nmap ta /-now\]/<Enter>:nohl<Enter>f<Space>l
+"nmap td ta:s/now/\=strftime('%H:%M')<Enter>
+"nmap ts $/^- /<Enter>:s/- /- [%-now] <Enter>:s/%/\=strftime('%H:%M')<Enter>:nohl<Enter>
+"nmap <Enter> :call ToggleTaskStatus()<Enter><Enter><C-l>
+
+"function! ToggleTaskStatus()
 "ruby <<EOF
 "  line = Vim::Buffer.current.line
 "
@@ -46,4 +50,4 @@ function! ToggleTaskStatus()
 "    puts task.to_s
 "  end
 "EOF
-endfunction
+"endfunction

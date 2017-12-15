@@ -110,14 +110,19 @@ when 'generate', 'g' # now g u_ani +normal_daily_routine -swimming_daily_routine
   # TODO.
 when 'edit', 'e'
   if ARGV.empty?
+    unless File.exists?(config.today_path)
+      system("vim #{config.task_list_path}")
+    end
     date_path = generate_todays_tasks(Date.today, config)
     exec("vim #{date_path}")
   elsif ARGV.first.to_i == 2
+    system("vim #{config.task_list_path}")
     date_path = generate_todays_tasks(Date.today, config)
     exec("vim -O2 #{date_path} #{config.task_list_path}")
   elsif ARGV.first == 'tomorrow'
+    system("vim #{config.task_list_path}")
     date_path = generate_todays_tasks(Date.today + 1, config)
-    exec("vim -O2 #{date_path} #{config.task_list_path}")
+    exec("vim #{date_path}")
   elsif ['tasks', 't'].include?(ARGV.first)
     exec("vim #{config.task_list_path}")
   else

@@ -26,5 +26,13 @@ module Pomodoro
         end
       end
     end
+
+    def calendar
+      (@data['calendar'] || Hash.new).reduce(Hash.new) do |buffer, (event_name, date)|
+        date = Date.strptime(date, '%d/%m')
+        date = (date < Date.today) ? date.next_year : date
+        buffer.merge(event_name => date)
+      end
+    end
   end
 end

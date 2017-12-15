@@ -12,8 +12,6 @@ def debug(message)
   warn message
 end
 
-# 1. Scheduled tasks ([10:10] Skype call).
-# 2. Start/end of all time frames.
 def set_schedules(today_list_path)
   tasks = Pomodoro::Formats::Today.parse(File.new(today_list_path, encoding: 'utf-8'))
 

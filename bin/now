@@ -75,8 +75,25 @@ def generate_todays_tasks(date, config)
   scheduled_task_list.each do |task_group|
     if task_group.scheduled_date == date
       task_group.tasks.each do |task|
-        puts "~ #{task}"
-        task_list.time_frames.first.create_task(task)
+
+        if (possible_time_frame_name, *rest = task.split(':')[0])
+          require 'abbrev'
+
+          time_frame = task_list.time_frames.find do |time_frame|
+            time_frame.name == possible_time_frame_name || begin
+              if possible_time_frame_name.match(/^[A-Z]{2,}$/) # Use MOR: to match Morning routine etc.
+                abbrevs = Abbrev.abbrev([time_frame.name.upcase])
+                abbrevs[possible_time_frame_name]
+              end
+            end
+          end
+          task = rest.join(':').strip if time_frame
+        else
+          time_frame = task_list.time_frames.first
+        end
+
+        puts "~ Adding #{task} to #{time_frame.name}"
+        time_frame.create_task(task)
         scheduled_task_list.delete(task_group)
       end
     end

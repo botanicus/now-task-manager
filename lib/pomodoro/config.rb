@@ -14,7 +14,8 @@ module Pomodoro
       task_list_path: '~/pomodoro/tasks.todo',
       today_path: '~/pomodoro/%Y-%m-%d.today',
       schedule_path: '~/pomodoro/schedule.rb',
-      routine_path: '~/pomodoro/routine.rb'
+      routine_path: '~/pomodoro/routine.rb',
+      data_root_path: nil
     }.each do |key, default_value|
       define_method(key) do |time = Time.now|
         path = @data[key.to_s] || default_value

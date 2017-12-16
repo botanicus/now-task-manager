@@ -331,6 +331,8 @@ when 'generate-upcoming-events'
 
     task_list.save(config.task_list_path)
   end
+when 'config' # now config task_list_path
+  puts config.send(ARGV.first)
 when 'help', '-h', '--help'
   puts(DATA.read.colourise)
 else

@@ -24,5 +24,17 @@ module Pomodoro::Formats::Today
         end
       end
     end
+
+    def months
+      self.files.group_by do |path|
+        path.split('/')[-3]
+      end
+    end
+
+    def weeks
+      self.files.group_by do |path|
+        path.split('/')[-2..-3].join('/')
+      end
+    end
   end
 end

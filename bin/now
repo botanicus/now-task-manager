@@ -76,7 +76,9 @@ def generate_todays_tasks(date, config)
     if task_group.scheduled_date == date
       task_group.tasks.each do |task|
 
-        if (possible_time_frame_name, *rest = task.split(':')[0])
+        pieces = task.split(/:\s+/)[0]
+        if pieces.length > 1
+          possible_time_frame_name, *rest = pieces
           require 'abbrev'
 
           time_frame = task_list.time_frames.find do |time_frame|
@@ -87,8 +89,10 @@ def generate_todays_tasks(date, config)
               end
             end
           end
-          task = rest.join(':').strip if time_frame
-        else
+          task = rest.join(': ').strip if time_frame
+        end
+
+        unless time_frame
           time_frame = task_list.time_frames.first
         end
 

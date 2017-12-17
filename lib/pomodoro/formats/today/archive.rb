@@ -1,39 +1,43 @@
+require 'ostruct'
 require 'pomodoro/formats/today'
 require 'pomodoro/config'
 
 module Pomodoro::Formats::Today
   class Archive
-    def initialize(glob)
-      @glob = glob
+    def initialize(start_date, end_date)
+      @start_date, @end_date = start_date, end_date
+      # TODO: Validate if start_date is smaller than end_date.
     end
 
-    def files
-      @files ||= Dir.glob("#{self.data_root_path}/#{@glob}/**/*.today")
-    end
-
-    def data_root_path
-      Pomodoro.config.data_root_path
-    end
-
-    def lists
-      @lists ||= self.files.map do |file|
-        begin
-          Pomodoro::Formats::Today.parse(File.new(file))
-        rescue => error
-          raise error.class.new("Error in #{file}: #{error.message}")
-        end
+    def days
+      (@start_date..@end_date).map do |date|
+        OpenStruct.new(date: date, task_list: task_list_for(date))
       end
     end
 
     def months
-      self.files.group_by do |path|
-        path.split('/')[-3]
-      end
+      xxx((@start_date..@end_date).group_by(&:month))
     end
 
     def weeks
-      self.files.group_by do |path|
-        path.split('/')[-2..-3].join('/')
+      xxx((@start_date..@end_date).group_by(&:cweek))
+    end
+
+    private
+    def xxx(hash)
+      hash.reduce(Hash.new) do |buffer, (num, date)|
+        buffer[num] ||= Array.new
+        buffer[num] << OpenStruct.new(date: date, task_list: task_list_for(date))
+        buffer
+      end
+    end
+
+    def task_list_for(date)
+      path = Pomodoro.config.today_path(date)
+      begin
+        Pomodoro::Formats::Today.parse(File.new(path)) if File.exist?(path)
+      rescue => error
+        raise error.class.new("Error in #{path}: #{error.message}")
       end
     end
   end

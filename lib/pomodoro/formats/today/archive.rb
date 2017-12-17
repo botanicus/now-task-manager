@@ -12,7 +12,7 @@ module Pomodoro::Formats::Today
     end
 
     def data_root_path
-      Pomodoro::Config.new.data_root_path
+      Pomodoro.config.data_root_path
     end
 
     def lists

@@ -35,8 +35,8 @@ module Pomodoro::Formats::Today
       end
     end
 
-    def expenses
-      # TODO
+    def empty?
+      self.tags.empty? && self.task_list.empty?
     end
   end
 end

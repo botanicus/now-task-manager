@@ -16,7 +16,7 @@ def retrieve_issues(url)
   request = HTTP.get(url)
   data = request.body
   issues = JSON.parse(data)
-  match = request.headers['Link'].match(/<(https:.+)>; rel="next"/)
+  match = request.headers['Link'] && request.headers['Link'].match(/<(https:.+)>; rel="next"/)
   if next_url = match && match[1]
     issues += retrieve_issues(next_url)
   end

@@ -59,6 +59,8 @@ def generate_todays_tasks(date, config)
 
   return date_path if File.exist?(config.today_path(date))
 
+  system("vim #{config.task_list_path}")
+
   scheduler = Pomodoro::Scheduler.load([config.schedule_path, config.routine_path], date)
 
   schedule = scheduler.schedule_for_date(date)
@@ -141,7 +143,6 @@ when 'edit', 'e'
     date_path = generate_todays_tasks(Date.today, config)
     exec("vim -O2 #{date_path} #{config.task_list_path}")
   elsif ARGV.first == 'tomorrow'
-    system("vim #{config.task_list_path}")
     date_path = generate_todays_tasks(Date.today + 1, config)
     exec("vim #{date_path}")
   elsif ['tasks', 't'].include?(ARGV.first)

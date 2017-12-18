@@ -52,7 +52,7 @@ results = SUBPROJECTS.reduce(Hash.new) do |buffer, subproject|
   buffer
 end
 
-overall_total = results.reduce(0) { |sum, (_, lines)| sum + lines[-1].match(/\d+/)[0].to_i }
+overall_total = results.reduce(0) { |sum, (_, lines)| sum + lines[-1].match(/\d+ pt/)[0].to_i }
 results.each do |key, lines|
   puts "<cyan>#</cyan> <magenta>#{key}</magenta>\n- #{lines.join("\n- ")}\n\n".colourise
 end

@@ -74,7 +74,7 @@ module Pomodoro::Formats::Today
 
     rule(:time_frame_with_tasks) { (time_frame_header >> (task | log_item).repeat.as(:items)).as(:time_frame) } # ...
 
-    rule(:day_tag) { str('@') >> (match['\s'].absent? >> any).repeat.as(:tag) >> space? }
+    rule(:day_tag) { str('@') >> (match('\s').absent? >> any).repeat.as(:tag) >> space? }
     rule(:day_tags) { day_tag.repeat(1).as(:tags) >> nl.maybe }
 
     rule(:time_frames_with_tasks) { day_tags.maybe >> time_frame_with_tasks.repeat(0) }

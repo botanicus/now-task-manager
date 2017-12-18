@@ -17,6 +17,7 @@ syn match scheduledHour '\[\d\+:\d\+\]'
 syn match time '\[\d\+\]'
 syn match tag '#\w\+'
 syn match logItem '^\~ .*$'
+syn match metadataLine '^  .*$'
 syn match finishedTask_1 '^[✓✔✕✖✗✘].*$'
 "syn match finishedTask_2 '^- \[\d\+:\d\+-\d\+:\d\+\].*$'
 syn match inProgressTask '^- \[\d\+:\d\+-?\+\].*$'
@@ -33,6 +34,7 @@ hi def link scheduledHour Todo
 hi def link time Statement
 hi def link tag Type
 hi def link logItem Comment
+hi def link metadataLine Comment
 hi def link finishedTask_1 Comment
 "hi def link finishedTask_2 Comment
 hi def link inProgressTask Underlined

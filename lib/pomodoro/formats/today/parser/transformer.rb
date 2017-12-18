@@ -35,6 +35,15 @@ module Pomodoro::Formats::Today
       {status: status}
     }
 
+    rule(log_item: simple(:blob)) {
+      hash = blob.to_s.chomp('.').split(/, /).reduce(Hash.new) do |buffer, chunk|
+        key, value = chunk.split(': ')
+        buffer.merge(key => value)
+      end
+
+      LogItem.new(hash)
+    }
+
     rule(task: subtree(:hashes)) {
       data = hashes.reduce(Hash.new) do |buffer, hash|
         key = hash.keys.first

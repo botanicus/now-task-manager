@@ -15,10 +15,8 @@ module Pomodoro::Formats::Today
   end
 
   class TimeFrame
-    include Enumerable
-
     # @since 1.0
-    attr_reader :name, :start_time, :end_time, :tasks
+    attr_reader :name, :start_time, :end_time, :items
 
     # @param name [String] name of the task group.
     # @param start_time [Hour] of when the time frame starts.
@@ -33,12 +31,12 @@ module Pomodoro::Formats::Today
     #   require 'pomodoro/formats/today'
     #
     #   time_frame = Pomodoro::Formats::Today::TimeFrame.new(
-    #     name: 'Morning routine', start_time: Hour.parse('7:50'), tasks: [
+    #     name: 'Morning routine', start_time: Hour.parse('7:50'), items: [
     #       Pomodoro::Formats::Today::Task.new(status: :done, body: 'Headspace.')
     #     ]
     #   )
-    def initialize(name:, start_time: nil, end_time: nil, tasks: Array.new)
-      @name, @start_time, @end_time, @tasks = name, start_time, end_time, tasks
+    def initialize(name:, start_time: nil, end_time: nil, items: Array.new)
+      @name, @start_time, @end_time, @items = name, start_time, end_time, items
 
       # This is not true, because it can be determined by the next/previous time frame.
       # https://github.com/botanicus/now-task-manager/issues/20
@@ -51,9 +49,17 @@ module Pomodoro::Formats::Today
       end
 
       task_methods = [:status, :body, :start_time, :end_time, :metadata]
-      unless tasks.is_a?(Array) && tasks.all? { |item| task_methods.all? { |method| item.respond_to?(method) }}
-        raise ArgumentError.new("Tasks is supposed to be an array of Task instances.")
+      unless items.is_a?(Array) && items.all? { |item| item.is_a?(Task) || item.is_a?(LogItem) }
+        raise ArgumentError.new("Items is supposed to be an array of Task or LogItem instances.")
       end
+    end
+
+    def tasks
+      self.items.select { |item| item.is_a?(Task) }
+    end
+
+    def log_items
+      self.items.select { |item| item.is_a?(LogItem) }
     end
 
     # Return overall duration of the time frame.
@@ -115,19 +121,11 @@ module Pomodoro::Formats::Today
     #
     # @since 1.0
     def to_s
-      if @tasks.empty?
+      if self.items.empty?
         "#{self.header}\n"
       else
-        "#{self.header}\n#{self.tasks.map(&:to_s).join}"
+        "#{self.header}\n#{self.items.map(&:to_s).join}"
       end
-    end
-
-    # Iterate over the tasks.
-    #
-    # @yieldparam [Task] task
-    # @since 1.0
-    def each(&block)
-      @tasks.each(&block)
     end
 
     # Name of method that will be available on a {TaskList task list} to access a time frame.
@@ -145,12 +143,12 @@ module Pomodoro::Formats::Today
     end
 
     def create_task(body, duration = nil, tags = Array.new)
-      @tasks << Task.new(status: :not_done, body: body, tags: tags)
+      @items << Task.new(status: :not_done, body: body, tags: tags)
     end
 
-    def clear
-      @tasks.clear
-    end
+    # def clear
+    #   @tasks.clear
+    # end
 
     def remaining_duration
       @end_time && (@end_time - Hour.now)

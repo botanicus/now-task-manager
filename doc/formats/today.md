@@ -1,6 +1,13 @@
 This format is used for tasks that are being worked on today.
 
 ```
+Morning routine
+~ Weight: 69.9
+
+Evening
+~ Consumption: 1 beer, au: 3, price: 8 PLN.
+~ Spending: 8 PLN
+
 Morning routine (7:50 – 9:20)
 ✔ Headspace. #meditation
 ✘ Go swimming. #exercise

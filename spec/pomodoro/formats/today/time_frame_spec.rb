@@ -10,24 +10,24 @@ describe Pomodoro::Formats::Today::TimeFrame do
 
     it "fails if start time or end time is not an Hour instance" do
       expect {
-        described_class.new(name: 'X', start_time: Time.now, tasks: Hash.new)
+        described_class.new(name: 'X', start_time: Time.now, items: Hash.new)
       }.to raise_error(ArgumentError, /Start time and end time has to be an Hour instance/)
 
       expect {
-        described_class.new(name: 'X', end_time: 30, tasks: Hash.new)
+        described_class.new(name: 'X', end_time: 30, items: Hash.new)
       }.to raise_error(ArgumentError, /Start time and end time has to be an Hour instance/)
     end
 
     it "fails if tasks is not an array" do
       expect {
-        described_class.new(name: 'X', start_time: h('7:50'), tasks: Hash.new)
-      }.to raise_error(ArgumentError, /Tasks is supposed to be an array of Task instances/)
+        described_class.new(name: 'X', start_time: h('7:50'), items: Hash.new)
+      }.to raise_error(ArgumentError, /Items is supposed to be an array of Task or LogItem instances/)
     end
 
     it "fails if tasks is not an array of task-like objects" do
       expect {
-        described_class.new(name: 'X', start_time: h('7:50'), tasks: [Object.new])
-      }.to raise_error(ArgumentError, /Tasks is supposed to be an array of Task instances/)
+        described_class.new(name: 'X', start_time: h('7:50'), items: [Object.new])
+      }.to raise_error(ArgumentError, /Items is supposed to be an array of Task or LogItem instances/)
     end
 
     it "succeeds when name and start_time is provided" do
@@ -39,7 +39,7 @@ describe Pomodoro::Formats::Today::TimeFrame do
   end
 
   subject do
-    described_class.new(name: 'Morning routine', start_time: h('7:50'), tasks: [
+    described_class.new(name: 'Morning routine', start_time: h('7:50'), items: [
       Pomodoro::Formats::Today::Task.new(status: :done, body: 'Headspace.')
     ])
   end
@@ -221,12 +221,6 @@ describe Pomodoro::Formats::Today::TimeFrame do
       it "returns a valid today task list formatted string" do
         expect(subject.to_s).to eql("Morning routine (7:50 – 9:20)\n")
       end
-    end
-  end
-
-  describe '#each' do
-    it "returns an enumerator" do
-      expect(subject.each).to be_kind_of(Enumerator)
     end
   end
 

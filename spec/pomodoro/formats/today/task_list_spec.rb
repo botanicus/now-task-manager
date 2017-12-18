@@ -8,7 +8,7 @@ describe Pomodoro::Formats::Today::TaskList do
 
   let(:time_frame) do
     Pomodoro::Formats::Today::TimeFrame.new(
-      name: 'Morning routine', start_time: h('7:50'), tasks: [task])
+      name: 'Morning routine', start_time: h('7:50'), items: [task])
   end
 
   describe '.new' do
@@ -237,7 +237,7 @@ describe Pomodoro::Formats::Today::TaskList do
           Pomodoro::Formats::Today::TimeFrame.new(
             name: 'Morning routine', end_time: h('9:20')),
           Pomodoro::Formats::Today::TimeFrame.new(
-            name: 'Work', end_time: h('17:20'), tasks: [
+            name: 'Work', end_time: h('17:20'), items: [
               Pomodoro::Formats::Today::Task.new(status: :done, body: "Task 1."),
               Pomodoro::Formats::Today::Task.new(status: :failed, body: "Task 1.", start_time: h('15:00'), end_time: h('15:25')),
               Pomodoro::Formats::Today::Task.new(status: :not_done, body: "Task 2.", start_time: h('15:30')),
@@ -256,7 +256,7 @@ describe Pomodoro::Formats::Today::TaskList do
           Pomodoro::Formats::Today::TimeFrame.new(
             name: 'Morning routine', end_time: h('9:20')),
           Pomodoro::Formats::Today::TimeFrame.new(
-            name: 'Work', end_time: h('17:20'), tasks: [
+            name: 'Work', end_time: h('17:20'), items: [
               Pomodoro::Formats::Today::Task.new(status: :done, body: "Task 1."),
               Pomodoro::Formats::Today::Task.new(status: :failed, body: "Task 1.", start_time: h('15:00'), end_time: h('15:25')),
               Pomodoro::Formats::Today::Task.new(status: :done, body: "Task 2."),

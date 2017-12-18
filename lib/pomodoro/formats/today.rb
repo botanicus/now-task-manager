@@ -27,15 +27,18 @@ module Pomodoro
       # @since 1.0
       def self.parse(string_or_io)
         string = string_or_io.respond_to?(:read) ? string_or_io.read : string_or_io
-        # tree = Parser.new.parse_with_debug(string)
-        tree = Parser.new.parse(string)
-        nodes = Transformer.new.apply(tree)
-        TaskList.new(*nodes) unless nodes.empty?
+        path   = string_or_io.path if string_or_io.respond_to?(:path)
+        tree   = Parser.new.parse(string)
+        nodes  = Transformer.new.apply(tree)
+        Day.new(path: path, nodes: nodes)
+      rescue => error
+        raise error.class.new("Error in #{path}: #{error.message}")
       end
     end
   end
 end
 
+require 'pomodoro/formats/today/day'
 require 'pomodoro/formats/today/task_list'
 require 'pomodoro/formats/today/time_frame'
 require 'pomodoro/formats/today/task'

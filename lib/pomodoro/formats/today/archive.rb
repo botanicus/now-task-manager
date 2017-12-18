@@ -1,6 +1,4 @@
-require 'ostruct'
 require 'pomodoro/formats/today'
-require 'pomodoro/config'
 
 module Pomodoro::Formats::Today
   class Archive
@@ -10,34 +8,23 @@ module Pomodoro::Formats::Today
     end
 
     def days
-      (@start_date..@end_date).map do |date|
-        OpenStruct.new(date: date, task_list: task_list_for(date))
-      end
+      (@start_date..@end_date).map { |date| Day.new(date) }
     end
 
     def months
-      xxx((@start_date..@end_date).group_by(&:month))
+      map_to_days((@start_date..@end_date).group_by(&:month))
     end
 
     def weeks
-      xxx((@start_date..@end_date).group_by(&:cweek))
+      map_to_days((@start_date..@end_date).group_by(&:cweek))
     end
 
     private
-    def xxx(hash)
+    def map_to_days(hash)
       hash.reduce(Hash.new) do |buffer, (num, date)|
         buffer[num] ||= Array.new
-        buffer[num] << OpenStruct.new(date: date, task_list: task_list_for(date))
+        buffer[num] << Day.new(date: date)
         buffer
-      end
-    end
-
-    def task_list_for(date)
-      path = Pomodoro.config.today_path(date)
-      begin
-        Pomodoro::Formats::Today.parse(File.new(path)) if File.exist?(path)
-      rescue => error
-        raise error.class.new("Error in #{path}: #{error.message}")
       end
     end
   end

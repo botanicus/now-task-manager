@@ -1,0 +1,41 @@
+require 'date'
+require 'pomodoro/formats/today'
+require 'pomodoro/config'
+
+module Pomodoro::Formats::Today
+  class Day
+    def self.for(date)
+      path = Pomodoro.config.today_path(date)
+      Pomodoro::Formats::Today.parse(path)
+    end
+
+    attr_reader :path, :task_list
+    def initialize(path: nil, nodes: Array.new)
+      @path, @nodes = path, nodes
+    end
+
+    def date
+      Date.parse(self.path.match(/\d{4}-\d{2}-\d{2}/)[0])
+    end
+
+    def tags
+      if @nodes.first.is_a?(TimeFrame)
+        Array.new
+      else
+        @nodes.first
+      end
+    end
+
+    def task_list
+      @task_list ||= if @nodes.first.is_a?(TimeFrame)
+        TaskList.new(*@nodes)
+      else
+        TaskList.new(*@nodes[1..-1])
+      end
+    end
+
+    def expenses
+      # TODO
+    end
+  end
+end

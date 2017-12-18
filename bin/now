@@ -277,7 +277,7 @@ when 'console', 'c'
 
   today   = parse_today_list(config) if File.exist?(config.today_path)
   tasks   = parse_task_list(config)  if File.exist?(config.task_list_path)
-  archive = Pomodoro::Formats::Today::Archive.new('')
+  archive = Pomodoro::Formats::Today::Archive.new(Date.new(2017, 12, 3), Date.today)
 
   require 'pry'; binding.pry
 when 'tools'

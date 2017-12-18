@@ -1,6 +1,6 @@
 require 'spec_helper'
 require 'pomodoro/formats/today'
-require 'parslet/rig/rspec' # So we can use parser.rule.parse(...)
+# require 'parslet/rig/rspec' # So we can use parser.rule.parse(...)
 
 describe Pomodoro::Formats::Today::Parser do
   describe 'rule :day_tag' do
@@ -12,14 +12,13 @@ describe Pomodoro::Formats::Today::Parser do
 
   describe 'rule :day_tags' do
     it "parses one tag" do
-      tree = subject.day_tag.parse("@holidays\n")
-      expect(tree[:tag]).to eql('holidays')
+      tree = subject.day_tags.parse("@holidays\n")
+      expect(tree[:tags][0]).to eql(tag: 'holidays')
     end
 
     it "parses all the tags" do
-      pending
-      tree = subject.day_tag.parse("@holidays @spain\n")
-      expect(tree[:tag]).to eql('spain')
+      tree = subject.day_tags.parse("@holidays @spain\n")
+      expect(tree[:tags]).to eql([{tag: 'holidays'}, {tag: 'spain'}])
     end
   end
 

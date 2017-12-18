@@ -3,6 +3,26 @@ require 'pomodoro/formats/today'
 require 'parslet/rig/rspec' # So we can use parser.rule.parse(...)
 
 describe Pomodoro::Formats::Today::Parser do
+  describe 'rule :day_tag' do
+    it "parses one tag" do
+      tree = subject.day_tag.parse('@holidays')
+      expect(tree[:tag]).to eql('holidays')
+    end
+  end
+
+  describe 'rule :day_tags' do
+    it "parses one tag" do
+      tree = subject.day_tag.parse("@holidays\n")
+      expect(tree[:tag]).to eql('holidays')
+    end
+
+    it "parses all the tags" do
+      pending
+      tree = subject.day_tag.parse("@holidays @spain\n")
+      expect(tree[:tag]).to eql('spain')
+    end
+  end
+
   describe 'rule :indent' do
     it "parses dash" do
       tree = subject.indent.parse('- ')

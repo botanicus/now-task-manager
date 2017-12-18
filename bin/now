@@ -6,13 +6,13 @@ require 'refined-refinements/colours'
 using RR::ColourExts
 
 def parse_today_list(config)
-  list = Pomodoro::Formats::Today.parse(File.new(config.today_path, encoding: 'utf-8'))
+  day = Pomodoro::Formats::Today.parse(File.new(config.today_path, encoding: 'utf-8'))
 
-  if (active_tasks = list.each_task.select(&:in_progress?)).length > 1
+  if (active_tasks = day.task_list.each_task.select(&:in_progress?)).length > 1
     raise "There are 2 active tasks: #{active_tasks}"
   end
 
-  list
+  day.task_list
 end
 
 def parse_task_list(config)

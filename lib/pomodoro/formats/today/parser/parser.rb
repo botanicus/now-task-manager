@@ -15,6 +15,7 @@ module Pomodoro::Formats::Today
     rule(:lparen)          { str('(') }
     rule(:rparen)          { str(')') }
     rule(:time_delimiter)  { match['-–'] }
+    # TODO: change to rule(:time_delimiter)  { match('[-–]|to') }
     rule(:colon)           { str(':') }
 
     rule(:hour)            { (integer.repeat >> (colon >> integer).maybe).as(:hour) }
@@ -69,7 +70,11 @@ module Pomodoro::Formats::Today
     end
 
     rule(:time_frame_with_tasks) { (time_frame_header >> task.repeat.as(:tasks)).as(:time_frame) } # ...
-    rule(:time_frames_with_tasks) { time_frame_with_tasks.repeat(0) }
+
+    rule(:day_tag) { str('@') >> (match['\s'].absent? >> any).repeat.as(:tag) >> space? }
+    rule(:day_tags) { day_tag.repeat(1).as(:tags) >> nl.maybe }
+
+    rule(:time_frames_with_tasks) { day_tags.maybe >> time_frame_with_tasks.repeat(0) }
 
     root(:time_frames_with_tasks)
   end

@@ -13,6 +13,15 @@ describe Pomodoro::Formats::Today::Parser do
       expect { subject.parse("\n") }.not_to raise_error
     end
 
+    it "parses a special day" do
+      x = "@holidays\n"
+
+      expect { subject.parse(x) }.not_to raise_error
+
+      tree = subject.parse(x)
+      expect(tree[:tags][0]).to eql(tag: :holidays)
+    end
+
     it "parses one time frame with no tasks" do
       x = "Time frame 1 (9:00 – 12:00)\n"
 

@@ -61,6 +61,10 @@ module Pomodoro::Formats::Today
       end
     }
 
+    rule(tags: subtree(:data)) {
+      data.map { |h| h[:tag] }
+    }
+
     rule(time_frame: subtree(:data)) {
       data[:name] = data.delete(:name).to_s.strip # WTH? All the other nodes are processed correctly?
       begin

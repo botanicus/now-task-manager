@@ -28,6 +28,8 @@ module Pomodoro
     end
 
     class DSL
+      include Pomodoro::Formats::Today
+
       attr_reader :rules, :schedules, :today
       def initialize(schedule_dir, today = Date.today)
         @schedule_dir, @today = schedule_dir, today
@@ -48,6 +50,14 @@ module Pomodoro
 
       def rule(name, condition, &block)
         @rules[name] = Rule.new(condition, &block)
+      end
+
+      def h(hour)
+        Hour.parse(hour) if hour
+      end
+
+      def time_frame(name, start_time = nil, end_time = nil)
+        TimeFrame.new(name: name, start_time: h(start_time), end_time: h(end_time))
       end
 
       def last_day_of_a_month

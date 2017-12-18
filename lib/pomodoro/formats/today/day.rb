@@ -16,11 +16,11 @@ module Pomodoro::Formats::Today
     end
 
     def date
-      Date.parse(self.path.match(/\d{4}-\d{2}-\d{2}/)[0])
+      Date.parse(self.path.match(/\d{4}-\d{2}-\d{2}/)[0]) if self.path
     end
 
     def tags
-      if @nodes.first.is_a?(TimeFrame)
+      @tags ||= if @nodes.first.is_a?(TimeFrame) || @nodes.first.nil?
         Array.new
       else
         @nodes.first

@@ -22,8 +22,9 @@ module Pomodoro
 
     class Schedule < Thing
       def call
-        list = @callable.call
-        Pomodoro::Formats::Today::TaskList.new(*list)
+        day = Pomodoro::Formats::Today::Day.new
+        @callable.call(day)
+        day
       end
     end
 

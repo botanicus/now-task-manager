@@ -14,8 +14,7 @@ module Pomodoro::Formats::Today
 
     rule(:lparen)          { str('(') }
     rule(:rparen)          { str(')') }
-    rule(:time_delimiter)  { match['-–'] }
-    # TODO: change to rule(:time_delimiter)  { match('[-–]|to') }
+    rule(:time_delimiter)  { match['-–'] | str('to') }
     rule(:colon)           { str(':') }
 
     rule(:hour)            { (integer.repeat >> (colon >> integer).maybe).as(:hour) }

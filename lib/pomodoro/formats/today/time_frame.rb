@@ -8,6 +8,8 @@ module Pomodoro::Formats::Today
       super <<-EOF.gsub(/^ */, '')
        The following values were not present: #{missing_values.keys.join(' and ')}
 
+       Full data: #{missing_values.inspect}
+
        Every time frame has to have a start_time and an end_time: if not explicitly,
        then the info has to be present on the previous/next time frame.
      EOF
@@ -109,8 +111,8 @@ module Pomodoro::Formats::Today
         raise ArgumentError.new("Current time has to be an Hour instance, was #{current_time.class}.")
       end
 
-      start_time = @start_time || prev_time_frame_end_time
-      end_time = @end_time || next_time_frame_start_time
+      start_time = @start_time || (prev_time_frame_end_time || Hour.parse('0:00'))
+      end_time = @end_time || (next_time_frame_start_time || Hour.parse('23:59'))
 
       validate_time_info_consistency(start_time, end_time)
 
@@ -185,7 +187,7 @@ module Pomodoro::Formats::Today
         raise TimeFrameInsufficientTimeInfoError.new(missing_values)
       end
 
-      unless start_time < end_time
+      if start_time && end_time && start_time > end_time
         raise ArgumentError.new("Start time cannot be bigger than end time.")
       end
     end

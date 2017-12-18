@@ -38,5 +38,9 @@ module Pomodoro::Formats::Today
     def empty?
       self.tags.empty? && self.task_list.empty?
     end
+
+    def normal?
+      ([:holidays, :bedbound] & self.tags).empty?
+    end
   end
 end

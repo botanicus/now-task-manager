@@ -9,7 +9,7 @@ endif
 " Groups so we can fold time frames.
 " Hide time frames where everything is done.
 
-syn match timeFrameLabel '^[^#-][a-zA-Z0-9 ]\+'
+syn match timeFrameLabel '^[^#-][^(]\+'
 syn match taskDef '^- '
 "syn match comment '#.*$'
 syn match hour '\d\+:\d\+'

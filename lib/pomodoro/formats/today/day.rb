@@ -6,7 +6,8 @@ module Pomodoro::Formats::Today
   class Day
     def self.for(date)
       path = Pomodoro.config.today_path(date)
-      Pomodoro::Formats::Today.parse(path)
+      Pomodoro::Formats::Today.parse(File.open(path, encoding: 'utf-8'))
+    rescue Errno::ENOENT
     end
 
     attr_reader :path, :task_list

@@ -33,7 +33,7 @@ describe Pomodoro::Formats::Today::Parser do
           name: "Time frame 1 ",
           start_time: {hour: '9:00'},
           end_time:   {hour: '12:00'},
-          tasks: []
+          items: []
         }
       }])
     end
@@ -49,7 +49,7 @@ describe Pomodoro::Formats::Today::Parser do
           name: "Time frame 1 ",
           start_time: {hour: '9:00'},
           end_time:   {hour: '12:00'},
-          tasks: [
+          items: [
             task: [{indent: '-'}, {body: "Do something."}]
           ]
         }
@@ -67,7 +67,7 @@ describe Pomodoro::Formats::Today::Parser do
           name: "Time frame 1 ",
           start_time: {hour: '9:00'},
           end_time:   {hour: '12:00'},
-          tasks: [
+          items: [
             {task: [{indent: '-'}, {body: "Do something."}]},
             {task: [{indent: '-'}, {body: "Do something else."}]},
             {task: [{indent: '-'}, {body: "Go to sleep."}]}
@@ -87,7 +87,7 @@ describe Pomodoro::Formats::Today::Parser do
             name: "Time frame 1 ",
             start_time: {hour: '9:00'},
             end_time:   {hour: '12:00'},
-            tasks: [
+            items: [
               {task: [{indent: '✔'}, {body: "Task 1."}]},
               {task: [{indent: '✔'}, {body: "Coffee. "}, {tag: 'break'}]},
               {task: [{indent: '✘'}, {body: "Task 2. "}, {tag: 'a'}, {tag: 'b'}, {tag: 'c'}]},
@@ -99,7 +99,7 @@ describe Pomodoro::Formats::Today::Parser do
             name: "Lunch break ",
             start_time: {hour: '12:00'},
             end_time:   {hour: '14:00'},
-            tasks: []
+            items: []
           }
         }
       ])

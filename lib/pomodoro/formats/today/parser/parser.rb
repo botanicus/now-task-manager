@@ -53,6 +53,10 @@ module Pomodoro::Formats::Today
       # IMPORTANT NOTE: nl.maybe is because the tag definition eats up \n's for unknown reason.
     end
 
+    rule(:log_item) do
+      str('~ ') >> (str("\n").absent? >> any).repeat.as(:log_item) >> nl
+    end
+
     rule(:time_range) do
       hour.as(:start_time) >> space? >> time_delimiter >> space? >> hour.as(:end_time)
     end
@@ -69,7 +73,7 @@ module Pomodoro::Formats::Today
       time_frame_desc >> (lparen >> (time_range | time_from | time_until) >> rparen).maybe >> nl # replaced nl_or_eof to fix the hang.
     end
 
-    rule(:time_frame_with_tasks) { (time_frame_header >> task.repeat.as(:tasks)).as(:time_frame) } # ...
+    rule(:time_frame_with_tasks) { (time_frame_header >> (task | log_item).repeat.as(:items)).as(:time_frame) } # ...
 
     rule(:day_tag) { str('@') >> (match['\s'].absent? >> any).repeat.as(:tag) >> space? }
     rule(:day_tags) { day_tag.repeat(1).as(:tags) >> nl.maybe }

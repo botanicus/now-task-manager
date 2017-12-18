@@ -10,7 +10,7 @@ describe Pomodoro::Formats::Today::Transformer do
             name: "Morning routine",
             start_time: {hour: '7:50'},
             end_time: {hour: '9:20'},
-            tasks: [
+            items: [
               {
                 task: [
                   {indent: '-'},
@@ -29,6 +29,6 @@ describe Pomodoro::Formats::Today::Transformer do
     expect(time_frame.start_time).to eql(h('7:50'))
     expect(time_frame.end_time).to eql(h('9:20'))
 
-    expect(time_frame.tasks.length).to be(1)
+    expect(time_frame.items.length).to be(1)
   end
 end

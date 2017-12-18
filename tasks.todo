@@ -31,18 +31,4 @@ Version 1.0
 # ? Zipping break activities.
 # Time frame: add 10m breaks between.
 
-1 = 25 min
-2 = 1 hour
-3 = 1.5 hours
-5 = 2.5 hours
-8 = 4 hours
-
-BitBar: 10
-Scheduled format parser: 7
-Today format: 9
-Vim: 9
-Loop 11
-CLI: 30
-= 76 points (~ 38 hours).
-
 Then rules and DSL, specs & docs and finally release.

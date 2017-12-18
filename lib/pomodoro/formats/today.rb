@@ -28,6 +28,11 @@ module Pomodoro
       def self.parse(string_or_io)
         string = string_or_io.respond_to?(:read) ? string_or_io.read : string_or_io
         path   = string_or_io.path if string_or_io.respond_to?(:path)
+
+        # unless string.match(/@v1\b/)
+        #   raise "#{path}: This format is version. It has to start with @v1."
+        # end
+
         tree   = Parser.new.parse(string)
         nodes  = Transformer.new.apply(tree)
         Day.new(path: path, nodes: nodes)

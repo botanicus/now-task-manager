@@ -19,7 +19,7 @@ module Pomodoro::Formats::Today
     #
     #   task_list = Pomodoro::Formats::Today::TaskList.new(
     #     Pomodoro::Formats::Today::TimeFrame.new(
-    #       name: 'Morning routine', start_time: Hour.parse('7:50'), tasks: [
+    #       name: 'Morning routine', start_time: Hour.parse('7:50'), items: [
     #         Pomodoro::Formats::Today::Task.new(status: :done, body: 'Headspace.')
     #       ]
     #     )

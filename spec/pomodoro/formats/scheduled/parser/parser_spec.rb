@@ -26,6 +26,28 @@ describe Pomodoro::Formats::Scheduled::Parser do
         }.not_to raise_error
       end
     end
+
+    describe 'start_time' do
+      it "parses header followed by any number of tasks" do
+        expect {
+          subject.start_time.parse('[9:20]')
+        }.not_to raise_error
+      end
+    end
+
+    describe 'time_frame' do
+      it "does not parse start_time" do
+        expect {
+          subject.time_frame.parse('[9:20]')
+        }.to raise_error
+      end
+
+      it "parses anything else between square brackets" do
+        expect {
+          subject.time_frame.parse('[Admin]')
+        }.not_to raise_error
+      end
+    end
   end
 
   describe '#parse' do
@@ -34,7 +56,7 @@ describe Pomodoro::Formats::Scheduled::Parser do
     end
 
     let(:task_group_1) do
-      "Tomorrow\n- Buy shoes #errands\n- [9:20] Call Tom.\n"
+      "Tomorrow\n- Buy shoes. #errands\n- [9:20] Call Tom.\n"
     end
 
     let(:task_group_2) do
@@ -60,15 +82,31 @@ describe Pomodoro::Formats::Scheduled::Parser do
           task_group: {
             header: 'Tomorrow',
             task_list: [
-              {task: "Buy shoes #errands"},
-              {task: "[9:20] Call Tom."}
+              {
+                task: {
+                  body: "Buy shoes.",
+                  tags: [
+                    {tag: 'errands'}
+                  ]
+                },
+                task: {
+                  start_time: {hour: '9:20'},
+                  body: "Call Tom. ",
+                  tags: []
+                }
+              }
             ]
           }
         }, {
           task_group: {
             header: 'Prague',
             task_list: [
-              {task: "Task 1."}
+              {
+                task: {
+                  body: "Task 1.",
+                  tags: []
+                }
+              }
             ]
           }
         }

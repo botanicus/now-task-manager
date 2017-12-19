@@ -1,10 +1,12 @@
 class Pomodoro::Commands::Tools < Pomodoro::Commands::Command
+  using RR::ColourExts
+
   self.help = <<-EOF.gsub(/^\s*/, '')
   EOF
 
   def run
     # TODO
-    if ARGV.shift == 'workdays'
+    if @args.shift == 'workdays'
       start_date = Date.new(2018, 12, 1)
       end_date   = Date.new(2018, 12, 31)
       work_days = (start_date..end_date).reduce(0) do |sum, date|

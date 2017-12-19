@@ -1,11 +1,13 @@
 class Pomodoro::Commands::Review < Pomodoro::Commands::Command
+  using RR::ColourExts
+
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>review</magenta> pattern<bright_black># ...</bright_black>
   EOF
 
   def run
     today_list = parse_today_list(self.config) if File.exist?(self.config.today_path)
-    pattern = ARGV.shift
+    pattern = @args.shift
     selected_time_frames = today_list.time_frames.select { |time_frame| time_frame.name.match(/#{pattern}/) }
     selected_time_frames.each do |time_frame|
       puts "<cyan>#{time_frame.name}</cyan>".colourise

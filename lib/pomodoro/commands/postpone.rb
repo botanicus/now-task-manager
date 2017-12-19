@@ -1,12 +1,12 @@
 class Pomodoro::Commands::Postpone < Pomodoro::Commands::Command
+  using RR::ColourExts
+
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>postpone</magenta> <bright_black># Postpone the active task.</bright_black>
   EOF
 
   def run
-    unless File.exist?(self.config.today_path)
-      abort "<red>! File #{self.config.today_path.sub(ENV['HOME'], '~')} doesn't exist</red>".colourise
-    end
+    must_exist(self.config.today_path)
 
     print "<bold>Why?</bold> ".colourise
     reason = STDIN.readline.chomp

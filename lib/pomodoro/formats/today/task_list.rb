@@ -42,6 +42,14 @@ module Pomodoro::Formats::Today
       end
     end
 
+    def <<(time_frame)
+      self.define_singleton_method(time_frame.method_name) do
+        time_frame
+      end
+
+      @time_frames << time_frame
+    end
+
     # Iterate over the time frames.
     #
     # @yieldparam [TimeFrame] time_frame

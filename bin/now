@@ -130,6 +130,9 @@ when 'generate', 'g' # now g u_ani +normal_daily_routine -swimming_daily_routine
     buffer
   end
 
+  # TODO: allow choosing date
+  # now generate holidays    # => today
+  # now generate +1 holidays # => tomorrow
   generate_todays_tasks(Date.today, config, **options)
 when 'edit', 'e'
   if ARGV.empty?

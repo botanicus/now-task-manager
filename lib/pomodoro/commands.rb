@@ -31,7 +31,7 @@ module Pomodoro
         Pomodoro::Formats::Scheduled.parse(File.new(config.task_list_path, encoding: 'utf-8'))
       end
 
-      def time_frame(config, &block)
+      def time_frame(config = self.config, &block)
         today_list = parse_today_list(config)
 
         unless current_time_frame = today_list.current_time_frame
@@ -100,6 +100,9 @@ module Pomodoro
 
     require 'pomodoro/commands/generate'
     self.command(:g, Commands::Generate)
+
+    require 'pomodoro/commands/log'
+    self.command(:log, Commands::Log)
 
     require 'pomodoro/commands/move_on'
     self.command(:move_on, Commands::MoveOn)

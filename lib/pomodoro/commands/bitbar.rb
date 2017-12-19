@@ -112,8 +112,11 @@ class Pomodoro::Commands::BitBarUI
           end
           puts "-- #{task_group.header} | color=#{colour}"
           task_group.tasks.each do |task|
-            # After the parser is updated: task.fixed_start_time #32
-            puts "---- #{task} | color=#{task.to_s.match(/\[\d+:\d+\]/) ? 'red': 'black'}"
+            if task.start_time
+              puts "---- #{task.start_time} #{task.body} | color=red"
+            else
+              puts "---- #{task.body} | color=black"
+            end
           end
         end
       end

@@ -36,7 +36,7 @@ module Pomodoro::Formats::Today
     end
 
     def empty?
-      self.tags.empty? && self.task_list.empty?
+      self.tags.empty? && self.task_list.time_frames.empty?
     end
 
     def normal?

@@ -68,12 +68,10 @@ class Pomodoro::Commands::BitBarUI
     end
   end
 
-  def self.show_upcoming_time_frames(today_tasks)
-    x_upcoming_time_frames = today_tasks.with_prev_and_next.select do |prev_time_frame, time_frame, next_time_frame|
-      (time_frame.start_time || prev_time_frame.end_time) > Hour.now
-    end
+  def self.show_upcoming_time_frames(today_tasks, current_time_frame)
+    index = today_tasks.time_frames.index(current_time_frame)
+    upcoming_time_frames = today_tasks.time_frames[(index + 1)..-1]
 
-    upcoming_time_frames = x_upcoming_time_frames.map { |pair_of_three| pair_of_three && pair_of_three[1] }
     unless upcoming_time_frames.empty?
       puts '---'
       puts "Rest of the today's schedule | color=green"
@@ -88,7 +86,7 @@ class Pomodoro::Commands::BitBarUI
       colour, icon = self.heading(current_time_frame)
       puts icon, '---'
       self.with_active_time_frame(current_time_frame)
-      self.show_upcoming_time_frames(today_tasks)
+      self.show_upcoming_time_frames(today_tasks, current_time_frame)
     elsif today_tasks
       colour, icon = self.heading(nil)
       puts icon, '---'

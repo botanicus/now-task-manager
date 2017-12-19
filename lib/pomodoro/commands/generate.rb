@@ -54,34 +54,40 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
     day
   end
 
+  def match_time_frame_shortcut_with_time_frame(time_frames, shortcut)
+    time_frames.find do |time_frame|
+      abbrevs = Abbrev.abbrev([time_frame.name.upcase])
+
+      time_frame.name.upcase == shortcut.upcase || # [Admin] [Morning ritual]
+      abbrevs.include?(shortcut.upcase)         ||  # [ADM]  [MOR]
+      time_frame.name.upcase.split(' ').map { |word| word[0] }.join == shortcut.upcase # [MR]
+    end
+  end
+
   def populate_from_scheduled_task_list(day, scheduled_task_list)
     scheduled_task_list.each do |task_group|
       if task_group.scheduled_date == @date
         task_group.tasks.each do |task|
 
-          pieces = task.split(/:\s+/)[0]
-          if pieces.length > 1
-            possible_time_frame_name, *rest = pieces
+          if task.time_frame
+            time_frame = self.match_time_frame_shortcut_with_time_frame(
+              day.task_list.time_frames, task.time_frame
+            )
 
-            time_frame = day.task_list.time_frames.find do |time_frame|
-              time_frame.name == possible_time_frame_name || begin
-                if possible_time_frame_name.match(/^[A-Z]{2,}\d?$/) # Use MOR: to match Morning routine etc.
-                  abbrevs = Abbrev.abbrev([time_frame.name.upcase])
-                  abbrevs[possible_time_frame_name]
-                end
-              end
+            unless time_frame
+              raise "No such time frame: #{task.time_frame} in #{day.task_list.time_frames.map(&:name).inspect}"
             end
-            task = rest.join(': ').strip if time_frame
           end
 
-          unless time_frame
-            time_frame = day.task_list.time_frames.first
-          end
+          time_frame ||= day.task_list.time_frames.first
 
           puts "~ Adding #{task} to #{time_frame.name}"
-          time_frame.create_task(task)
-          scheduled_task_list.delete(task_group)
+          time_frame.items << Pomodoro::Formats::Today::Task.new(
+            status: :not_done, body: task.body, tags: task.tags,
+            fixed_start_time: task.start_time)
         end
+
+        scheduled_task_list.delete(task_group)
       end
     end
   end

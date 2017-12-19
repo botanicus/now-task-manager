@@ -21,8 +21,11 @@ class Pomodoro::Commands::Edit < Pomodoro::Commands::Command
       date_path = generate_todays_tasks(Date.today, self.config)
       exec("vim -O2 #{date_path} #{self.config.task_list_path}")
     elsif @args.first == 'tomorrow'
-      date_path = generate_todays_tasks(Date.today + 1, self.config)
-      exec("vim #{date_path}")
+      if File.exists?(self.config.today_path(Date.today + 1))
+        system("vim #{self.config.today_path(Date.today + 1)}")
+      else
+        abort "<red>Error:</red> File #{self.config.task_list_path} doesn't exist.\n  Run the g command first.".colourise
+      end
     elsif ['tasks', 't'].include?(@args.first)
       exec("vim #{self.config.task_list_path}")
     else

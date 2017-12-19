@@ -36,7 +36,7 @@ module Pomodoro::Formats::Scheduled
     #
     # @since 1.0
     def to_s
-      [@header, @tasks.map { |task| "- #{task}" }, nil].flatten.join("\n")
+      [@header, @tasks.map(&:to_s), nil].flatten.join("\n")
     end
 
     def save(path)

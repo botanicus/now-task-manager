@@ -36,7 +36,7 @@ module Pomodoro::Formats::Scheduled
 
     rule(task: subtree(:data)) do
       options = {
-        time_frame: data[:time_frame] ? nil : data[:time_frame].to_s,
+        time_frame: (data[:time_frame].to_s if data[:time_frame]),
         start_time: data[:start_time],
         body: data[:body].to_s.strip,
         tags: data[:tags].map { |tag| tag[:tag].to_sym }

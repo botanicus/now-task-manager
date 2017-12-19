@@ -1,4 +1,6 @@
 class Pomodoro::Commands::Next < Pomodoro::Commands::Command
+  using RR::ColourExts
+
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <green>next</green> <bright_black># Print the next task.</bright_black>
   EOF

@@ -1,10 +1,12 @@
 class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
+  using RR::ColourExts
+
   self.help = <<-EOF.gsub(/^\s*/, '')
   EOF
 
   def run
     template = {apply_rules: Array.new, remove_rules: Array.new}
-    options = ARGV.reduce(template) do |buffer, argument|
+    options = @args.reduce(template) do |buffer, argument|
       case argument
       when /^\+/
         buffer[:apply_rules] << argument[1..-1]

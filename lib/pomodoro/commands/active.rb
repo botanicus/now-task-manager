@@ -1,25 +1,19 @@
 class Pomodoro::Commands::Active < Pomodoro::Commands::Command
+  using RR::ColourExts
+
   self.help = <<-EOF.gsub(/^\s*/, '')
-    now <green>active</green> <bright_black># Print the active task.</bright_black>
+    now <green>active</green> '%b' <bright_black># Print the active task.</bright_black>
   EOF
 
   def run
-    unless File.exist?(self.config.today_path)
-      abort "<red>! File #{self.config.today_path.sub(ENV['HOME'], '~')} doesn't exist</red>".colourise
-    end
-
+    must_exist(self.config.today_path)
     today_list = parse_today_list(self.config)
-    if  active_task = today_list.active_task
-      case ARGV.shift
-       # git-commit-pomodoro
-       # TODO: Subtasks as well.
-      when 'git'    then puts active_task.text
-      when 'prompt' then puts active_task.text
-      when nil      then puts active_task
-      else
-        puts 'xxx'
-        # TODO: Format with %d etc.
-      end
+
+    if active_task = today_list.active_task
+      format_string = (@args.shift || '%b').dup
+      format_string.gsub!('%b', active_task.body)
+      # TODO ...
+      puts format_string
     else
       abort "<red>No active tasks.</red>".colourise
     end

@@ -1,4 +1,6 @@
 class Pomodoro::Commands::PostponeNext < Pomodoro::Commands::Command
+  using RR::ColourExts
+
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>postpone-next</magenta> <bright_black># ...</bright_black>
   EOF

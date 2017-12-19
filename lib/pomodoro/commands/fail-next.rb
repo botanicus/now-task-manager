@@ -1,4 +1,6 @@
 class Pomodoro::Commands::FailNext < Pomodoro::Commands::Command
+  using RR::ColourExts
+
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>fail-next</magenta> <bright_black># ...</bright_black>
   EOF

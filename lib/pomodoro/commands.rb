@@ -11,6 +11,12 @@ module Pomodoro
         @args, @config = args, Pomodoro.config
       end
 
+      def must_exist(path)
+        unless File.exist?(path)
+          abort "<red>! File #{path.sub(ENV['HOME'], '~')} doesn't exist</red>".colourise
+        end
+      end
+
       def parse_today_list(config)
         day = Pomodoro::Formats::Today.parse(File.new(config.today_path, encoding: 'utf-8'))
 
@@ -84,7 +90,7 @@ module Pomodoro
     self.command(:done, Commands::Done)
 
     require 'pomodoro/commands/edit'
-    self.command(:edit, Commands::Edit)
+    self.command(:e, Commands::Edit)
 
     require 'pomodoro/commands/fail-next'
     self.command(:'fail-next', Commands::FailNext)

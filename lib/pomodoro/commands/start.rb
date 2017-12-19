@@ -1,12 +1,12 @@
 class Pomodoro::Commands::Start < Pomodoro::Commands::Command
+  using RR::ColourExts
+
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>start</magenta> <bright_black># Start a new task.</bright_black>
   EOF
 
   def run
-    unless File.exist?(self.config.today_path)
-      abort "<red>! File #{self.config.today_path.sub(ENV['HOME'], '~')} doesn't exist</red>".colourise
-    end
+    must_exist(self.config.today_path)
 
     with_active_task(self.config) do |active_task|
       abort "<red>There is an active task already:</red> #{active_task.body}".colourise

@@ -9,7 +9,7 @@ class Pomodoro::Commands::Console < Pomodoro::Commands::Command
     today   = parse_today_list(self.config) if File.exist?(self.config.today_path)
     tasks   = parse_task_list(self.config)  if File.exist?(self.config.task_list_path)
     archive = Pomodoro::Formats::Today::Archive.new(Date.new(2017, 12, 3), Date.today)
-    self.config
+    config
 
     require 'pry'; binding.pry
   end

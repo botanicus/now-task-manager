@@ -45,12 +45,12 @@ module Pomodoro::Formats::Today
       end
     end
 
-    def remaining_duration(current_time_frame)
+    def remaining_duration(current_time_frame, now = Hour.now)
       @start_time || raise("The task #{self.inspect} hasn't been started yet.")
 
       closing_time = @start_time + duration
       time_frame_end_time = current_time_frame.end_time
-      [closing_time, time_frame_end_time].min - @start_time
+      [closing_time, time_frame_end_time].min - now
     end
 
     # This works even when the task is only ticked off without having the times.

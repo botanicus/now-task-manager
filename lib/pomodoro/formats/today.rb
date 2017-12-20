@@ -37,7 +37,7 @@ module Pomodoro
         nodes  = Transformer.new.apply(tree)
         Day.new(path: path, nodes: nodes)
       rescue => error
-        raise error.class.new("Error in #{path}: #{error.message}")
+        raise error.class.new("Error in #{path}: #{error.message}\n\n#{error.backtrace.join("\n- ")}")
       end
     end
   end

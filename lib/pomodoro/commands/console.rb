@@ -6,11 +6,22 @@ class Pomodoro::Commands::Console < Pomodoro::Commands::Command
   def run
     require 'pomodoro/formats/today/archive'
 
-    today   = parse_today_list(self.config) if File.exist?(self.config.today_path)
-    tasks   = parse_task_list(self.config)  if File.exist?(self.config.task_list_path)
+    if File.exist?(self.config.today_path)
+      today = Pomodoro::Formats::Today.parse(File.read(self.config.today_path, encoding: 'utf-8'))
+    end
+
+    if File.exist?(self.config.task_list_path)
+      tasks = parse_task_list(self.config)
+    end
+
     archive = Pomodoro::Formats::Today::Archive.new(Date.new(2017, 12, 3), Date.today)
+
     config
 
+    current_time_frame = today.task_list.current_time_frame
+    active_task = today.task_list.active_task
+
+    # Run ls to see the list of the local variables.
     require 'pry'; binding.pry
   end
 end

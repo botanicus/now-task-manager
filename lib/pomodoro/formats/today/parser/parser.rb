@@ -19,10 +19,10 @@ module Pomodoro::Formats::Today
 
     rule(:hour)            { (integer.repeat >> (colon >> integer).maybe).as(:hour) }
     rule(:hour_strict)     { (integer.repeat >> colon >> integer).as(:hour) }
-    rule(:indent)          { match['-✓✔✕✖✗✘'].as(:indent).repeat(1, 1) >> space }
+    rule(:indent)          { match['-✓✔✕✖✗✘'].repeat(1, 1).as(:str) >> space }
 
-    rule(:task_desc)       { (match['#\n'].absent? >> any).repeat.as(:body) }
-    rule(:time_frame_desc) { (match['(\n'].absent? >> any).repeat.as(:name) }
+    rule(:task_desc)       { (match['#\n'].absent? >> any).repeat.as(:str) }
+    rule(:time_frame_desc) { (match['(\n'].absent? >> any).repeat.as(:str) }
     # rule(:task_desc)       { (str(' #').absent? >> match['^\n']).repeat.as(:desc) }
     # rule(:time_frame_desc) { (str(' (').absent? >> match['^\n']).repeat.as(:desc) }
     # rule(:task_desc)       { (str("\n").absent? >> str(' #').absent? >> any).repeat.as(:desc) }
@@ -42,10 +42,10 @@ module Pomodoro::Formats::Today
       str('[') >> (duration | hour_strict.as(:fixed_start_time) | integer.as(:duration)) >> str(']') >> space
     end
 
-    rule(:metadata) { (str("\n").absent? >> any).repeat.as(:line) }
+    rule(:metadata) { (str("\n").absent? >> any).repeat.as(:str) }
 
-    rule(:task_body) { indent >> task_time_info.maybe >> task_desc >> tag.repeat }
-    rule(:metadata_block) { (nl.maybe >> str('  ') >> metadata).repeat(0) }
+    rule(:task_body) { indent.as(:indent) >> task_time_info.maybe >> task_desc.as(:body) >> tag.repeat.as(:tags) }
+    rule(:metadata_block) { (nl.maybe >> str('  ') >> metadata).repeat(0).as(:lines) }
     # ^ nl.maybe is becase tags are eating nl's
 
     rule(:task) do
@@ -54,7 +54,7 @@ module Pomodoro::Formats::Today
     end
 
     rule(:log_item) do
-      str('~ ') >> (str("\n").absent? >> any).repeat.as(:log_item) >> nl
+      str('~ ') >> (str("\n").absent? >> any).repeat.as(:str) >> nl
     end
 
     rule(:time_range) do
@@ -70,10 +70,10 @@ module Pomodoro::Formats::Today
     end
 
     rule(:time_frame_header) do
-      time_frame_desc >> (lparen >> (time_range | time_from | time_until) >> rparen).maybe >> nl # replaced nl_or_eof to fix the hang.
+      time_frame_desc.as(:name) >> (lparen >> (time_range | time_from | time_until) >> rparen).maybe >> nl # replaced nl_or_eof to fix the hang.
     end
 
-    rule(:time_frame_with_tasks) { (time_frame_header >> (task | log_item).repeat.as(:items)).as(:time_frame) } # ...
+    rule(:time_frame_with_tasks) { (time_frame_header >> (task | log_item.as(:log_item)).repeat.as(:items)).as(:time_frame) } # ...
 
     rule(:day_tag) { str('@') >> (match('\s').absent? >> any).repeat.as(:tag) >> space? }
     rule(:day_tags) { day_tag.repeat(1).as(:tags) >> nl.maybe }

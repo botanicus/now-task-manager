@@ -20,38 +20,20 @@ module Pomodoro::Formats::Scheduled
 
   # @api private
   class Transformer < Parslet::Transform
-    # Doesn't work BECAUSE it has multiple keys.
-    # Maybe refactor to do {str: 'x'}
-    rule(body: simple(:body)) { body.to_s }
+    rule(str: simple(:slice)) { slice.to_s.strip }
 
-    rule(header: simple(:header)) { header.to_s }
+    rule(tag: simple(:slice)) { slice.to_sym }
 
     rule(hour: simple(:hour_string)) do
       Hour.parse(hour_string.to_s)
     end
 
-    rule(tags: subtree(:tags)) do
-      tags.map { |tag| tag[:tag].to_sym }
-    end
-
     rule(task: subtree(:data)) do
-      options = {
-        time_frame: (data[:time_frame].to_s if data[:time_frame]),
-        start_time: data[:start_time],
-        body: data[:body].to_s.strip,
-        tags: data[:tags].map { |tag| tag[:tag].to_sym }
-      }
-
-      Task.new(**options)
+      Task.new(**data)
     end
 
-    rule(task_group: subtree(:task_group)) {
-      options = {
-        header: task_group[:header].to_s,
-        tasks:  task_group[:task_list]
-      }
-
-      TaskGroup.new(**options)
+    rule(task_group: subtree(:data)) {
+      TaskGroup.new(**data)
     }
   end
 end

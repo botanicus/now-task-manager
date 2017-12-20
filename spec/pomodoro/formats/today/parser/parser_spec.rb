@@ -30,7 +30,7 @@ describe Pomodoro::Formats::Today::Parser do
       tree = subject.parse(x)
       expect(tree).to eql([{
         time_frame: {
-          name: "Time frame 1 ",
+          name: {str: "Time frame 1 "},
           start_time: {hour: '9:00'},
           end_time:   {hour: '12:00'},
           items: []
@@ -46,11 +46,11 @@ describe Pomodoro::Formats::Today::Parser do
       tree = subject.parse(x)
       expect(tree).to eql([{
         time_frame: {
-          name: "Time frame 1 ",
+          name: {str: "Time frame 1 "},
           start_time: {hour: '9:00'},
           end_time:   {hour: '12:00'},
           items: [
-            task: [{indent: '-'}, {body: "Do something."}]
+            task: {indent: {str: '-'}, body: {str: "Do something."}, tags: [], lines: []}
           ]
         }
       }])
@@ -64,13 +64,13 @@ describe Pomodoro::Formats::Today::Parser do
       tree = subject.parse(x)
       expect(tree).to eql([{
         time_frame: {
-          name: "Time frame 1 ",
+          name: {str: "Time frame 1 "},
           start_time: {hour: '9:00'},
           end_time:   {hour: '12:00'},
           items: [
-            {task: [{indent: '-'}, {body: "Do something."}]},
-            {task: [{indent: '-'}, {body: "Do something else."}]},
-            {task: [{indent: '-'}, {body: "Go to sleep."}]}
+            {task: {indent: {str: '-'}, body: {str: "Do something."}, tags: [], lines: []}},
+            {task: {indent: {str: '-'}, body: {str: "Do something else."}, tags: [], lines: []}},
+            {task: {indent: {str: '-'}, body: {str: "Go to sleep."}, tags: [], lines: []}}
           ]
         }
       }])
@@ -84,19 +84,26 @@ describe Pomodoro::Formats::Today::Parser do
       expect(tree).to eql([
         {
           time_frame: {
-            name: "Time frame 1 ",
+            name: {str: "Time frame 1 "},
             start_time: {hour: '9:00'},
             end_time:   {hour: '12:00'},
             items: [
-              {task: [{indent: '✔'}, {body: "Task 1."}]},
-              {task: [{indent: '✔'}, {body: "Coffee. "}, {tag: 'break'}]},
-              {task: [{indent: '✘'}, {body: "Task 2. "}, {tag: 'a'}, {tag: 'b'}, {tag: 'c'}]},
-              {task: [{indent: '-'}, {body: "Task 3."}]},
+              {task: {indent: {str: '✔'}, body: {str: "Task 1."}, tags: [], lines: []}},
+              {task: {
+                indent: {str: '✔'},
+                body: {str: "Coffee. "},
+                tags: [{tag: 'break'}], lines: []
+              }},
+              {task: {
+                indent: {str: '✘'}, body: {str: "Task 2. "},
+                tags: [{tag: 'a'}, {tag: 'b'}, {tag: 'c'}], lines: []
+              }},
+              {task: {indent: {str: '-'}, body: {str: "Task 3."}, tags: [], lines: []}}
             ]
           }
         }, {
           time_frame: {
-            name: "Lunch break ",
+            name: {str: "Lunch break "},
             start_time: {hour: '12:00'},
             end_time:   {hour: '14:00'},
             items: []

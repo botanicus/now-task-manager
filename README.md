@@ -3,6 +3,7 @@
 [![Gem version][GV img]][Gem version]
 [![Build status][BS img]][Build status]
 [![Coverage status][CS img]][Coverage status]
+[![CodeClimate status][CC img]][CodeClimate status]
 [![YARD documentation][YD img]][YARD documentation]
 
 **Now Task Manager** is a daily planner & focus app *for programmers*. It helps
@@ -58,9 +59,11 @@ _**Read next**: the [workflow](https://github.com/botanicus/now-task-manager/blo
 [Gem version]: https://rubygems.org/gems/now-task-manager
 [Build status]: https://travis-ci.org/botanicus/now-task-manager
 [Coverage status]: https://coveralls.io/github/botanicus/now-task-manager
+[CodeClimate status]: https://codeclimate.com/github/botanicus/now-task-manager/maintainability
 [YARD documentation]: http://www.rubydoc.info/github/botanicus/now-task-manager/master
 
 [GV img]: https://badge.fury.io/rb/now-task-manager.svg
 [BS img]: https://travis-ci.org/botanicus/now-task-manager.svg?branch=master
 [CS img]: https://img.shields.io/coveralls/botanicus/now-task-manager.svg
+[CC img]: https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/maintainability
 [YD img]: http://img.shields.io/badge/yard-docs-blue.svg

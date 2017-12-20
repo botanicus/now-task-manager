@@ -120,8 +120,8 @@ module Pomodoro
     require 'pomodoro/commands/config'
     self.command(:config, Commands::Config)
 
-    require 'pomodoro/commands/review'
-    self.command(:review, Commands::Report)
+    require 'pomodoro/commands/report'
+    self.command(:report, Commands::Report)
 
     # Tools.
     require 'pomodoro/commands/console'

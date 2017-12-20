@@ -1,4 +1,6 @@
 require 'spec_helper'
+require 'pomodoro/commands'
 
-describe 'TODO' do
+# TODO: We need some setup (override config, point to spec/data).
+describe Pomodoro::Commands::Active do
 end

@@ -3,6 +3,8 @@ class Pomodoro::Commands::Log < Pomodoro::Commands::Command
 
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <green>log</green> key=value key=value <bright_black># ...</bright_black>
+    now <green>log</green> weight=69.6
+    now <green>log</green> 'expense=Lunch at Parniczek' cost=14
   EOF
 
   def run

@@ -4,8 +4,10 @@ require 'pomodoro/scheduler'
 class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
   using RR::ColourExts
 
+  # TODO: now g u_ani +normal_daily_routine -swimming_daily_routine
   self.help = <<-EOF.gsub(/^\s*/, '')
-    now g u_ani +normal_daily_routine -swimming_daily_routine
+    now <red>g</red> holidays     <bright_black># Generate task list for today.</bright_black>
+    now <red>g</red> +1 holidays  <bright_black># Generate task list for tomorrow.</bright_black>
   EOF
 
   def group_args

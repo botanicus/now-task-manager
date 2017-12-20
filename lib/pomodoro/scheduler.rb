@@ -30,16 +30,20 @@ module Pomodoro
     end
 
     def schedule_for_date(date)
-      self.schedules.each do |name, schedule|
+      self.schedules.each do |schedule|
         return schedule if schedule.true?
       end
 
       return nil
     end
 
-    def populate_from_rules(task_list)
-      self.rules.each do |rule_name, rule|
-        rule.true? && rule.call(task_list)
+    using RR::ColourExts
+    def populate_from_rules(task_list, schedule: nil, apply_rules: [], remove_rules: [])
+      self.rules.each do |rule|
+        if rule.true?(schedule)
+          puts "~ Invoking rule <green>#{rule.name}</green>.".colourise
+          rule.call(task_list)
+        end
       end
     end
   end

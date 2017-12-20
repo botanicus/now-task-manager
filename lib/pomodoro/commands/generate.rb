@@ -37,13 +37,19 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
   def populate_from_schedule_and_rules(**options)
     scheduler = Pomodoro::Scheduler.load([self.config.schedule_path, self.config.routine_path], @date)
 
-    schedule = if options[:schedule]
-      unless scheduler.schedules[options[:schedule].to_sym]
-        raise "No such schedule: #{options[:schedule]}. Valid are: #{scheduler.schedules.keys.inspect}"
+    if schedule_name = options.delete(:schedule)
+      schedule = scheduler.schedules.find { |schedule| schedule.name == schedule_name.to_sym }
+      unless schedule
+        raise "No such schedule: #{schedule_name}. Valid are: #{scheduler.schedules.keys.inspect}"
       end
     else
-      scheduler.schedule_for_date(@date)
+      schedule = scheduler.schedule_for_date(@date)
+      unless schedule
+        raise "Cannot find any schedule for #{@date.strftime('%d/%m')}"
+      end
     end
+
+    puts "~ Schedule: <magenta>#{schedule.name}</magenta>.".colourise
 
     day = schedule.call
 
@@ -51,7 +57,7 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
       abort "<red>No data were found in the task list.</red>".colourise
     end
 
-    scheduler.populate_from_rules(day.task_list)
+    scheduler.populate_from_rules(day.task_list, schedule: schedule, **options)
 
     day
   end
@@ -131,7 +137,7 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
         scheduled_task_list.save(self.config.task_list_path)
         puts
       else
-        puts "~ <green>No postponed tasks</green> from #{previous_day.date.strftime('%m%/d')}.".colourise
+        puts "~ <green>No postponed tasks</green> from #{previous_day.date.strftime('%m/%d')}.".colourise
       end
 
       # TODO: Warn about skipped tasks and print their list, wait for the user to acknowledge (STDIN.readline).

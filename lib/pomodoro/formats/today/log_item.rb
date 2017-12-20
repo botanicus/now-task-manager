@@ -1,5 +1,6 @@
 require 'pomodoro/formats/today'
 
+# TODO: instantiate with Expense, WeightRecord or whatever based on the keys.
 module Pomodoro::Formats::Today
   class LogItem
     attr_reader :data

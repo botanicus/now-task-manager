@@ -4,7 +4,7 @@ module Pomodoro::Formats::Today
   class TaskList
     include Enumerable
 
-    # @since 1.0
+    # @since 0.2
     attr_reader :time_frames
 
     # Create a list of time frames and define a shortcut method on the task list
@@ -12,7 +12,7 @@ module Pomodoro::Formats::Today
     #
     # @param [Array<TimeFrame>] time_frames
     # @see TimeFrame#method_name
-    # @since 1.0
+    # @since 0.2
     #
     # @example
     #   require 'pomodoro/formats/today'
@@ -53,7 +53,7 @@ module Pomodoro::Formats::Today
     # Iterate over the time frames.
     #
     # @yieldparam [TimeFrame] time_frame
-    # @since 1.0
+    # @since 0.2
     def each(&block)
       @time_frames.each(&block)
     end
@@ -61,7 +61,7 @@ module Pomodoro::Formats::Today
     # Iterate over the tasks of each time frame.
     #
     # @yieldparam [Task] task
-    # @since 1.0
+    # @since 0.2
     def each_task(&block)
       @time_frames.map(&:tasks).flatten.each(&block)
     end
@@ -69,7 +69,7 @@ module Pomodoro::Formats::Today
     # Return overall duration.
     #
     # @return [Hour]
-    # @since 1.0
+    # @since 0.2
     def duration
       self.with_prev_and_next.reduce(0) do |sum, (prev_time_frame, time_frame, next_time_frame)|
         prev_time_frame_end_time   = prev_time_frame ? prev_time_frame.end_time   : Hour.parse('0:00')
@@ -106,7 +106,7 @@ module Pomodoro::Formats::Today
 
     # Return a today task list formatted string.
     #
-    # @since 1.0
+    # @since 0.2
     def to_s
       self.time_frames.reduce(nil) do |buffer, time_frame|
         buffer ? "#{buffer}\n#{time_frame.to_s}" : "#{time_frame.to_s}"
@@ -125,7 +125,7 @@ module Pomodoro::Formats::Today
     # Return the currently active task, regardless of the time frame we are in.
     #
     # @return [Task, nil]
-    # @since 1.0
+    # @since 0.2
     def active_task
       self.each_task.find(&:in_progress?)
     end
@@ -133,7 +133,7 @@ module Pomodoro::Formats::Today
     # Return the currently active time frame.
     #
     # @return [TimeFrame, nil]
-    # @since 1.0
+    # @since 0.2
     def current_time_frame(current_time = Hour.now)
       result = self.with_prev_and_next.find do |prev_time_frame, time_frame, next_time_frame|
         prev_time_frame_end_time = prev_time_frame && prev_time_frame.end_time

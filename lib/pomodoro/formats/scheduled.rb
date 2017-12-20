@@ -21,7 +21,7 @@ module Pomodoro
       #     Prague
       #     - Pick up my shoes. #errands
       #   EOF
-      # @since 1.0
+      # @since 0.2
       def self.parse(string_or_io)
         string = string_or_io.respond_to?(:read) ? string_or_io.read : string_or_io
         tree = Parser.new.parse_with_debug(string)

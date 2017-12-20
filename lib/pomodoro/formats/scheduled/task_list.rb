@@ -3,7 +3,7 @@ module Pomodoro::Formats::Scheduled
     include Enumerable
 
     # List of {TaskGroup task groups}. Or more precisely objects responding to `#header` and `#tasks`.
-    # @since 1.0
+    # @since 0.2
     attr_reader :data
 
     # @param [Array<TaskGroup>] data List of task groups.
@@ -17,7 +17,7 @@ module Pomodoro::Formats::Scheduled
     #   tasks = ['Buy milk. #errands', '[9:20] Call with Mike.']
     #   group = Pomodoro::Formats::Scheduled::TaskGroup.new(header: 'Tomorrow', tasks: tasks)
     #   list  = Pomodoro::Formats::Scheduled::TaskList.new([group])
-    # @since 1.0
+    # @since 0.2
     def initialize(data)
       @data = data
 
@@ -29,7 +29,7 @@ module Pomodoro::Formats::Scheduled
     # Find a task group that matches given header.
     #
     # @return [TaskGroup, nil] matching the header.
-    # @since 1.0
+    # @since 0.2
     #
     # @example
     #   # Using the code from the initialiser.
@@ -44,7 +44,7 @@ module Pomodoro::Formats::Scheduled
     #
     # @raise [ArgumentError] if the task group is already in the list.
     # @param [TaskGroup] task_group the task group.
-    # @since 1.0
+    # @since 0.2
     def <<(task_group)
       if self[task_group.header]
         raise ArgumentError.new("Task group with header #{task_group.header} is already on the list.")
@@ -56,7 +56,7 @@ module Pomodoro::Formats::Scheduled
     # Remove a task group from the task list.
     #
     # @param [TaskGroup] task_group the task group.
-    # @since 1.0
+    # @since 0.2
     def delete(task_group)
       @data.delete(task_group)
     end
@@ -64,14 +64,14 @@ module Pomodoro::Formats::Scheduled
     # Iterate over the task groups.
     #
     # @yieldparam [TaskGroup] task_group
-    # @since 1.0
+    # @since 0.2
     def each(&block)
       @data.each(&block)
     end
 
     # Return a scheduled task list formatted string.
     #
-    # @since 1.0
+    # @since 0.2
     def to_s
       @data.map(&:to_s).join("\n")
     end

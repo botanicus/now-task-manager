@@ -4,12 +4,13 @@ require 'pomodoro/formats/today'
 module Pomodoro
   module Schedule
     class Thing
-      def initialize(condition, &block)
-        @condition, @callable = condition, block
+      attr_reader :name
+      def initialize(name, condition, &block)
+        @name, @condition, @callable = name, condition, block
       end
 
-      def true?
-        @condition.call
+      def true?(*args)
+        @condition.call(*args)
       end
 
       def call(tasks)
@@ -34,7 +35,7 @@ module Pomodoro
       attr_reader :rules, :schedules, :today
       def initialize(schedule_dir, today = Date.today)
         @schedule_dir, @today = schedule_dir, today
-        @rules, @schedules = Hash.new, Hash.new
+        @rules, @schedules = Array.new, Array.new
       end
 
       alias_method :_require, :require
@@ -46,11 +47,11 @@ module Pomodoro
       end
 
       def schedule(name, condition, &block)
-        @schedules[name] = Schedule.new(condition, &block)
+        @schedules << Schedule.new(name, condition, &block)
       end
 
       def rule(name, condition, &block)
-        @rules[name] = Rule.new(condition, &block)
+        @rules << Rule.new(name, condition, &block)
       end
 
       def h(hour)

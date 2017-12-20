@@ -81,13 +81,13 @@ module Pomodoro::Formats::Today
         raise ArgumentError.new("start_time has to be smaller than end_time.")
       end
 
-      if @duration && ! (@duration.respond_to?(:integer?) && @duration.integer?)
+      if @duration && ! @duration.is_a?(Hour)
         raise ArgumentError.new("Duration has to be an integer.")
       end
 
-      if @duration && ! (5..90).include?(@duration)
-        raise ArgumentError.new("Duration has between 5 and 90 minutes.")
-      end
+      # if @duration && ! (5..90).include?(@duration)
+      #   raise ArgumentError.new("Duration has between 5 and 90 minutes.")
+      # end
 
       unless STATUS_LIST.include?(@status)
         raise ArgumentError.new("Status has to be one of #{STATUS_MAPPING.keys.inspect}.")

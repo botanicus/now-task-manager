@@ -30,7 +30,7 @@ module Pomodoro::Formats::Today
 
     rule(:tag)             { str('#') >> match['^\s'].repeat.as(:tag) >> space? }
 
-    rule(:duration) do
+    rule(:start_time_end_time) do
       # ✔ 9:20
       # ✔ 9:20–10:00
       # ✖ 9-10
@@ -39,7 +39,9 @@ module Pomodoro::Formats::Today
     end
 
     rule(:task_time_info) do
-      str('[') >> (duration | hour_strict.as(:fixed_start_time) | integer.as(:duration)) >> str(']') >> space
+      (str('[') >> start_time_end_time >> str(']') >> space).maybe >>
+      (str('[') >> hour_strict.as(:fixed_start_time) >> str(']') >> space).maybe >>
+      (str('[') >> integer.as(:duration) >> str(']') >> space).maybe
     end
 
     rule(:metadata) { (str("\n").absent? >> any).repeat.as(:str) }

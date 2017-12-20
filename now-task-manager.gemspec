@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency('parslet', ['~> 1.8'])
   s.add_runtime_dependency('term-ansicolor', ['~> 1.4'])
-  s.add_runtime_dependency('refined-refinements', ['~> 0.0'])
+  s.add_runtime_dependency('refined-refinements', ['~> 0.0.1.1'])
   s.add_runtime_dependency('rufus-scheduler', ['~> 3.4'])
   s.add_runtime_dependency('filewatcher', ['~> 1.0'])
 end

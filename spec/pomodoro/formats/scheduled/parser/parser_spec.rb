@@ -80,18 +80,19 @@ describe Pomodoro::Formats::Scheduled::Parser do
       expect(tree).to eql([
         {
           task_group: {
-            header: 'Tomorrow',
-            task_list: [
+            header: {str: 'Tomorrow'},
+            tasks: [
               {
                 task: {
-                  body: "Buy shoes.",
+                  body: {str: "Buy shoes. "},
                   tags: [
-                    {tag: 'errands'}
+                    {tag: {str: 'errands'}}
                   ]
                 },
+              }, {
                 task: {
                   start_time: {hour: '9:20'},
-                  body: "Call Tom. ",
+                  body: {str: "Call Tom."},
                   tags: []
                 }
               }
@@ -99,11 +100,11 @@ describe Pomodoro::Formats::Scheduled::Parser do
           }
         }, {
           task_group: {
-            header: 'Prague',
-            task_list: [
+            header: {str: 'Prague'},
+            tasks: [
               {
                 task: {
-                  body: "Task 1.",
+                  body: {str: "Task 1."},
                   tags: []
                 }
               }

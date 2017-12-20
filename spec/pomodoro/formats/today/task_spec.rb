@@ -42,26 +42,27 @@ describe Pomodoro::Formats::Today::Task do
     end
 
     it "allows duration to be set" do
-      task = described_class.new(body: "Buy milk.", status: :not_done, duration: 5)
-      expect(task.duration).to eql(5)
+      task = described_class.new(body: "Buy milk.", status: :not_done, duration: h('0:05'))
+      expect(task.duration).to eql(h('0:05'))
     end
 
-    # NOTE: We could totally allow it to be an Hour instance.
     it "does not allow duration to be anything but integer" do
       expect {
-        described_class.new(body: "Buy milk.", status: :not_done, duration: h('0:10'))
-      }.to raise_error(ArgumentError, /Duration has to be an integer/)
+        described_class.new(body: "Buy milk.", status: :not_done, duration: 10)
+      }.to raise_error(ArgumentError, /Duration has to be an Hour instance/)
     end
 
     it "does not allow duration to be smaller than 5 minutes" do
       expect {
-        described_class.new(body: "Buy milk.", status: :not_done, duration: 2)
+        pending "Possibly won't be implemented."
+        described_class.new(body: "Buy milk.", status: :not_done, duration: h('0:02'))
       }.to raise_error(ArgumentError, /Duration has between 5 and 90 minutes/)
     end
 
     it "does not allow duration to be bigger than 90 minutes" do
       expect {
-        described_class.new(body: "Buy milk.", status: :not_done, duration: 95)
+        pending "Possibly won't be implemented."
+        described_class.new(body: "Buy milk.", status: :not_done, duration: h('1:55'))
       }.to raise_error(ArgumentError, /Duration has between 5 and 90 minutes/)
     end
 

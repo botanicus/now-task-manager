@@ -25,13 +25,13 @@ describe Pomodoro::Formats::Today::Parser do
   describe 'rule :indent' do
     it "parses dash" do
       tree = subject.indent.parse('- ')
-      expect(tree[0][:indent]).to eql('-')
+      expect(tree[:str]).to eql('-')
     end
 
     it "parses UTF-8 checks and crosses" do
       '✓✔✕✖✗✘'.each_char do |char|
         tree = subject.indent.parse("#{char} ")
-        expect(tree[0][:indent]).to eql(char)
+        expect(tree[:str]).to eql(char)
       end
     end
   end
@@ -56,43 +56,68 @@ describe Pomodoro::Formats::Today::Parser do
   describe 'rule :task' do
     it do
       tree = subject.task.parse("- Description 123!\n")
-      expect(tree).to eql(task: [{indent: '-'}, {body: "Description 123!"}])
+      expect(tree).to eql(task: {
+        indent: {str: '-'},
+        body: {str: "Description 123!"},
+        tags: [], lines: []
+      })
     end
 
     it do
       tree = subject.task.parse("- Description 123! #break\n")
-      expect(tree).to eql(task: [{indent: '-'}, {body: "Description 123! "}, {tag: 'break'}])
+      expect(tree).to eql(task: {
+        indent: {str: '-'}, body: {str: "Description 123! "},
+        tags: [{tag: 'break'}], lines: []
+      })
 
       tree = subject.task.parse("- Description 123! #break #yummy\n")
-      expect(tree).to eql(task: [{indent: '-'}, {body: "Description 123! "}, {tag: 'break'},  {tag: 'yummy'}])
+      expect(tree).to eql(task: {
+        indent: {str: '-'}, body: {str: "Description 123! "},
+        tags: [{tag: 'break'}, {tag: 'yummy'}], lines: []
+      })
     end
 
     it do
       tree = subject.task.parse("- [7:50-8:10] Description 123!\n")
-      expect(tree).to eql(task: [{indent: '-'}, {start_time: {hour: '7:50'}, end_time: {hour: '8:10'}}, {body: "Description 123!"}])
+      expect(tree).to eql(task: {
+        indent: {str: '-'}, start_time: {hour: '7:50'}, end_time: {hour: '8:10'},
+        body: {str: "Description 123!"}, tags: [], lines: []
+      })
     end
 
     it do
       tree = subject.task.parse("- [7:50-????] Description 123!\n")
-      expect(tree).to eql(task: [{indent: '-'}, {start_time: {hour: '7:50'}}, {body: "Description 123!"}])
+      expect(tree).to eql(task: {
+        indent: {str: '-'}, start_time: {hour: '7:50'},
+        body: {str: "Description 123!"}, tags: [], lines: []
+      })
     end
 
     it do
       tree = subject.task.parse("- [7:50] Call Marka.\n")
-      expect(tree).to eql(task: [{indent: '-'}, {fixed_start_time: {hour: '7:50'}}, {body: "Call Marka."}])
+      expect(tree).to eql(task: {
+        indent: {str: '-'}, fixed_start_time: {hour: '7:50'}, body: {str: "Call Marka."},
+        tags: [], lines: []
+      })
     end
 
     it "parses expected duration" do
       tree = subject.task.parse("- [20] Description 123!\n")
-      expect(tree).to eql(task: [{indent: '-'}, {duration: '20'}, {body: "Description 123!"}])
+      expect(tree).to eql(task: {
+        indent: {str: '-'}, duration: '20', body: {str: "Description 123!"}, tags: [], lines: []
+      })
     end
 
     it "parses metadata" do
       tree = subject.task.parse("- A\n  B\n")
-      expect(tree).to eql(task: [{indent: '-'}, {body: "A"}, {line: "B"}])
+      expect(tree).to eql(task: {
+        indent: {str: '-'}, body: {str: "A"}, tags: [], lines: [{str: "B"}]
+      })
 
       tree = subject.task.parse("- A\n  B\n  C\n")
-      expect(tree).to eql(task: [{indent: '-'}, {body: "A"}, {line: "B"}, {line: "C"}])
+      expect(tree).to eql(task: {
+        indent: {str: '-'}, body: {str: "A"}, tags: [], lines: [{str: "B"}, {str: "C"}]
+      })
     end
   end
 
@@ -101,11 +126,11 @@ describe Pomodoro::Formats::Today::Parser do
       tree = subject.time_frame_with_tasks.parse("Test\n- A\n- B\n~ Log\n")
       expect(tree).to eql({
         time_frame: {
-          name: "Test",
+          name: {str: "Test"},
           items: [
-            {task: [{indent: "-"}, {body: "A"}]},
-            {task: [{indent: "-"}, {body: "B"}]},
-            {log_item: "Log"}
+            {task: {indent: {str: "-"}, body: {str: "A"}, tags: [], lines: []}},
+            {task: {indent: {str: "-"}, body: {str: "B"}, tags: [], lines: []}},
+            {log_item: {str: "Log"}}
           ]
         }
       })
@@ -115,10 +140,10 @@ describe Pomodoro::Formats::Today::Parser do
       tree = subject.time_frame_with_tasks.parse("Test\n- A\n  Pekny kozy.\n- B\n")
       expect(tree).to eql({
         time_frame: {
-          name: "Test",
+          name: {str: "Test"},
           items: [
-            {task: [{indent: "-"}, {body: "A"}, {line: "Pekny kozy."}]},
-            {task: [{indent: "-"}, {body: "B"}]}
+            {task: {indent: {str: "-"}, body: {str: "A"}, tags: [], lines: [{str: "Pekny kozy."}]}},
+            {task: {indent: {str: "-"}, body: {str: "B"}, tags: [], lines: []}}
           ]
         }
       })

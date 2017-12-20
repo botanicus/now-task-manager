@@ -15,22 +15,27 @@ describe Pomodoro::Formats::Scheduled::TaskGroup do
   end
 
   subject do
-    described_class.new(header: 'Tomorrow', tasks: ['Buy milk.'])
+    described_class.new(header: 'Tomorrow', tasks: [
+      Pomodoro::Formats::Scheduled::Task.new(body: 'Buy milk.')
+    ])
   end
 
   describe '#<<' do
     it "adds a task into the group" do
-      expect { subject << 'Task 1.' }.to change { subject.tasks.length }.by(1)
+      task = Pomodoro::Formats::Scheduled::Task.new(body: 'Task 1.')
+      expect { subject << task }.to change { subject.tasks.length }.by(1)
     end
 
     it "does not add the same task twice" do
-      expect { subject << 'Buy milk.' }.not_to change { subject.tasks.length }
+      task = Pomodoro::Formats::Scheduled::Task.new(body: 'Buy milk.')
+      expect { subject << task }.not_to change { subject.tasks.length }
     end
   end
 
   describe '#delete' do
     it "removes a task group from the list" do
-      expect { subject.delete('Buy milk.') }.to change { subject.tasks.length }.by(-1)
+      task = Pomodoro::Formats::Scheduled::Task.new(body: 'Buy milk.')
+      expect { subject.delete(task) }.to change { subject.tasks.length }.by(-1)
     end
   end
 

@@ -16,20 +16,31 @@ module Pomodoro::Formats::Scheduled
     #   group = Pomodoro::Formats::Scheduled::TaskGroup.new(header: 'Tomorrow', tasks: tasks)
     def initialize(header:, tasks: Array.new)
       @header, @tasks = header, tasks
+      if tasks.any? { |task| ! task.is_a?(Task) }
+        raise ArgumentError.new("Task objects expected.")
+      end
     end
 
     # Add a task to the task group.
     #
     # @since 0.2
     def <<(task)
-      @tasks << task unless @tasks.include?(task) || @tasks.map(&:to_s).include?(task.to_s)
+      unless task.is_a?(Task)
+        raise ArgumentError.new("Task expected, got #{task.class}.")
+      end
+
+      @tasks << task unless @tasks.map(&:to_s).include?(task.to_s)
     end
 
     # Remove a task from the task group.
     #
     # @since 0.2
     def delete(task)
-      @tasks.delete(task)
+      unless task.is_a?(Task)
+        raise ArgumentError.new("Task expected, got #{task.class}.")
+      end
+
+      @tasks.delete_if { |t2| t2.to_s == task.to_s }
     end
 
     # Return a scheduled task list formatted string.

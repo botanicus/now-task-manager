@@ -82,10 +82,10 @@ module Pomodoro::Formats::Today
       end
 
       if @duration && ! @duration.is_a?(Hour)
-        raise ArgumentError.new("Duration has to be an integer.")
+        raise ArgumentError.new("Duration has to be an Hour instance.")
       end
 
-      # if @duration && ! (5..90).include?(@duration)
+      # if @duration && @duration <= Hour.new(0, 5) || @duration >= Hour.new(1, 30)
       #   raise ArgumentError.new("Duration has between 5 and 90 minutes.")
       # end
 

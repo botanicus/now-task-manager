@@ -1,4 +1,5 @@
 require 'parslet'
+require 'pomodoro/exts/hour'
 require 'pomodoro/formats/scheduled'
 
 module Pomodoro::Formats::Scheduled

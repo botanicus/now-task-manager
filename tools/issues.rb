@@ -37,7 +37,7 @@ results = SUBPROJECTS.reduce(Hash.new) do |buffer, subproject|
 
   current_estimated_issues.map do |issue|
     labels = issue['labels'].map { |label| label['name'] }
-    if labels.include?(subproject) && (issue['milestone'] && issue['milestone']['title'] == "Version 1.0")
+    if labels.include?(subproject) && (issue['milestone'] && issue['milestone']['title'] == "Version 0.2")
       buffer[subproject] << "[<yellow>#{(labels & POINTS_ARRAY)[0]}</yellow>] #{issue['title']}"
     end
   end

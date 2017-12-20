@@ -71,59 +71,64 @@ module Pomodoro
       super('Now task manager')
     end
 
+    # Formatters.
     require 'pomodoro/commands/active'
     self.command(:active, Commands::Active)
-
-    require 'pomodoro/commands/add'
-    self.command(:+, Commands::Add)
-
-    require 'pomodoro/commands/bitbar'
-    self.command(:bitbar, Commands::BitBar)
-
-    require 'pomodoro/commands/config'
-    self.command(:config, Commands::Config)
-
-    require 'pomodoro/commands/console'
-    self.command(:console, Commands::Console)
-
-    require 'pomodoro/commands/done'
-    self.command(:done, Commands::Done)
-
-    require 'pomodoro/commands/edit'
-    self.command(:e, Commands::Edit)
-
-    require 'pomodoro/commands/fail-next'
-    self.command(:'fail-next', Commands::FailNext)
-
-    require 'pomodoro/commands/generate-upcoming-events'
-    self.command(:'generate-upcoming-events', Commands::GenerateUpcomingEvents)
-
-    require 'pomodoro/commands/generate'
-    self.command(:g, Commands::Generate)
-
-    require 'pomodoro/commands/log'
-    self.command(:log, Commands::Log)
-
-    require 'pomodoro/commands/move_on'
-    self.command(:move_on, Commands::MoveOn)
 
     require 'pomodoro/commands/next'
     self.command(:next, Commands::Next)
 
-    require 'pomodoro/commands/postpone-next'
-    self.command(:'postpone-next', Commands::PostponeNext)
+    # Action on an active tasks.
+    require 'pomodoro/commands/start'
+    self.command(:start, Commands::Start)
+
+    require 'pomodoro/commands/done'
+    self.command(:done, Commands::Done)
+
+    require 'pomodoro/commands/move_on'
+    self.command(:move_on, Commands::MoveOn)
 
     require 'pomodoro/commands/postpone'
     self.command(:postpone, Commands::Postpone)
 
-    require 'pomodoro/commands/review'
-    self.command(:review, Commands::Review)
+    # Action on tasks (without starting them).
+    require 'pomodoro/commands/fail-next'
+    self.command(:'fail-next', Commands::FailNext)
 
-    require 'pomodoro/commands/start'
-    self.command(:start, Commands::Start)
+    require 'pomodoro/commands/postpone-next'
+    self.command(:'postpone-next', Commands::PostponeNext)
 
     require 'pomodoro/commands/tick-off-next'
     self.command(:'tick-off-next', Commands::TickOffNext)
+
+    # Generate & edit.
+    require 'pomodoro/commands/edit'
+    self.command(:e, Commands::Edit)
+
+    require 'pomodoro/commands/generate'
+    self.command(:g, Commands::Generate)
+
+    require 'pomodoro/commands/add'
+    self.command(:+, Commands::Add)
+
+    require 'pomodoro/commands/generate-upcoming-events'
+    self.command(:'generate-upcoming-events', Commands::GenerateUpcomingEvents)
+
+    require 'pomodoro/commands/log'
+    self.command(:log, Commands::Log)
+
+    require 'pomodoro/commands/config'
+    self.command(:config, Commands::Config)
+
+    require 'pomodoro/commands/review'
+    self.command(:review, Commands::Report)
+
+    # Tools.
+    require 'pomodoro/commands/console'
+    self.command(:console, Commands::Console)
+
+    require 'pomodoro/commands/bitbar'
+    self.command(:bitbar, Commands::BitBar)
 
     require 'pomodoro/commands/tools'
     self.command(:tools, Commands::Tools)

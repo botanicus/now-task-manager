@@ -29,7 +29,7 @@ class Pomodoro::Commands::Edit < Pomodoro::Commands::Command
     elsif ['tasks', 't'].include?(@args.first)
       exec("vim #{self.config.task_list_path}")
     else
-      abort(DATA.read.colourise)
+      abort('DATA.read.colourise') # FIXME
     end
   end
 end

@@ -1,8 +1,4 @@
 class Pomodoro::Commands::BitBar < Pomodoro::Commands::Command
-  self.help = <<-EOF.gsub(/^\s*/, '')
-    now <yellow>bitbar</yellow> <bright_black># Print output for BitBar.</bright_black>
-  EOF
-
   def run
     today_list = parse_today_list(self.config) if File.exist?(self.config.today_path)
     task_list  = parse_task_list(self.config)  if File.exist?(self.config.task_list_path)

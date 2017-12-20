@@ -1,8 +1,8 @@
-class Pomodoro::Commands::Review < Pomodoro::Commands::Command
+class Pomodoro::Commands::Report < Pomodoro::Commands::Command
   using RR::ColourExts
 
   self.help = <<-EOF.gsub(/^\s*/, '')
-    now <magenta>review</magenta> pattern<bright_black># ...</bright_black>
+    now <magenta>report</magenta> pattern<bright_black># ...</bright_black>
   EOF
 
   def run

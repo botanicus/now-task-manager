@@ -2,8 +2,9 @@ class Pomodoro::Commands::Config < Pomodoro::Commands::Command
   using RR::ColourExts
 
   self.help = <<-EOF.gsub(/^\s*/, '')
-    now config today_path
-    now config today_path 2017-12-19
+    now <yellow>config</yellow>
+    now <yellow>config</yellow> today_path
+    now <yellow>config</yellow> today_path 2017-12-19
   EOF
 
   def run

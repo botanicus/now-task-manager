@@ -2,7 +2,7 @@ class Pomodoro::Commands::Next < Pomodoro::Commands::Command
   using RR::ColourExts
 
   self.help = <<-EOF.gsub(/^\s*/, '')
-    now <green>next</green> <bright_black># Print the next task.</bright_black>
+    now <green>next</green> <bright_black># Print the next task. Exit 1 if there is none.</bright_black>
   EOF
 
   def run

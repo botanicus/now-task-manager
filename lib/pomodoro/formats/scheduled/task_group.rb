@@ -2,12 +2,12 @@ require 'date'
 
 module Pomodoro::Formats::Scheduled
   class TaskGroup
-    # @since 1.0
+    # @since 0.2
     attr_reader :header, :tasks
 
     # @param header [String] header of the task group.
     # @param tasks [Array<String>] tasks of the group.
-    # @since 1.0
+    # @since 0.2
     #
     # @example
     #   require 'pomodoro/formats/scheduled'
@@ -20,21 +20,21 @@ module Pomodoro::Formats::Scheduled
 
     # Add a task to the task group.
     #
-    # @since 1.0
+    # @since 0.2
     def <<(task)
       @tasks << task unless @tasks.include?(task)
     end
 
     # Remove a task from the task group.
     #
-    # @since 1.0
+    # @since 0.2
     def delete(task)
       @tasks.delete(task)
     end
 
     # Return a scheduled task list formatted string.
     #
-    # @since 1.0
+    # @since 0.2
     def to_s
       [@header, @tasks.map(&:to_s), nil].flatten.join("\n")
     end

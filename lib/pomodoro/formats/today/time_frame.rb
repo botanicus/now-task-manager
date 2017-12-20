@@ -17,7 +17,7 @@ module Pomodoro::Formats::Today
   end
 
   class TimeFrame
-    # @since 1.0
+    # @since 0.2
     attr_reader :name, :start_time, :end_time, :items
 
     # @param name [String] name of the task group.
@@ -27,7 +27,7 @@ module Pomodoro::Formats::Today
     # @raise ArgumentError if name is not present, neither start_time or end_time
     #   is present or one of the times is not an Hour instance or if tasks is not
     #   an array of task-like objects.
-    # @since 1.0
+    # @since 0.2
     #
     # @example
     #   require 'pomodoro/formats/today'
@@ -71,7 +71,7 @@ module Pomodoro::Formats::Today
     # @raise [ArgumentError]
     # @raise [TimeFrameInsufficientTimeInfoError]
     # @return [Hour]
-    # @since 1.0
+    # @since 0.2
     # @example
     #   # TODO
     def duration(prev_time_frame_end_time = nil, next_time_frame_start_time = nil)
@@ -103,7 +103,7 @@ module Pomodoro::Formats::Today
     # @raise [ArgumentError]
     # @raise [TimeFrameInsufficientTimeInfoError]
     # @return [Boolean]
-    # @since 1.0
+    # @since 0.2
     # @example
     #   # TODO
     def active?(current_time = Hour.now, prev_time_frame_end_time = nil, next_time_frame_start_time = nil)
@@ -121,7 +121,7 @@ module Pomodoro::Formats::Today
 
     # Return a today task list formatted string.
     #
-    # @since 1.0
+    # @since 0.2
     def to_s
       if self.items.empty?
         "#{self.header}\n"
@@ -139,7 +139,7 @@ module Pomodoro::Formats::Today
     #   ).method_name
     #
     #   # => :morning_routine
-    # @since 1.0
+    # @since 0.2
     def method_name
       @name.downcase.tr(' ', '_').to_sym
     end

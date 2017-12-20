@@ -24,7 +24,7 @@ module Pomodoro
       #     Admin (9:20 – 10:00)
       #     - [9:20] Call with Mike.
       #   EOF
-      # @since 1.0
+      # @since 0.2
       def self.parse(string_or_io)
         string = string_or_io.respond_to?(:read) ? string_or_io.read : string_or_io
         path   = string_or_io.path if string_or_io.respond_to?(:path)

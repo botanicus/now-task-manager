@@ -56,11 +56,11 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
 
   def match_time_frame_shortcut_with_time_frame(time_frames, shortcut)
     time_frames.find do |time_frame|
-      abbrevs = Abbrev.abbrev([time_frame.name.upcase])
+      abbrevs = Abbrev.abbrev([time_frame.name.upcase.delete(' ')])
 
       time_frame.name.upcase == shortcut.upcase || # [Admin] [Morning ritual]
-      abbrevs.include?(shortcut.upcase)         ||  # [ADM]  [MOR]
-      time_frame.name.upcase.split(' ').map { |word| word[0] }.join == shortcut.upcase # [MR]
+      time_frame.name.upcase.split(' ').map { |word| word[0] }.join == shortcut.upcase || # [MR]
+      abbrevs.include?(shortcut.upcase)            # [ADM]  [MOR]
     end
   end
 
@@ -81,7 +81,7 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
 
           time_frame ||= day.task_list.time_frames.first
 
-          puts "~ Adding #{task} to #{time_frame.name}"
+          puts "~ Adding <green>#{task.body}</green> to <magenta>#{time_frame.name.downcase}</magenta>.".colourise
           time_frame.items << Pomodoro::Formats::Today::Task.new(
             status: :not_done, body: task.body, tags: task.tags,
             fixed_start_time: task.start_time)
@@ -92,11 +92,47 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
     end
   end
 
+  def add_postponed_task_to_scheduled_list(scheduled_task_list, time_frame, task)
+    scheduled_date = task.metadata['Review at'] || Date.today.iso8601
+
+    if Date.parse(scheduled_date) == (Date.today + 1)
+      scheduled_date = 'Tomorrow' # FIXME: What about if it is today?
+    end
+
+    task_group = scheduled_task_list[scheduled_date] || (
+      scheduled_task_list << Pomodoro::Formats::Scheduled::TaskGroup.new(header: scheduled_date)
+      scheduled_task_list[scheduled_date]
+    )
+    task_group << Pomodoro::Formats::Scheduled::Task.new(time_frame: time_frame.name, body: task.body, tags: task.tags)
+
+    return scheduled_date
+  end
+
   def run
     @date = self.parse_date
 
     if File.exist?(self.date_path)
       abort "<red>Error:</red> File #{self.date_path.sub(ENV['HOME'], '~')} already exists.".colourise
+    end
+
+    previous_day_task_list_path = self.config.today_path(@date - 1)
+    if File.exist?(previous_day_task_list_path)
+      previous_day = Pomodoro::Formats::Today.parse(File.new(previous_day_task_list_path, encoding: 'utf-8'))
+      postponed_tasks = previous_day.task_list.each_task_with_time_frame.select { |tf, task| task.postponed? }
+      unless postponed_tasks.empty?
+        puts "~ <green>Migrating postponed tasks</green> from #{previous_day.date.strftime('%d/%m')}.".colourise
+        scheduled_task_list = parse_task_list(self.config)
+        postponed_tasks.each do |time_frame, task|
+          scheduled_date = add_postponed_task_to_scheduled_list(scheduled_task_list, time_frame, task)
+          puts "  ~ Scheduling <green>#{task.body}</green> for <yellow>#{scheduled_date.downcase}</yellow>.".colourise
+        end
+        scheduled_task_list.save(self.config.task_list_path)
+        puts
+      else
+        puts "~ <green>No postponed tasks</green> from #{previous_day.date.strftime('%m%/d')}.".colourise
+      end
+
+      # TODO: Warn about skipped tasks and print their list, wait for the user to acknowledge (STDIN.readline).
     end
 
     options = self.group_args

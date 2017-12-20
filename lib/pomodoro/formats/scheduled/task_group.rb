@@ -22,7 +22,7 @@ module Pomodoro::Formats::Scheduled
     #
     # @since 0.2
     def <<(task)
-      @tasks << task unless @tasks.include?(task)
+      @tasks << task unless @tasks.include?(task) || @tasks.map(&:to_s).include?(task.to_s)
     end
 
     # Remove a task from the task group.

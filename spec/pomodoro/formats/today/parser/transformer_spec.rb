@@ -7,15 +7,15 @@ describe Pomodoro::Formats::Today::Transformer do
       [
         {
           time_frame: {
-            name: "Morning routine",
+            name: {str: "Morning routine"},
             start_time: {hour: '7:50'},
             end_time: {hour: '9:20'},
             items: [
               {
-                task: [
-                  {indent: '-'},
-                  {body: "Meditation."}
-                ]
+                task: {
+                  indent: {str: '-'},
+                  body: {str: "Meditation."}
+                }
               }
             ]
           }

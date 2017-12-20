@@ -72,7 +72,9 @@ describe Pomodoro::Formats::Scheduled::TaskList do
     let(:data) do
       [
         Pomodoro::Formats::Scheduled::TaskGroup.new(header: 'Tomorrow'),
-        Pomodoro::Formats::Scheduled::TaskGroup.new(header: 'Prague', tasks: ["Pick up shoes #errands"])
+        Pomodoro::Formats::Scheduled::TaskGroup.new(header: 'Prague', tasks: [
+          Pomodoro::Formats::Scheduled::Task.new(body: "Pick up shoes", tags: [:errands])
+        ])
       ]
     end
 

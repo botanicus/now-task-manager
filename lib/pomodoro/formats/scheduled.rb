@@ -34,5 +34,6 @@ end
 
 require 'pomodoro/formats/scheduled/parser/parser'
 require 'pomodoro/formats/scheduled/parser/transformer'
+require 'pomodoro/formats/scheduled/task'
 require 'pomodoro/formats/scheduled/task_list'
 require 'pomodoro/formats/scheduled/task_group'

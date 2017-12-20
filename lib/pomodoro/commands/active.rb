@@ -3,7 +3,9 @@ class Pomodoro::Commands::Active < Pomodoro::Commands::Command
 
   FORMATTERS ||= {
     body: '%b',
-    start_time: '%f'
+    start_time: '%f',
+    duration: '%d',
+    # remaining_duration: # TODO: This takes arguments.
   }
 
   self.help = <<-EOF

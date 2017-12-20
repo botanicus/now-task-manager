@@ -7,8 +7,14 @@ class Pomodoro::Commands::BitBar < Pomodoro::Commands::Command
 end
 
 class Pomodoro::Commands::BitBarUI
-  def self.heading(current_time_frame)
-    if current_time_frame
+  def self.heading(current_time_frame, active_task)
+    if active_task && active_task.duration
+      remaining_duration = active_task.remaining_duration(current_time_frame)
+      # TODO: base it on %.
+      x = {red: (0..5), green: (5..20)}.find { |key, range| range.include?(remaining_duration.minutes) }
+      colour = x[0] || 'grey'
+      puts "#{current_time_frame.name} [#{remaining_duration}] | color=#{colour}"
+    elsif current_time_frame
       self.heading_work_in_progress(current_time_frame)
     else
       ['black', self.heading_default_icon]
@@ -46,11 +52,11 @@ class Pomodoro::Commands::BitBarUI
       end
 
       if task.in_progress?
-        puts "#{task.body.chomp} | color=blue"
-        # We don't have support for having both start/end time and duration #31.
-        # if task.duration
-        #   print " #{task.remaining_duration(current_time_frame)}"
-        # end
+        if task.duration
+          puts "#{task.remaining_duration(current_time_frame)} #{task.body.chomp} | color=blue"
+        else
+          puts "#{task.body.chomp} | color=blue"
+        end
         puts "-- Finish   | bash='now done'     color=black"
         puts "-- Postpone | bash='now postpone' color=black"
         puts "-- Move on  | bash='now move_on'  color=black"
@@ -79,7 +85,7 @@ class Pomodoro::Commands::BitBarUI
 
   def self.main(today_tasks, task_list)
     if today_tasks && current_time_frame = today_tasks.current_time_frame
-      colour, icon = self.heading(current_time_frame)
+      colour, icon = self.heading(current_time_frame, today_tasks.active_task)
       puts icon, '---'
       self.with_active_time_frame(current_time_frame)
       self.show_upcoming_time_frames(today_tasks, current_time_frame)

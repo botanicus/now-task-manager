@@ -66,6 +66,18 @@ module Pomodoro::Formats::Today
       @time_frames.map(&:tasks).flatten.each(&block)
     end
 
+    def each_task_with_time_frame(&block)
+      if block
+        @time_frames.each do |time_frame|
+          time_frame.tasks.each do |task|
+            block.call(time_frame, task)
+          end
+        end
+      else
+        self.enum_for(:each_task_with_time_frame)
+      end
+    end
+
     # Return overall duration.
     #
     # @return [Hour]

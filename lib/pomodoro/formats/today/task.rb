@@ -38,8 +38,8 @@ module Pomodoro::Formats::Today
 
     def metadata
       @metadata ||= @lines.reduce(Hash.new) do |hash, line|
-        if line.match(/^(.+):(.+)$/)
-          hash.merge($1 => $2)
+        if match = line.match(/^(.+): +(.+)$/)
+          hash.merge!(match[1] => match[2])
         end
         hash
       end

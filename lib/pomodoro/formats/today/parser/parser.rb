@@ -9,7 +9,7 @@ module Pomodoro::Formats::Today
     rule(:nl)              { str("\n").repeat(1) }
     rule(:nl_or_eof)       { any.absent? | nl.maybe }
 
-    rule(:space)           { match('\s').repeat(1) }
+    rule(:space)           { str(' ').repeat(1) }
     rule(:space?)          { space.maybe }
 
     rule(:lparen)          { str('(') }
@@ -45,7 +45,8 @@ module Pomodoro::Formats::Today
     rule(:metadata) { (str("\n").absent? >> any).repeat.as(:line) }
 
     rule(:task_body) { indent >> task_time_info.maybe >> task_desc >> tag.repeat }
-    rule(:metadata_block) { (nl >> str('  ') >> metadata).repeat(0) }
+    rule(:metadata_block) { (nl.maybe >> str('  ') >> metadata).repeat(0) }
+    # ^ nl.maybe is becase tags are eating nl's
 
     rule(:task) do
       (task_body >> metadata_block).as(:task) >> nl.maybe # replaced nl_or_eof to fix the hang.

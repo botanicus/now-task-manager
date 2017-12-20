@@ -9,6 +9,7 @@ syn match traskGroupHeader '^[^-]\+$'
 syn match taskDefStart '^- '
 syn match timeFrame '\[.\+\]'
 syn match scheduledHour '\[\d\+:\d\+\]'
+syn match tag '#\w\+'
 
 let b:current_syntax = "scheduled"
 
@@ -16,3 +17,4 @@ hi def link traskGroupHeader Statement
 hi def link taskDefStart Constant
 hi def link timeFrame Statement
 hi def link scheduledHour Todo
+hi def link tag Type

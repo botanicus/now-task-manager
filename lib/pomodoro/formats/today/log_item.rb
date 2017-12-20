@@ -11,6 +11,10 @@ module Pomodoro::Formats::Today
       @data = data
     end
 
+    def [](key)
+      @data[key.to_s]
+    end
+
     def to_s
       blob = self.data.map { |key, value| "#{key}: #{value}" }.join(', ')
 

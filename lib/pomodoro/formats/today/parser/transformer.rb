@@ -20,7 +20,7 @@ module Pomodoro::Formats::Today
 
     # This might to get matched(?)
     rule(duration: simple(:duration)) {
-      {duration: Hour.new(Integer(duration))}
+      {duration: Hour.new(0, Integer(duration))}
     }
 
     # This doesn't get matched because there are multiple keys in the hash.
@@ -47,6 +47,10 @@ module Pomodoro::Formats::Today
       char = data.delete(:indent)
       status, _ = Task::STATUS_MAPPING.find { |status, i| i.include?(char) }
       data[:status] = status
+
+      if duration = data.delete(:duration)
+        data[:duration] = Hour.new(0, Integer(duration))
+      end
 
       begin
         Task.new(**data)

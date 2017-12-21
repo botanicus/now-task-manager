@@ -9,8 +9,9 @@ module Pomodoro
     CONFIG_PATH ||= File.expand_path('~/.config/now-task-manager.yml')
 
     # Use Pomodoro.config instead of instantiating a new Config object.
-    def initialize
-      @data = YAML.load_file(CONFIG_PATH)
+    def initialize(config_path = CONFIG_PATH)
+      @config_path = config_path
+      @data = YAML.load_file(@config_path)
     rescue
       @data = Hash.new
     end
@@ -32,7 +33,7 @@ module Pomodoro
         if File.exist?(File.expand_path("#{path}/.."))
           path
         else
-          raise "No #{key} found. Add #{key} into #{CONFIG_PATH} pointing the the actual path."
+          raise "File #{path} doesn't exist. (From #{@config_path}/#{key}.)"
         end
       end
     end

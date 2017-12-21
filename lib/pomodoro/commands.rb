@@ -5,8 +5,28 @@ require 'refined-refinements/cli/commander'
 
 module Pomodoro
   module Commands
-    class Command < RR::Command
+    module EnvironmentCommunication
       using RR::ColourExts
+
+      def puts(message)
+        Kernel.puts(message.colourise)
+      end
+
+      def warn(message)
+        Kernel.warn(message.colourise)
+      end
+
+      def abort(message)
+        Kernel.abort(message.colourise)
+      end
+
+      def command(command)
+        %x{#{command}}
+      end
+    end
+
+    class Command < RR::Command
+      include EnvironmentCommunication
 
       attr_reader :config
       def initialize(args, config = nil)
@@ -15,7 +35,7 @@ module Pomodoro
 
       def must_exist(path)
         unless File.exist?(path)
-          abort "<red>! File #{path.sub(ENV['HOME'], '~')} doesn't exist</red>".colourise
+          abort "<red>! File #{path.sub(ENV['HOME'], '~')} doesn't exist</red>"
         end
       end
 

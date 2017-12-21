@@ -6,9 +6,11 @@ require 'refined-refinements/cli/commander'
 module Pomodoro
   module Commands
     class Command < RR::Command
+      using RR::ColourExts
+
       attr_reader :config
-      def initialize(args)
-        @args, @config = args, Pomodoro.config
+      def initialize(args, config = nil)
+        @args, @config = args, config || Pomodoro.config
       end
 
       def must_exist(path)

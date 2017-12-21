@@ -33,7 +33,6 @@ class Pomodoro::Commands::Active < Pomodoro::Commands::Command
   EOF
 
   def run
-    # exit 1
     must_exist(self.config.today_path)
     today_list = parse_today_list(self.config)
 

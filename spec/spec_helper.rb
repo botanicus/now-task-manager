@@ -11,6 +11,9 @@ class Parslet::Slice
   end
 end
 
+class ExecutionFinished < StandardError
+end
+
 module CLITestHelpers
   def self.extended(base)
     base.define_singleton_method(:sequence) do
@@ -32,6 +35,7 @@ module CLITestHelpers
 
   def abort(message)
     self.sequence << {abort: message}
+    raise ExecutionFinished
   end
 
   def command(command)
@@ -40,6 +44,7 @@ module CLITestHelpers
 
   def exit(value = nil)
     self.sequence << {exit: value}
+    raise ExecutionFinished
   end
 end
 
@@ -47,6 +52,11 @@ RSpec.configure do |config|
   config.include Module.new {
     def h(string)
       Hour.parse(string)
+    end
+
+    def run(command)
+      command.run
+    rescue ExecutionFinished
     end
   }
 end

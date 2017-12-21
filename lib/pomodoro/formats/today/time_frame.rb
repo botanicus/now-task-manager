@@ -1,4 +1,4 @@
-require 'pomodoro/exts/hour'
+require 'refined-refinements/hour'
 require 'pomodoro/formats/today'
 
 module Pomodoro::Formats::Today

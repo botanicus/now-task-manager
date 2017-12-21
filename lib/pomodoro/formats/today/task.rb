@@ -1,4 +1,4 @@
-require 'pomodoro/exts/hour'
+require 'refined-refinements/hour'
 require 'pomodoro/formats/today'
 require 'pomodoro/formats/today/task/statuses'
 require 'pomodoro/formats/today/task/dynamic_additions'

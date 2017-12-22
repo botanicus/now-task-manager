@@ -18,5 +18,7 @@ class Pomodoro::Commands::Postpone < Pomodoro::Commands::Command
       review_at.empty? ? active_task.postpone!(reason) : active_task.postpone!(reason, review_at)
       puts "<bold>~</bold> <green>#{active_task.body}</green> has been postponed.".colourise
     end
+  rescue Pomodoro::Config::ConfigFileMissingError => error
+    abort "<red>#{error.message}</red>"
   end
 end

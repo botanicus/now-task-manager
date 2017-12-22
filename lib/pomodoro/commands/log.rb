@@ -25,5 +25,7 @@ class Pomodoro::Commands::Log < Pomodoro::Commands::Command
       current_time_frame.items << item
       today_list.save(config.today_path)
     end
+  rescue Pomodoro::Config::ConfigFileMissingError => error
+    abort "<red>#{error.message}</red>"
   end
 end

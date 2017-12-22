@@ -21,5 +21,7 @@ class Pomodoro::Commands::Next < Pomodoro::Commands::Command
         abort "<red>No more tasks in #{current_time_frame.desc}</red>".colourise
       end
     end
+  rescue Pomodoro::Config::ConfigFileMissingError => error
+    abort "<red>#{error.message}</red>"
   end
 end

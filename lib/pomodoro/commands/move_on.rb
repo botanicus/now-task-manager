@@ -13,5 +13,7 @@ class Pomodoro::Commands::MoveOn < Pomodoro::Commands::Command
       active_task.move_on!
       puts "<bold>~</bold> You moved on from <green>#{active_task.body}</green>.".colourise
     end
+  rescue Pomodoro::Config::ConfigFileMissingError => error
+    abort "<red>#{error.message}</red>"
   end
 end

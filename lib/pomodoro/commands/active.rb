@@ -52,5 +52,7 @@ class Pomodoro::Commands::Active < Pomodoro::Commands::Command
     else
       p active_task
     end
+  rescue Pomodoro::Config::ConfigFileMissingError => error
+    abort "<red>#{error.message}</red>"
   end
 end

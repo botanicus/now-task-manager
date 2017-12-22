@@ -6,18 +6,33 @@ module Pomodoro
   end
 
   class Config
+    class ConfigFileMissingError < StandardError
+      def initialize
+        super("The config file #{Config::CONFIG_PATH.sub(ENV['HOME'], '~')} doesn't exist.")
+      end
+    end
+
+    class ConfigError < StandardError
+      def initialize(key)
+        super("No such key: #{key}")
+      end
+    end
+
     CONFIG_PATH ||= File.expand_path('~/.config/now-task-manager.yml')
 
     # Use Pomodoro.config instead of instantiating a new Config object.
     def initialize(config_path = CONFIG_PATH)
       @config_path = config_path
-      @data = YAML.load_file(@config_path)
-    rescue
-      @data = Hash.new
+    end
+
+    def data
+      @data ||= YAML.load_file(@config_path)
+    rescue Errno::ENOENT
+      raise ConfigFileMissingError.new
     end
 
     def data_root_path
-      data_root_path = File.expand_path(@data.fetch('data_root_path'))
+      data_root_path = File.expand_path(self.data.fetch('data_root_path'))
       if File.directory?(data_root_path)
         data_root_path
       else
@@ -29,7 +44,11 @@ module Pomodoro
       :task_list_path, :today_path, :schedule_path, :routine_path
     ].each do |key|
       define_method(key) do |time = Time.now|
-        path = File.expand_path(time.strftime(@data[key.to_s]))
+        value = self.data.fetch(key.to_s) do
+          raise ConfigError.new(key)
+        end
+
+        path = File.expand_path(time.strftime(value))
         if File.exist?(File.expand_path("#{path}/.."))
           path
         else
@@ -39,7 +58,7 @@ module Pomodoro
     end
 
     def calendar
-      (@data['calendar'] || Hash.new).reduce(Hash.new) do |buffer, (event_name, date)|
+      (self.data['calendar'] || Hash.new).reduce(Hash.new) do |buffer, (event_name, date)|
         date = Date.strptime(date, '%d/%m')
         date = (date < Date.today) ? date.next_year : date
         buffer.merge(event_name => date)

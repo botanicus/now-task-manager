@@ -20,7 +20,14 @@ describe Pomodoro::Commands::Active do
   end
 
   context "without config" do
-    # TODO
+    let(:config) do
+      Pomodoro::Config.new('now-task-manager.yml')
+    end
+
+    it "fails" do
+      expect { run(subject) }.to change { subject.sequence.length }.by(1)
+      expect(subject.sequence[0]).to eql(abort: "<red>The config file ~/.config/now-task-manager.yml doesn't exist.</red>")
+    end
   end
 
   context "without today_path" do

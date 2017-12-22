@@ -31,6 +31,10 @@ module Pomodoro
       raise ConfigFileMissingError.new
     end
 
+    def inspect
+      self.data && super
+    end
+
     def data_root_path
       data_root_path = File.expand_path(self.data.fetch('data_root_path'))
       if File.directory?(data_root_path)

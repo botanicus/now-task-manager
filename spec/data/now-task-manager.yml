@@ -1,5 +1,5 @@
 data_root_path: spec/data/tasks
-today_path:     spec/data/tasks/%Y/%m/%Y-%m-%d.today
+today_path:     spec/data/tasks/%Y-%m-%d.today
 task_list_path: spec/data/tasks.todo
 
 schedule_path:  spec/data/schedules.rb

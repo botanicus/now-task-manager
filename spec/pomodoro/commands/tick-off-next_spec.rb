@@ -10,4 +10,10 @@ describe Pomodoro::Commands::TickOffNext do
       expect(described_class.help.length).not_to be(0)
     end
   end
+
+  context "with an active task" do
+  end
+
+  context "with no active task" do
+  end
 end

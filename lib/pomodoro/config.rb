@@ -56,7 +56,8 @@ module Pomodoro
         if File.exist?(File.expand_path("#{path}/.."))
           path
         else
-          raise "File #{path} doesn't exist. (From #{@config_path}/#{key}.)"
+          dir, base = File.split(path)
+          raise "#{self.class}##{key}: Root directory #{dir.sub(ENV['HOME'], '~')} for file #{base} doesn't exist..)"
         end
       end
     end

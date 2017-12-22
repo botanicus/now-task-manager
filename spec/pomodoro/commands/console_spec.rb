@@ -10,4 +10,6 @@ describe Pomodoro::Commands::Console do
       expect(described_class.help.length).not_to be(0)
     end
   end
+
+  # The rest we won't be specing.
 end

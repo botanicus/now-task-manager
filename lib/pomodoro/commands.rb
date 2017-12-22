@@ -151,8 +151,5 @@ module Pomodoro
 
     require 'pomodoro/commands/bitbar'
     self.command(:bitbar, Commands::BitBar)
-
-    require 'pomodoro/commands/tools'
-    self.command(:tools, Commands::Tools)
   end
 end

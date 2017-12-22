@@ -90,11 +90,11 @@ class Pomodoro::Commands::BitBarUI
       self.with_active_time_frame(current_time_frame)
       self.show_upcoming_time_frames(today_tasks, current_time_frame)
     elsif today_tasks
-      colour, icon = self.heading(nil)
+      colour, icon = self.heading(nil, nil)
       puts icon, '---'
       puts 'TODO: Some day summary and possibly show tomorrow.' #33
     else
-      colour, icon = self.heading(nil)
+      colour, icon = self.heading(nil, nil)
       puts icon, '---'
       puts "Click here to add some tasks. | bash='now edit' color=green"
     end

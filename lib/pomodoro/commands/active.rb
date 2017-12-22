@@ -7,7 +7,7 @@ class Pomodoro::Commands::Active < Pomodoro::Commands::Command
 
     def call(time_frame, active_task)
       block = @block || Proc.new { |_, t| t.send(@name) }
-      @block.call(time_frame, active_task)
+      block.call(time_frame, active_task)
     end
   end
 
@@ -15,8 +15,7 @@ class Pomodoro::Commands::Active < Pomodoro::Commands::Command
 
   FORMATTERS ||= [
     Formatter.new(:body, '%b'),
-    Formatter.new(:start_time, '%s'),
-    Formatter.new(:end_time, '%e'),
+    Formatter.new(:start_time, '%s'), # NOTE: no need time, since after that, the task is no longer active, right?
     Formatter.new(:duration, '%d'),
     Formatter.new(:remaining_duration, '%rd') do |time_frame, task|
       task.duration ? task.remaining_duration(time_frame) : nil

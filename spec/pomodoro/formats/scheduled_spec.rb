@@ -16,8 +16,8 @@ describe Pomodoro::Formats::Scheduled do
       expect(task_list).to be_kind_of(described_class::TaskList)
     end
 
-    it "returns nil for an empty task list" do
-      expect(described_class.parse('')).to be_nil
+    it "returns an empty task list object for an empty task list" do
+      expect(described_class.parse('')).to be_kind_of(described_class::TaskList)
     end
   end
 end

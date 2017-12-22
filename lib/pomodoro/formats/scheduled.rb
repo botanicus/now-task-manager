@@ -26,7 +26,7 @@ module Pomodoro
         string = string_or_io.respond_to?(:read) ? string_or_io.read : string_or_io
         tree = Parser.new.parse_with_debug(string)
         nodes = Transformer.new.apply(tree)
-        TaskList.new(nodes) unless nodes.empty?
+        TaskList.new(nodes.empty? ? Array.new : nodes)
       end
     end
   end

@@ -12,5 +12,7 @@ class Pomodoro::Commands::Done < Pomodoro::Commands::Command
       active_task.complete!
       puts "<bold>~</bold> <green>#{active_task.body}</green> has been finished.".colourise
     end
+  rescue Pomodoro::Config::ConfigFileMissingError => error
+    abort "<red>#{error.message}</red>"
   end
 end

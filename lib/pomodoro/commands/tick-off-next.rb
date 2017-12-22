@@ -12,5 +12,7 @@ class Pomodoro::Commands::TickOffNext < Pomodoro::Commands::Command
       next_task.complete!
       puts "<bold>~</bold> <green>#{next_task.body}</green> has been finished.".colourise
     end
+  rescue Pomodoro::Config::ConfigFileMissingError => error
+    abort "<red>#{error.message}</red>"
   end
 end

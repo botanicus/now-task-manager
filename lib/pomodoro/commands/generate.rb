@@ -155,5 +155,7 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
     scheduled_task_list.save(self.config.task_list_path)
 
     puts "~ <green>File #{date_path} has been created.</green>".colourise
+  rescue Pomodoro::Config::ConfigFileMissingError => error
+    abort "<red>#{error.message}</red>"
   end
 end

@@ -16,5 +16,7 @@ class Pomodoro::Commands::Start < Pomodoro::Commands::Command
       puts "<bold>~</bold> <green>#{next_task.body}</green> has been started.".colourise
       next_task.start!
     end
+  rescue Pomodoro::Config::ConfigFileMissingError => error
+    abort "<red>#{error.message}</red>"
   end
 end

@@ -29,5 +29,7 @@ class Pomodoro::Commands::Edit < Pomodoro::Commands::Command
     else
       abort('DATA.read.colourise') # FIXME
     end
+  rescue Pomodoro::Config::ConfigFileMissingError => error
+    abort "<red>#{error.message}</red>"
   end
 end

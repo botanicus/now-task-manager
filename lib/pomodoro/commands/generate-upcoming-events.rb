@@ -1,11 +1,11 @@
+require 'date'
+
 class Pomodoro::Commands::GenerateUpcomingEvents < Pomodoro::Commands::Command
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <blue>generate-upcoming-events</blue> <bright_black># ...</bright_black>
   EOF
 
   def run
-    require 'date'
-
     upcoming_events = self.config.calendar.select do |event_name, date|
       ((Date.today + 1)..(Date.today + 8)).include?(date)
     end

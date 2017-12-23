@@ -11,6 +11,10 @@ module Pomodoro
       def puts(message)
         Kernel.puts(message.colourise)
       end
+      
+      def print(message)
+        Kernel.print(message.colourise)
+      end
 
       def warn(message)
         Kernel.warn(message.colourise)

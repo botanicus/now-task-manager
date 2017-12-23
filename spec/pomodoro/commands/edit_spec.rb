@@ -28,26 +28,7 @@ describe Pomodoro::Commands::Edit do
     end
   end
 
-  context "without today_path" do
-    let(:config) do
-      OpenStruct.new(today_path: 'non-existent.today')
-    end
-
-    it "fails" do
-      expect { run(subject) }.to change { subject.sequence.length }.by(1)
-      expect(subject.sequence[0]).to eql(abort: "<red>! File non-existent.today doesn't exist</red>\n  Run the g command first.")
-    end
-  end
-
-  context "without task_list_path" do
-    let(:config) do
-      OpenStruct.new(today_path: 'non-existent.today')
-    end
-
-    # TODO
-  end
-
-  context "with a valid config" do
+  context "with config" do
     let(:config) do
       OpenStruct.new(
         today_path: "spec/data/#{described_class}.#{rand(1000)}.today",
@@ -62,11 +43,27 @@ describe Pomodoro::Commands::Edit do
     end
 
     after(:each) do
-      File.unlink(config.today_path)
+      begin
+        File.unlink(config.today_path)
+      rescue Errno::ENOENT
+      end
     end
 
     describe "no args" do
+      context "without config.today_path" do
+      end
+
+      context "without today_path file" do
+        it "fails" do
+          File.unlink(config.today_path)
+
+          expect { run(subject) }.to change { subject.sequence.length }.by(1)
+          expect(subject.sequence[0]).to eql(abort: "<red>! File #{config.today_path} doesn't exist</red>\n  Run the g command first.")
+        end
+      end
+
       it do
+        pending
         expect { run(subject) }.to change { subject.sequence.length }.by(1)
         expect(subject.sequence[0]).to eql(command: "vim #{config.today_path}")
       end
@@ -74,6 +71,32 @@ describe Pomodoro::Commands::Edit do
 
     describe "2" do
       let(:args) { ['2'] }
+
+      context "without config.today_path" do
+      end
+
+      context "without today_path file" do
+        let(:config) do
+          OpenStruct.new(today_path: 'non-existent.today', task_list_path: 'somewhere')
+        end
+
+        it "fails" do
+          pending
+          expect { run(subject) }.to change { subject.sequence.length }.by(1)
+          expect(subject.sequence[0]).to eql(abort: "<red>! File non-existent.today doesn't exist</red>\n  Run the g command first.")
+        end
+      end
+
+      context "without config.task_list_path" do
+      end
+
+      context "without task_list_path file" do
+        let(:config) do
+          OpenStruct.new(today_path: 'non-existent.today')
+        end
+
+        # TODO
+      end
 
       it do
         expect { run(subject) }.to change { subject.sequence.length }.by(1)

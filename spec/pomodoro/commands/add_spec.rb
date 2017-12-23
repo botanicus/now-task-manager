@@ -44,7 +44,7 @@ describe Pomodoro::Commands::Add do
     end
 
     it "doesn't add the task twice" do
-      expect { 2.times { run(subject) } }.not_to change { subject.sequence.length }
+      2.times { run(subject) }
       expect(File.read(config.task_list_path)).to eql("Later\n- Do this and that.\n")
     end
   end
@@ -61,7 +61,7 @@ describe Pomodoro::Commands::Add do
     end
 
     it "doesn't add the task twice" do
-      expect { 2.times { run(subject) } }.not_to change { subject.sequence.length }
+      2.times { run(subject) }
       expect(File.read(config.task_list_path)).to eql("Later\n- Do this and that.\n")
     end
   end

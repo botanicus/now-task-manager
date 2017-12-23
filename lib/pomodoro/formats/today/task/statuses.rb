@@ -62,12 +62,16 @@ module Pomodoro::Formats::Today
       @status = :done
     end
 
-    def postpone!(reason, next_review = (Date.today + 1).iso8601)
+    def postpone!(reason, next_review_date = Date.today + 1)
+      unless next_review_date.is_a?(Date)
+        raise ArgumentError.new("Date expected, got #{next_review_date} (#{next_review_date.class}).")
+      end
+
       @end_time = Hour.now if @start_time
       @status = :failed
       @lines << "Postponed: #{reason}"
-      next_review_date = Date.parse(next_review)
       @lines << "Review at: #{next_review_date.iso8601}"
+      next_review_date
     end
 
     def fail!(reason)

@@ -8,12 +8,18 @@ class Pomodoro::Commands::Postpone < Pomodoro::Commands::Command
 
     if  with_active_task(self.config) do |active_task|
           print "<bold>Why?</bold> "
-          reason = STDIN.readline.chomp
-          print "<bold>When do you want to review?</bold> Defaults to tomorrow. "
-          review_at = STDIN.readline.chomp
-          
-          review_at.empty? ? active_task.postpone!(reason) : active_task.postpone!(reason, review_at)
-          puts "<bold>~</bold> <green>#{unsentence(active_task.body)}</green> has been postponed."
+          reason = $stdin.readline.chomp
+          print "<bold>When do you want to review?</bold> Defaults to tomorrow. Format <yellow>%d/%m</yellow> "
+          review_at = $stdin.readline.chomp
+
+          if review_at.empty?
+            review_date = active_task.postpone!(reason)
+          else
+            review_date = Date.strptime(review_at, '%d/%m')
+            review_date = active_task.postpone!(reason, review_date)
+          end
+
+          puts "<bold>~</bold> <green>#{unsentence(active_task.body)}</green> has been postponed to <yellow>#{review_date.strftime('%-d/%-m')}</yellow>."
         end
     else
       abort "<red>There is no task in progress.</red>"

@@ -25,8 +25,12 @@ module CLITestHelpers
     self.sequence << {p: object}
   end
 
-  def puts(message)
+  def print(message)
     self.sequence << {stdout: message}
+  end
+
+  def puts(message)
+    self.sequence << {stdout: message} # TODO: "#{message}\n"
   end
 
   def warn(message)

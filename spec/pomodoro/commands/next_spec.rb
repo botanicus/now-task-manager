@@ -40,5 +40,22 @@ describe Pomodoro::Commands::Next do
   end
 
   context "with a valid config" do
+    let(:task) do
+      '[7:50-???] [20] Active task.'
+    end
+
+    let(:data) do
+      <<-EOF.gsub(/^\s*/, '')
+        Admin (0:00 – #{time_frame_end_time})
+        - #{task}
+        - Active task.
+      EOF
+    end
+
+    context "and a next task" do
+    end
+
+    context "and no next task" do
+    end
   end
 end

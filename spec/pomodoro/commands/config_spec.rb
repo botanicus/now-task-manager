@@ -24,7 +24,13 @@ describe Pomodoro::Commands::Config do
       Pomodoro::Config.new('non-existent-now-task-manager.yml')
     end
 
+    # This doesn't work, because of the stubs.
+    # Normally, p would do puts(object.inspect) and Config#inspect is where
+    # the exception would occur. But since we're redefining Kernel#p, it never
+    # gets there, so it looks like it prints the inspected config object
+    # successfuly, but that's not true.
     it "fails" do
+      pending "See the comment above."
       expect { run(subject) }.to change { subject.sequence.length }.by(1)
       expect(subject.sequence[0]).to eql(abort: "<red>The config file non-existent-now-task-manager.yml doesn't exist.</red>")
     end

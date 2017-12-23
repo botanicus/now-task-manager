@@ -11,52 +11,70 @@ describe Pomodoro::Commands::Active do
     end
   end
 
+  let(:data) do
+    <<-EOF.gsub(/^\s*/, '')
+      Admin (0:00 – 23:59)
+      - [7:50-???] [20] Active task.
+      - Active task.
+    EOF
+  end
+
   let(:config) do
-    OpenStruct.new(today_path: 'spec/data/tasks/2017/12/2017-12-20.today')
+    OpenStruct.new(today_path: "spec/data/active_spec.#{rand(1000)}.today")
+  end
+
+  before(:each) do
+    File.open(config.today_path, 'w') do |file|
+      file.puts(data)
+    end
+  end
+
+  after(:each) do
+    File.unlink(config.today_path) if config.today_path.match('active_spec')
   end
 
   subject do
     described_class.new([], config).extend(CLITestHelpers)
   end
 
-  context "without config" do
-    let(:config) do
-      Pomodoro::Config.new('non-existing-now-task-manager.yml')
-    end
+  # context "without config" do
+  #   let(:config) do
+  #     Pomodoro::Config.new('non-existent-now-task-manager.yml')
+  #   end
+  #
+  #   it "fails" do
+  #     expect { run(subject) }.to change { subject.sequence.length }.by(1)
+  #     expect(subject.sequence[0]).to eql(abort: "<red>The config file non-existent-now-task-manager.yml doesn't exist.</red>")
+  #   end
+  # end
 
-    it "fails" do
-      expect { run(subject) }.to change { subject.sequence.length }.by(1)
-      expect(subject.sequence[0]).to eql(abort: "<red>The config file ~/.config/now-task-manager.yml doesn't exist.</red>")
-    end
-  end
-
-  context "without today_path" do
-    let(:config) do
-      OpenStruct.new(today_path: 'non-existin.today')
-    end
-
-    it "fails" do
-      expect { run(subject) }.to change { subject.sequence.length }.by(1)
-      expect(subject.sequence[0]).to eql(abort: "<red>! File #{config.today_path} doesn't exist</red>")
-    end
-  end
-
+  # context "without today_path" do
+  #   let(:config) do
+  #     OpenStruct.new(today_path: 'non-existent.today')
+  #   end
+  #
+  #   it "fails" do
+  #     expect { run(subject) }.to change { subject.sequence.length }.by(1)
+  #     expect(subject.sequence[0]).to eql(abort: "<red>! File #{config.today_path} doesn't exist</red>")
+  #   end
+  # end
+  #
   context "with no active task" do
-    let(:config) do
-      OpenStruct.new(today_path: 'spec/data/1_basic.today')
-    end
+      let(:data) do
+        <<-EOF.gsub(/^\s*/, '')
+          Admin (0:00 – 23:59)
+          - First task.
+          - Second task.
+        EOF
+      end
 
     it "exits with 1" do
       expect { run(subject) }.to change { subject.sequence.length }.by(1)
-      expect(subject.sequence[0]).to eql(abort: "<red>! File spec/data/1_basic.today doesn't exist</red>")
+      expect(subject.sequence[0]).to eql(exit: 1)
     end
   end
 
   context "with an active task" do
-    let(:config) do
-      OpenStruct.new(today_path: 'spec/data/with_active_task.today')
-    end
-
     it "prints out the active task" do
       expect { run(subject) }.to change { subject.sequence.length }.by(1)
       expect(subject.sequence[0][:p]).to be_kind_of(Pomodoro::Formats::Today::Task)
@@ -64,10 +82,6 @@ describe Pomodoro::Commands::Active do
   end
 
   describe "formatters" do
-    let(:config) do
-      OpenStruct.new(today_path: 'spec/data/with_active_task.today')
-    end
-
     subject do
       described_class.new([format_string], config).extend(CLITestHelpers)
     end
@@ -113,8 +127,12 @@ describe Pomodoro::Commands::Active do
       end
 
       context "it doesn't have duration" do
-        let(:config) do
-          OpenStruct.new(today_path: 'spec/data/with_active_task_no_duration.today')
+        let(:data) do
+          <<-EOF.gsub(/^\s*/, '')
+            Admin (0:00 – 23:59)
+            - [7:50-???] Active task.
+            - Active task.
+          EOF
         end
 
         it "displays the task duration" do
@@ -139,8 +157,12 @@ describe Pomodoro::Commands::Active do
       end
 
       context "it doesn't have duration" do
-        let(:config) do
-          OpenStruct.new(today_path: 'spec/data/with_active_task_no_duration.today')
+        let(:data) do
+          <<-EOF.gsub(/^\s*/, '')
+            Admin (0:00 – 23:59)
+            - [7:50-???] Active task.
+            - Active task.
+          EOF
         end
 
         it "displays the task duration" do

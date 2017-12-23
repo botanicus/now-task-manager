@@ -56,7 +56,7 @@ describe Pomodoro::Commands::Active do
     end
 
     let(:config) do
-      OpenStruct.new(today_path: "spec/data/active_spec.#{rand(1000)}.today")
+      OpenStruct.new(today_path: "spec/active_spec.#{rand(1000)}.today")
     end
 
     before(:each) do

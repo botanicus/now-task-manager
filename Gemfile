@@ -11,3 +11,4 @@ gem 'github-markup'
 
 gem 'rspec'
 gem 'coveralls'
+gem 'timecop'

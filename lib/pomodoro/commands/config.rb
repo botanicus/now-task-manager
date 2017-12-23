@@ -1,6 +1,4 @@
 class Pomodoro::Commands::Config < Pomodoro::Commands::Command
-  using RR::ColourExts
-
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <yellow>config</yellow>
     now <yellow>config</yellow> today_path

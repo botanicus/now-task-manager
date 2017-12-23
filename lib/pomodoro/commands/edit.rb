@@ -1,6 +1,4 @@
 class Pomodoro::Commands::Edit < Pomodoro::Commands::Command
-  using RR::ColourExts
-
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <green>edit</green>, now <green>e</green>
       <bright_black>now e</bright_black> Edit the today task file, creating it if it doesn't exist.
@@ -14,7 +12,7 @@ class Pomodoro::Commands::Edit < Pomodoro::Commands::Command
       if File.exists?(self.config.today_path)
         system("vim #{self.config.today_path}")
       else
-        abort "<red>Error:</red> File #{self.config.task_list_path} doesn't exist.\n  Run the g command first.".colourise
+        abort "<red>Error:</red> File #{self.config.task_list_path} doesn't exist.\n  Run the g command first."
       end
     elsif @args.first.to_i == 2 # This could also be tomorrow + tasks, not just today + tasks.
       exec("vim -O2 #{self.config.today_path} #{self.config.task_list_path}")
@@ -22,7 +20,7 @@ class Pomodoro::Commands::Edit < Pomodoro::Commands::Command
       if File.exists?(self.config.today_path(Date.today + 1))
         system("vim #{self.config.today_path(Date.today + 1)}")
       else
-        abort "<red>Error:</red> File #{self.config.task_list_path} doesn't exist.\n  Run the g command first.".colourise
+        abort "<red>Error:</red> File #{self.config.task_list_path} doesn't exist.\n  Run the g command first."
       end
     elsif ['tasks', 't'].include?(@args.first)
       exec("vim #{self.config.task_list_path}")

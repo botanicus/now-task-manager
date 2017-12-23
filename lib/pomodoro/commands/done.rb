@@ -1,6 +1,4 @@
 class Pomodoro::Commands::Done < Pomodoro::Commands::Command
-  using RR::ColourExts
-
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>done</magenta> <bright_black># Complete the active task.</bright_black>
   EOF
@@ -10,7 +8,7 @@ class Pomodoro::Commands::Done < Pomodoro::Commands::Command
 
     with_active_task(self.config) do |active_task|
       active_task.complete!
-      puts "<bold>~</bold> <green>#{active_task.body}</green> has been finished.".colourise
+      puts "<bold>~</bold> <green>#{active_task.body}</green> has been finished."
     end
   rescue Pomodoro::Config::ConfigFileMissingError => error
     abort "<red>#{error.message}</red>"

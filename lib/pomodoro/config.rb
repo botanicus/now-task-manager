@@ -7,8 +7,8 @@ module Pomodoro
 
   class Config
     class ConfigFileMissingError < StandardError
-      def initialize
-        super("The config file #{Config::CONFIG_PATH.sub(ENV['HOME'], '~')} doesn't exist.")
+      def initialize(config_path)
+        super("The config file #{config_path.sub(ENV['HOME'], '~')} doesn't exist.")
       end
     end
 
@@ -28,7 +28,7 @@ module Pomodoro
     def data
       @data ||= YAML.load_file(@config_path)
     rescue Errno::ENOENT
-      raise ConfigFileMissingError.new
+      raise ConfigFileMissingError.new(@config_path)
     end
 
     def inspect

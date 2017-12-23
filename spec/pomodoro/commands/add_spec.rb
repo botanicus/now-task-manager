@@ -21,14 +21,14 @@ describe Pomodoro::Commands::Add do
 
   context "without config" do
     let(:config) do
-      Pomodoro::Config.new('non-existing-now-task-manager.yml')
+      Pomodoro::Config.new('non-existent-now-task-manager.yml')
     end
 
     let(:args) { '' }
 
     it "fails" do
       expect { run(subject) }.to change { subject.sequence.length }.by(1)
-      expect(subject.sequence[0]).to eql(abort: "<red>The config file ~/.config/now-task-manager.yml doesn't exist.</red>")
+      expect(subject.sequence[0]).to eql(abort: "<red>The config file non-existent-now-task-manager.yml doesn't exist.</red>")
     end
   end
 

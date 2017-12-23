@@ -9,23 +9,20 @@ class Pomodoro::Commands::Edit < Pomodoro::Commands::Command
 
   def run
     if @args.empty?
-      if File.exists?(self.config.today_path)
-        system("vim #{self.config.today_path}")
-      else
-        abort "<red>Error:</red> File #{self.config.task_list_path} doesn't exist.\n  Run the g command first."
-      end
+      self.must_exist(self.config.today_path, "Run the g command first.")
+      command("vim #{self.config.today_path}")
     elsif @args.first.to_i == 2 # This could also be tomorrow + tasks, not just today + tasks.
-      exec("vim -O2 #{self.config.today_path} #{self.config.task_list_path}")
+      self.must_exist(self.config.task_list_path)
+      self.must_exist(self.config.today_path, "Run the g command first.")
+      command("vim -O2 #{self.config.today_path} #{self.config.task_list_path}")
     elsif @args.first == 'tomorrow'
-      if File.exists?(self.config.today_path(Date.today + 1))
-        system("vim #{self.config.today_path(Date.today + 1)}")
-      else
-        abort "<red>Error:</red> File #{self.config.task_list_path} doesn't exist.\n  Run the g command first."
-      end
+      self.must_exist(self.config.today_path(Date.today + 1), "Run the g command first.")
+      command("vim #{self.config.today_path(Date.today + 1)}")
     elsif ['tasks', 't'].include?(@args.first)
-      exec("vim #{self.config.task_list_path}")
+      self.must_exist(self.config.task_list_path)
+      command("vim #{self.config.task_list_path}")
     else
-      abort('DATA.read.colourise') # FIXME
+      abort(self.class.help)
     end
   rescue Pomodoro::Config::ConfigFileMissingError => error
     abort "<red>#{error.message}</red>"

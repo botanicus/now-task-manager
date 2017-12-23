@@ -10,4 +10,6 @@ describe Pomodoro::Commands::Log do
       expect(described_class.help.length).not_to be(0)
     end
   end
+
+  it "might be removed soon"
 end

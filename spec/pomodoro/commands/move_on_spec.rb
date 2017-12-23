@@ -10,4 +10,6 @@ describe Pomodoro::Commands::MoveOn do
       expect(described_class.help.length).not_to be(0)
     end
   end
+
+  it "Might have specs, but so far this is not being used."
 end

@@ -62,6 +62,9 @@ module Pomodoro
         if active_task = today_list.active_task
           block.call(active_task)
           today_list.save(config.today_path)
+          return true
+        else
+          return false
         end
       end
 

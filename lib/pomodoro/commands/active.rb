@@ -13,7 +13,7 @@ class Pomodoro::Commands::Active < Pomodoro::Commands::Command
 
   FORMATTERS ||= [
     Formatter.new(:body, '%b'),
-    Formatter.new(:start_time, '%s'), # NOTE: no need time, since after that, the task is no longer active, right?
+    Formatter.new(:start_time, '%s'), # NOTE: no need for end time, since after that, the task is no longer active, right?
     Formatter.new(:duration, '%d'),
     Formatter.new(:remaining_duration, '%rd') do |time_frame, task|
       if task.duration
@@ -44,13 +44,15 @@ class Pomodoro::Commands::Active < Pomodoro::Commands::Command
     time_frame = today_list.time_frames.find { |time_frame| time_frame.items.include?(active_task) }
 
     if format_string = @args.shift
-      puts(FORMATTERS.reduce(format_string.dup) do |format_string, formatter|
+      res = FORMATTERS.reduce(format_string.dup) do |format_string, formatter|
         if format_string.match(formatter.pattern)
           value = formatter.call(time_frame, active_task)
           format_string.gsub!(formatter.pattern, value.to_s)
         end
         format_string
-      end)
+      end
+
+      puts res unless res == ''
     else
       p active_task
     end

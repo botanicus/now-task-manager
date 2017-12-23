@@ -8,20 +8,10 @@ module Pomodoro
     module EnvironmentCommunication
       using RR::ColourExts
 
-      def puts(message)
-        Kernel.puts(message.colourise)
-      end
-      
-      def print(message)
-        Kernel.print(message.colourise)
-      end
-
-      def warn(message)
-        Kernel.warn(message.colourise)
-      end
-
-      def abort(message)
-        Kernel.abort(message.colourise)
+      [:puts, :print, :warn, :abort].each do |method_name|
+        define_method(method_name) do |message|
+          Kernel.send(method_name, message.colourise)
+        end
       end
 
       def command(command)
@@ -61,7 +51,7 @@ module Pomodoro
         today_list = parse_today_list(config)
 
         unless current_time_frame = today_list.current_time_frame
-          abort "<red>There is no active time frame.</red>".colourise
+          abort "<red>There is no active time frame.</red>"
         end
 
         block.call(today_list, current_time_frame)
@@ -78,15 +68,21 @@ module Pomodoro
       def edit_next_task_when_no_task_active(config, &block)
         time_frame(config) do |today_list, current_time_frame|
           if active_task = today_list.active_task
-            abort "<red>There is an active task already:</red> #{active_task.body}".colourise
+            abort "<red>There is an active task already:</red> #{active_task.body}"
           end
 
           if next_task = current_time_frame.first_unstarted_task
             block.call(next_task)
             today_list.save(config.today_path)
           else
-            abort "<red>No more tasks in #{current_time_frame.name}</red>".colourise
+            abort "<red>No more tasks in #{current_time_frame.name}</red>"
           end
+        end
+      end
+
+      def unsentence(possible_sentense)
+        possible_sentense.sub(/^(.)(.+)\.$/) do
+          "#{$1.downcase}#{$2}"
         end
       end
     end

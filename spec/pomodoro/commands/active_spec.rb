@@ -137,9 +137,8 @@ describe Pomodoro::Commands::Active do
         context "it doesn't have duration" do
           let(:task) { '[7:50-???] Active task.' }
 
-          it "displays the task duration" do
-            expect { run(subject) }.to change { subject.sequence.length }.by(1)
-            expect(subject.sequence[0]).to eql(stdout: "")
+          it "displays nothing" do
+            expect { run(subject) }.not_to change { subject.sequence.length }
           end
         end
       end
@@ -188,9 +187,8 @@ describe Pomodoro::Commands::Active do
         context "it doesn't have duration" do
           let(:task) { '[7:50-???] Active task.' }
 
-          it "displays the task duration" do
-            expect { run(subject) }.to change { subject.sequence.length }.by(1)
-            expect(subject.sequence[0]).to eql(stdout: "")
+          it "displays nothing" do
+            expect { run(subject) }.not_to change { subject.sequence.length }
           end
         end
       end

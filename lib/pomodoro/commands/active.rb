@@ -18,7 +18,10 @@ class Pomodoro::Commands::Active < Pomodoro::Commands::Command
     Formatter.new(:start_time, '%s'), # NOTE: no need time, since after that, the task is no longer active, right?
     Formatter.new(:duration, '%d'),
     Formatter.new(:remaining_duration, '%rd') do |time_frame, task|
-      task.duration ? task.remaining_duration(time_frame) : nil
+      if task.duration
+        result = task.remaining_duration(time_frame)
+        result.minutes <= 0 ? 0 : result
+      end
     end,
     Formatter.new(:time_frame, '%tf') do |time_frame, _|
       time_frame.name
@@ -38,12 +41,14 @@ class Pomodoro::Commands::Active < Pomodoro::Commands::Command
     active_task = today_list.active_task
     exit 1 unless active_task
 
-    current_time_frame = today_list.current_time_frame
+    # The time frame is not necessarily current: if the task is marked as active,
+    # but the time frame has ended, we still want to show both (or neither).
+    time_frame = today_list.time_frames.find { |time_frame| time_frame.items.include?(active_task) }
 
     if format_string = @args.shift
       puts(FORMATTERS.reduce(format_string.dup) do |format_string, formatter|
         if format_string.match(formatter.pattern)
-          value = formatter.call(current_time_frame, active_task)
+          value = formatter.call(time_frame, active_task)
           format_string.gsub!(formatter.pattern, value.to_s)
         end
         format_string

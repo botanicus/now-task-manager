@@ -41,18 +41,16 @@ describe Pomodoro::Commands::Active do
   end
 
   context "with a valid config" do
-    let(:data) do
-      <<-EOF.gsub(/^\s*/, '')
-        Admin (0:00 – 23:59)
-        - [7:50-???] [20] Active task.
-        - Active task.
-      EOF
+    let(:time_frame_end_time) { h('23:59') }
+
+    let(:task) do
+      '[7:50-???] [20] Active task.'
     end
 
-    let(:active_task_with_no_duration) do
+    let(:data) do
       <<-EOF.gsub(/^\s*/, '')
-        Admin (0:00 – 23:59)
-        - [7:50-???] Active task.
+        Admin (0:00 – #{time_frame_end_time})
+        - #{task}
         - Active task.
       EOF
     end
@@ -137,7 +135,7 @@ describe Pomodoro::Commands::Active do
         end
 
         context "it doesn't have duration" do
-          let(:data) { active_task_with_no_duration }
+          let(:task) { '[7:50-???] Active task.' }
 
           it "displays the task duration" do
             expect { run(subject) }.to change { subject.sequence.length }.by(1)
@@ -153,17 +151,42 @@ describe Pomodoro::Commands::Active do
           expect(described_class.help).to match(format_string)
         end
 
-        context "it has duration" do
+        context "it has duration and the time frame ends after the task does" do
           it "displays the task remaining duration" do
             Timecop.freeze(h('8:00').to_time) do
               expect { run(subject) }.to change { subject.sequence.length }.by(1)
               expect(subject.sequence[0]).to eql(stdout: "0:10")
             end
           end
+
+          it "displays 0 if the task already ended" do
+            Timecop.freeze(h('9:00').to_time) do
+              expect { run(subject) }.to change { subject.sequence.length }.by(1)
+              expect(subject.sequence[0]).to eql(stdout: "0")
+            end
+          end
+        end
+
+        context "it has duration and the time frame ends after the task does" do
+          let(:time_frame_end_time) { h('8:05') }
+
+          it "displays the time frame remaining duration" do
+            Timecop.freeze(h('8:00').to_time) do
+              expect { run(subject) }.to change { subject.sequence.length }.by(1)
+              expect(subject.sequence[0]).to eql(stdout: "0:05")
+            end
+          end
+
+          it "displays 0 if the task already ended" do
+            Timecop.freeze(h('9:00').to_time) do
+              expect { run(subject) }.to change { subject.sequence.length }.by(1)
+              expect(subject.sequence[0]).to eql(stdout: "0")
+            end
+          end
         end
 
         context "it doesn't have duration" do
-          let(:data) { active_task_with_no_duration }
+          let(:task) { '[7:50-???] Active task.' }
 
           it "displays the task duration" do
             expect { run(subject) }.to change { subject.sequence.length }.by(1)

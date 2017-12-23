@@ -2,8 +2,6 @@ require 'abbrev'
 require 'pomodoro/scheduler'
 
 class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
-  using RR::ColourExts
-
   # TODO: now g u_ani +normal_daily_routine -swimming_daily_routine
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <red>g</red> holidays     <bright_black># Generate task list for today.</bright_black>
@@ -49,12 +47,12 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
       end
     end
 
-    puts "~ Schedule: <magenta>#{schedule.name}</magenta>.".colourise
+    puts "~ Schedule: <magenta>#{schedule.name}</magenta>."
 
     day = schedule.call
 
     if day.empty?
-      abort "<red>No data were found in the task list.</red>".colourise
+      abort "<red>No data were found in the task list.</red>"
     end
 
     scheduler.populate_from_rules(day.task_list, schedule: schedule, **options)
@@ -89,7 +87,7 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
 
           time_frame ||= day.task_list.time_frames.first
 
-          puts "~ Adding <green>#{task.body}</green> to <magenta>#{time_frame.name.downcase}</magenta>.".colourise
+          puts "~ Adding <green>#{task.body}</green> to <magenta>#{time_frame.name.downcase}</magenta>."
           time_frame.items << Pomodoro::Formats::Today::Task.new(
             status: :not_done, body: task.body, tags: task.tags,
             fixed_start_time: task.start_time)
@@ -120,7 +118,7 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
     @date = self.parse_date
 
     if File.exist?(self.date_path)
-      abort "<red>Error:</red> File #{self.date_path.sub(ENV['HOME'], '~')} already exists.".colourise
+      abort "<red>Error:</red> File #{self.date_path.sub(ENV['HOME'], '~')} already exists."
     end
 
     previous_day_task_list_path = self.config.today_path(@date - 1)
@@ -128,16 +126,16 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
       previous_day = Pomodoro::Formats::Today.parse(File.new(previous_day_task_list_path, encoding: 'utf-8'))
       postponed_tasks = previous_day.task_list.each_task_with_time_frame.select { |tf, task| task.postponed? }
       unless postponed_tasks.empty?
-        puts "~ <green>Migrating postponed tasks</green> from #{previous_day.date.strftime('%d/%m')}.".colourise
+        puts "~ <green>Migrating postponed tasks</green> from #{previous_day.date.strftime('%d/%m')}."
         scheduled_task_list = parse_task_list(self.config)
         postponed_tasks.each do |time_frame, task|
           scheduled_date = add_postponed_task_to_scheduled_list(scheduled_task_list, time_frame, task)
-          puts "  ~ Scheduling <green>#{task.body}</green> for <yellow>#{scheduled_date.downcase}</yellow>.".colourise
+          puts "  ~ Scheduling <green>#{task.body}</green> for <yellow>#{scheduled_date.downcase}</yellow>."
         end
         scheduled_task_list.save(self.config.task_list_path)
         puts
       else
-        puts "~ <green>No postponed tasks</green> from #{previous_day.date.strftime('%m/%d')}.".colourise
+        puts "~ <green>No postponed tasks</green> from #{previous_day.date.strftime('%m/%d')}."
       end
 
       # TODO: Warn about skipped tasks and print their list, wait for the user to acknowledge (STDIN.readline).
@@ -154,7 +152,7 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
     day.task_list.save(self.date_path)
     scheduled_task_list.save(self.config.task_list_path)
 
-    puts "~ <green>File #{date_path} has been created.</green>".colourise
+    puts "~ <green>File #{date_path} has been created.</green>"
   rescue Pomodoro::Config::ConfigFileMissingError => error
     abort "<red>#{error.message}</red>"
   end

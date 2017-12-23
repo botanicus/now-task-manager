@@ -1,6 +1,4 @@
 class Pomodoro::Commands::Log < Pomodoro::Commands::Command
-  using RR::ColourExts
-
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <green>log</green> key=value key=value <bright_black># ...</bright_black>
     now <green>log</green> weight=69.6
@@ -9,7 +7,7 @@ class Pomodoro::Commands::Log < Pomodoro::Commands::Command
 
   def run
     if @args.empty?
-      abort "<red>Usage:</red> now log key=value key=value".colourise
+      abort "<red>Usage:</red> now log key=value key=value"
     end
 
     must_exist(self.config.today_path)

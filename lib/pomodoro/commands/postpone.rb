@@ -6,15 +6,17 @@ class Pomodoro::Commands::Postpone < Pomodoro::Commands::Command
   def run
     must_exist(self.config.today_path)
 
-    print "<bold>Why?</bold> "
-    reason = STDIN.readline.chomp
-    print "<bold>When do you want to review?</bold> Defaults to tomorrow. "
-    review_at = STDIN.readline.chomp
-
-    # Ask for metadata and comments.
-    with_active_task(self.config) do |active_task|
-      review_at.empty? ? active_task.postpone!(reason) : active_task.postpone!(reason, review_at)
-      puts "<bold>~</bold> <green>#{active_task.body}</green> has been postponed."
+    if  with_active_task(self.config) do |active_task|
+          print "<bold>Why?</bold> "
+          reason = STDIN.readline.chomp
+          print "<bold>When do you want to review?</bold> Defaults to tomorrow. "
+          review_at = STDIN.readline.chomp
+          
+          review_at.empty? ? active_task.postpone!(reason) : active_task.postpone!(reason, review_at)
+          puts "<bold>~</bold> <green>#{unsentence(active_task.body)}</green> has been postponed."
+        end
+    else
+      abort "<red>There is no task in progress.</red>"
     end
   rescue Pomodoro::Config::ConfigFileMissingError => error
     abort "<red>#{error.message}</red>"

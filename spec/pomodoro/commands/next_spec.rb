@@ -42,7 +42,7 @@ describe Pomodoro::Commands::Next do
 
   context "with a valid config" do
     let(:config) do
-      OpenStruct.new(today_path: "spec/active_spec.#{rand(1000)}.today")
+      OpenStruct.new(today_path: "spec/data/#{described_class}.#{rand(1000)}.today")
     end
 
     before(:each) do

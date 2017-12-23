@@ -4,7 +4,6 @@ class Pomodoro::Commands::Next < Pomodoro::Commands::Command
   EOF
 
   def run
-    # require 'pry'; binding.pry ###
     unless File.exist?(self.config.today_path)
       abort "<red>! File #{self.config.today_path.sub(ENV['HOME'], '~')} doesn't exist</red>"
     end

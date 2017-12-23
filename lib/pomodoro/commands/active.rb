@@ -11,8 +11,6 @@ class Pomodoro::Commands::Active < Pomodoro::Commands::Command
     end
   end
 
-  using RR::ColourExts
-
   FORMATTERS ||= [
     Formatter.new(:body, '%b'),
     Formatter.new(:start_time, '%s'), # NOTE: no need time, since after that, the task is no longer active, right?

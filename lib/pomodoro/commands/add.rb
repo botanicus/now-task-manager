@@ -1,6 +1,4 @@
 class Pomodoro::Commands::Add < Pomodoro::Commands::Command
-  using RR::ColourExts
-
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <red>+</red> [strings]<bright_black> # Add a task for later.</bright_black>
   EOF

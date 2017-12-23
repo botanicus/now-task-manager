@@ -1,6 +1,4 @@
 class Pomodoro::Commands::GenerateUpcomingEvents < Pomodoro::Commands::Command
-  using RR::ColourExts
-
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <blue>generate-upcoming-events</blue> <bright_black># ...</bright_black>
   EOF

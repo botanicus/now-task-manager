@@ -1,6 +1,7 @@
 require 'spec_helper'
 require 'ostruct'
 require 'date'
+require 'timecop'
 require 'pomodoro/config'
 require 'pomodoro/commands'
 
@@ -12,38 +13,52 @@ describe Pomodoro::Commands::Config do
     end
   end
 
+  let(:args) { Array.new }
+
   subject do
     described_class.new(args, config).extend(CLITestHelpers)
   end
 
-  let(:config) do
-    Pomodoro::Config.new('spec/data/now-task-manager.yml')
-  end
+  context "without config" do
+    let(:config) do
+      Pomodoro::Config.new('non-existent-now-task-manager.yml')
+    end
 
-  let(:args) { Array.new }
-
-  context "with no arguments" do
-    it "prints out the whole config" do
+    it "fails" do
       expect { run(subject) }.to change { subject.sequence.length }.by(1)
-      expect(subject.sequence[0].keys[0]).to eql(:p)
+      require 'pry'; binding.pry ###
+      expect(subject.sequence[0]).to eql(abort: "<red>The config file non-existent-now-task-manager.yml doesn't exist.</red>")
     end
   end
 
-  context "with a key" do
-    let(:args) { ['today_path'] }
-
-    it "prints out its value" do
-      expect { run(subject) }.to change { subject.sequence.length }.by(1)
-      expect(subject.sequence[0][:stdout]).to match("/#{Date.today.strftime('%Y-%m-%d')}.today")
+  context "with a valid config" do
+    let(:config) do
+      Pomodoro::Config.new('spec/data/now-task-manager.yml')
     end
-  end
 
-  context "with a key and an argument" do
-    let(:args) { ['today_path', '2015-01-31'] }
+    context "with no arguments" do
+      it "prints out the whole config" do
+        expect { run(subject) }.to change { subject.sequence.length }.by(1)
+        expect(subject.sequence[0].keys[0]).to eql(:p)
+      end
+    end
 
-    it "prints out its value" do
-      expect { run(subject) }.to change { subject.sequence.length }.by(1)
-      expect(subject.sequence[0][:stdout]).to match("/2015-01-31.today")
+    context "with a key" do
+      let(:args) { ['today_path'] }
+
+      it "prints out its value" do
+        expect { run(subject) }.to change { subject.sequence.length }.by(1)
+        expect(subject.sequence[0][:stdout]).to match("/#{Date.today.strftime('%Y-%m-%d')}.today")
+      end
+    end
+
+    context "with a key and an argument" do
+      let(:args) { ['today_path', '2015-01-31'] }
+
+      it "prints out its value" do
+        expect { run(subject) }.to change { subject.sequence.length }.by(1)
+        expect(subject.sequence[0][:stdout]).to match("/2015-01-31.today")
+      end
     end
   end
 end

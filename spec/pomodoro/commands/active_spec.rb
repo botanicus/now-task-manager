@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'ostruct'
+require 'timecop'
 require 'pomodoro/config'
 require 'pomodoro/commands'
 
@@ -11,8 +12,10 @@ describe Pomodoro::Commands::Active do
     end
   end
 
+  let(:args) { Array.new }
+
   subject do
-    described_class.new([], config).extend(CLITestHelpers)
+    described_class.new(args, config).extend(CLITestHelpers)
   end
 
   context "without config" do
@@ -91,9 +94,7 @@ describe Pomodoro::Commands::Active do
     end
 
     describe "formatters" do
-      subject do
-        described_class.new([format_string], config).extend(CLITestHelpers)
-      end
+      let(:args) { [format_string] }
 
       describe "the body formatter %b" do
         let(:format_string) { '%b' }
@@ -153,9 +154,11 @@ describe Pomodoro::Commands::Active do
         end
 
         context "it has duration" do
-          it "displays the task duration" do
-            pending "Use timecop or whatever is being used these days."
-            raise
+          it "displays the task remaining duration" do
+            Timecop.freeze(h('8:00').to_time) do
+              expect { run(subject) }.to change { subject.sequence.length }.by(1)
+              expect(subject.sequence[0]).to eql(stdout: "0:10")
+            end
           end
         end
 

@@ -44,7 +44,7 @@ describe Pomodoro::Commands::Config do
     context "with no arguments" do
       it "prints out the whole config" do
         expect { run(subject) }.to change { subject.sequence.length }.by(1)
-        expect(subject.sequence[0].keys[0]).to eql(:p)
+        expect(subject.sequence[0][:p]).to be_kind_of(Pomodoro::Config)
       end
     end
 

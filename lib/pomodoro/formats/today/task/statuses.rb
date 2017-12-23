@@ -71,6 +71,7 @@ module Pomodoro::Formats::Today
       @status = :failed
       @lines << "Postponed: #{reason}"
       @lines << "Review at: #{next_review_date.iso8601}"
+
       next_review_date
     end
 

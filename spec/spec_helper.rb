@@ -43,7 +43,7 @@ module CLITestHelpers
   end
 
   def command(command)
-    self.sequence << {command: message}
+    self.sequence << {command: command}
   end
 
   def exit(value = nil)

@@ -6,6 +6,8 @@ class Pomodoro::Commands::Log < Pomodoro::Commands::Command
   EOF
 
   def run
+    warn "<bold>~</bold> <yellow>This functionality might be removed.</yellow>"
+
     if @args.empty?
       abort "<red>Usage:</red> now log key=value key=value"
     end

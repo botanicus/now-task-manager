@@ -15,7 +15,7 @@ module Pomodoro
       end
 
       def command(command)
-        %x{#{command}}
+        system(command)
       end
     end
 

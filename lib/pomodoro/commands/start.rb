@@ -7,11 +7,11 @@ class Pomodoro::Commands::Start < Pomodoro::Commands::Command
     must_exist(self.config.today_path)
 
     with_active_task(self.config) do |active_task|
-      abort "<red>There is an active task already:</red> #{active_task.body}"
+      abort "<red>There is an active task already:</red> #{unsentence(active_task.body)}."
     end
 
     edit_next_task_when_no_task_active(self.config) do |next_task|
-      puts "<bold>~</bold> <green>#{next_task.body}</green> has been started."
+      puts "<bold>~</bold> <green>#{unsentence(next_task.body)}</green> has been started."
       next_task.start!
     end
   rescue Pomodoro::Config::ConfigFileMissingError => error

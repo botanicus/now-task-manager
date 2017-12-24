@@ -32,7 +32,7 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
     self.config.today_path(@date)
   end
 
-  def populate_from_schedule_and_rules(**options)
+  def get_schedule(**options)
     scheduler = Pomodoro::Scheduler.load([self.config.schedule_path, self.config.routine_path], @date)
 
     if schedule_name = options.delete(:schedule)
@@ -46,6 +46,12 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
         raise "Cannot find any schedule for #{@date.strftime('%d/%m')}"
       end
     end
+
+    schedule
+  end
+
+  def populate_from_schedule_and_rules(**options)
+    schedule = self.get_schedule(**options)
 
     puts "~ Schedule: <magenta>#{schedule.name}</magenta>."
 

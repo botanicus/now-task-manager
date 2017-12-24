@@ -6,7 +6,7 @@ class Pomodoro::Commands::FailNext < Pomodoro::Commands::Command
   def run
     # Before we start asking, so we cannot wait for the exception.
     unless File.exist?(self.config.today_path)
-      abort "<red>! File #{self.config.today_path.sub(ENV['HOME'], '~')} doesn't exist</red>"
+      abort "<red>! File #{Pomodoro::Tools.format_path(self.config.today_path)} doesn't exist</red>"
     end
 
     print "<bold>Why?</bold> "

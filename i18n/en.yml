@@ -2,3 +2,6 @@ errors:
   config:
     missing_file: The config file %{path} doesn't exist.
     missing_key: "No such key: %{key}."
+commands:
+  generate:
+    alredy_exists: "<red>Error:</red> File %{path} already exists."

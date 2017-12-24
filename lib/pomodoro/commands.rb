@@ -29,7 +29,7 @@ module Pomodoro
 
       def must_exist(path, additional_info = nil)
         unless File.exist?(path)
-          abort ["<red>! File #{path.sub(ENV['HOME'], '~')} doesn't exist.</red>", additional_info].compact.join("\n  ")
+          abort ["<red>! File #{Pomodoro::Tools.format_path(path)} doesn't exist.</red>", additional_info].compact.join("\n  ")
         end
       end
 

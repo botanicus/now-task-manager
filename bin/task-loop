@@ -65,7 +65,7 @@ end
 
 today_list_path = Pomodoro::Config.new.today_path
 
-puts "<bold>~</bold> Watching <bright_black>#{today_list_path.sub(ENV['HOME'], '~')}</bright_black>.".colourise
+puts "<bold>~</bold> Watching <bright_black>#{Pomodoro::Tools.format_path(today_list_path)}</bright_black>.".colourise
 set_schedules(today_list_path)
 Filewatcher.new([today_list_path]).watch do |filename, event|
   begin

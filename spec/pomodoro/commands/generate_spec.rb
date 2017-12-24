@@ -13,4 +13,15 @@ describe Pomodoro::Commands::Generate do
   end
 
   include_examples(:missing_config)
+
+  context "with valid config" do
+    let(:config) do
+      Pomodoro::Config.new('spec/data/now-task-manager.yml')
+    end
+
+    it do
+      # require 'pry'; binding.pry ###
+      run(subject)
+    end
+  end
 end

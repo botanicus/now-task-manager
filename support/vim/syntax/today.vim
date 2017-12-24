@@ -9,6 +9,7 @@ endif
 " Groups so we can fold time frames.
 " Hide time frames where everything is done.
 
+syn match tagHeader '^@.\+\( @.\+\)*$'
 syn match timeFrameLabel '^[^#-][^(]\+'
 syn match taskDef '^- '
 "syn match comment '#.*$'
@@ -26,6 +27,7 @@ syn region celDescBlock start=":$" end="\n\n" fold transparent
 
 let b:current_syntax = "today"
 
+hi def link timeFrameLabel Comment
 hi def link timeFrameLabel Statement
 hi def link taskDef Constant
 "hi def link comment Comment

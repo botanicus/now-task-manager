@@ -1,6 +1,7 @@
 require 'abbrev'
 require 'pomodoro/scheduler'
 
+# TODO: maybe better "now plan tomorrow"?
 class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
   # TODO: now g u_ani +normal_daily_routine -swimming_daily_routine
   self.help = <<-EOF.gsub(/^\s*/, '')
@@ -64,7 +65,7 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
       abort "<red>No data were found in the task list.</red>"
     end
 
-    scheduler.populate_from_rules(day.task_list, schedule: schedule, **options)
+    scheduler.populate_from_rules(day.task_list, **options.merge(schedule: schedule))
 
     day
   end

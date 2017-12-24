@@ -1,4 +1,0 @@
-#!/bin/sh
-
-message=$(pomodoro active %B)
-git commit -m "$message"

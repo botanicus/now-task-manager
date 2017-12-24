@@ -23,7 +23,7 @@ class Pomodoro::Commands::Log < Pomodoro::Commands::Command
 
     time_frame do |today_list, current_time_frame|
       current_time_frame.items << item
-      today_list.save(config.today_path)
+      day.save(config.today_path)
     end
   rescue Pomodoro::Config::ConfigError => error
     abort "<red>#{error.message}</red>"

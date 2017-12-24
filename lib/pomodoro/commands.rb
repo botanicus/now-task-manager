@@ -56,7 +56,7 @@ module Pomodoro
           raise "There are 2 active tasks: #{active_tasks}"
         end
 
-        day.task_list
+        day
       end
 
       def parse_task_list(config)
@@ -64,20 +64,20 @@ module Pomodoro
       end
 
       def time_frame(config = self.config, &block)
-        today_list = parse_today_list(config)
+        day = parse_today_list(config)
 
-        unless current_time_frame = today_list.current_time_frame
+        unless current_time_frame = day.task_list.current_time_frame
           abort "<red>There is no active time frame.</red>"
         end
 
-        block.call(today_list, current_time_frame)
+        block.call(day, current_time_frame)
       end
 
       def with_active_task(config, &block)
-        today_list = parse_today_list(config)
-        if active_task = today_list.active_task
+        day = parse_today_list(config)
+        if active_task = day.task_list.active_task
           block.call(active_task)
-          today_list.save(config.today_path)
+          day.save(config.today_path)
           return true
         else
           return false
@@ -85,14 +85,14 @@ module Pomodoro
       end
 
       def edit_next_task_when_no_task_active(config, &block)
-        time_frame(config) do |today_list, current_time_frame|
-          if active_task = today_list.active_task
+        time_frame(config) do |day, current_time_frame|
+          if active_task = day.task_list.active_task
             abort "<red>There is an active task already:</red> #{active_task.body}"
           end
 
           if next_task = current_time_frame.first_unstarted_task
             block.call(next_task)
-            today_list.save(config.today_path)
+            day.save(config.today_path)
           else
             abort "<red>No more tasks in #{current_time_frame.name}</red>"
           end

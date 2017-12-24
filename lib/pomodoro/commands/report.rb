@@ -4,7 +4,7 @@ class Pomodoro::Commands::Report < Pomodoro::Commands::Command
   EOF
 
   def run
-    today_list = parse_today_list(self.config) if File.exist?(self.config.today_path)
+    today_list = parse_today_list(self.config).task_list if File.exist?(self.config.today_path)
     pattern = @args.shift
     selected_time_frames = today_list.time_frames.select { |time_frame| time_frame.name.match(/#{pattern}/) }
     selected_time_frames.each do |time_frame|

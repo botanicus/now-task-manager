@@ -10,7 +10,7 @@ class Pomodoro::Commands::Next < Pomodoro::Commands::Command
       warn "<yellow>There is a task in progress already:</yellow> #{Pomodoro::Tools.unsentence(active_task.body)}.\n\n"
     end
 
-    time_frame(self.config) do |today_list, current_time_frame|
+    time_frame(self.config) do |day, current_time_frame|
       if next_task = current_time_frame.first_unstarted_task
         puts "<bold>~</bold> The upcoming task is <green>#{Pomodoro::Tools.unsentence(next_task.body)}</green>."
       else

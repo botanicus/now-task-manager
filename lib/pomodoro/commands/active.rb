@@ -37,7 +37,7 @@ class Pomodoro::Commands::Active < Pomodoro::Commands::Command
 
   def run
     ensure_today
-    today_list = parse_today_list(self.config)
+    today_list = parse_today_list(self.config).task_list
 
     active_task = today_list.active_task
     exit 1 unless active_task

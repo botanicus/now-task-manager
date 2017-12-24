@@ -168,6 +168,9 @@ module Pomodoro
     require 'pomodoro/commands/show-schedule'
     self.command(:'show-schedule', Commands::ShowSchedule)
 
+    require 'pomodoro/commands/review'
+    self.command(:review, Commands::Review)
+
     require 'pomodoro/commands/bitbar'
     self.command(:bitbar, Commands::BitBar)
   end

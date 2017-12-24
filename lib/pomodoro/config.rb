@@ -42,15 +42,15 @@ module Pomodoro
     def inspect
       self.data && super
     end
-    #
-    # def data_root_path
-    #   data_root_path = File.expand_path(self.data.fetch('data_root_path'))
-    #   if File.directory?(data_root_path)
-    #     data_root_path
-    #   else
-    #     raise "data_root_path was supposed to be #{data_root_path}, but such path doesn't exist."
-    #   end
-    # end
+
+    def data_root_path(*chunks)
+      data_root_path = File.expand_path(self.data.fetch('data_root_path'))
+      if File.directory?(data_root_path)
+        [data_root_path, *chunks].join('/')
+      else
+        raise ConfigError.new("data_root_path was supposed to be #{data_root_path}, but such path doesn't exist.")
+      end
+    end
 
     [
       :task_list_path, :today_path, :schedule_path, :routine_path

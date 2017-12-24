@@ -12,8 +12,10 @@ class Pomodoro::Commands::Active < Pomodoro::Commands::Command
   end
 
   FORMATTERS ||= [
-    Formatter.new(:body, '%b'),
-    Formatter.new(:body, '%B'), # TODO: task.body vs. unsentence(task.body)
+    Formatter.new(:body, '%B'),
+    Formatter.new(:body_unsentenced, '%b') do |_, task|
+      Pomodoro::Tools.unsentence(task.body)
+    end,
     Formatter.new(:start_time, '%s'), # NOTE: no need for end time, since after that, the task is no longer active, right?
     Formatter.new(:duration, '%d'),
     Formatter.new(:remaining_duration, '%rd') do |time_frame, task|

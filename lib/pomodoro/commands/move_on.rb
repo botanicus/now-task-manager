@@ -11,7 +11,7 @@ class Pomodoro::Commands::MoveOn < Pomodoro::Commands::Command
           reason = STDIN.readline.chomp
           
           active_task.move_on!(reason)
-          puts "<bold>~</bold> You moved on from <green>#{unsentence(active_task.body)}</green>."
+          puts "<bold>~</bold> You moved on from <green>#{Pomodoro::Tools.unsentence(active_task.body)}</green>."
         end
     else
       abort "<red>There is no task in progress.</red>"

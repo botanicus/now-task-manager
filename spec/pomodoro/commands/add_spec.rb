@@ -28,7 +28,8 @@ describe Pomodoro::Commands::Add do
       after(:each)  { File.unlink(config.task_list_path) }
 
       it "adds the task into the 'Later' task group" do
-        expect { run(subject) }.not_to change { subject.sequence.length }
+        run(subject)
+        expect(subject.sequence[0]).to eql(exit: 0)
         expect(File.read(config.task_list_path)).to eql("Later\n- Do this and that.\n")
       end
 
@@ -45,7 +46,8 @@ describe Pomodoro::Commands::Add do
       after(:each)  { File.unlink(config.task_list_path) }
 
       it "adds the task into the 'Later' task group" do
-        expect { run(subject) }.not_to change { subject.sequence.length }
+        run(subject)
+        expect(subject.sequence[0]).to eql(exit: 0)
         expect(File.read(config.task_list_path)).to eql("Later\n- Do this and that.\n")
       end
 

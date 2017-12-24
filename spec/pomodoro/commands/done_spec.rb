@@ -21,7 +21,7 @@ describe Pomodoro::Commands::Done do
     end
 
     it "fails" do
-      expect { run(subject) }.to change { subject.sequence.length }.by(1)
+      run(subject)
       expect(subject.sequence[0]).to eql(abort: "<red>! File #{config.today_path} doesn't exist.</red>\n  Run the <yellow>g</yellow> command first.")
     end
   end
@@ -59,8 +59,9 @@ describe Pomodoro::Commands::Done do
     context "with an active task" do
       it "marks it as complete" do
         Timecop.freeze(h('9:00').to_time) do
-          expect { run(subject) }.to change { subject.sequence.length }.by(1)
+          run(subject)
           expect(subject.sequence[0]).to eql(stdout: "<bold>~</bold> <green>active task</green> has been finished.")
+          expect(subject.sequence[1]).to eql(exit: 0)
 
           expect(File.read(config.today_path)).to eql("Admin (0:00 – 23:59)\n✔ [7:50-9:00] Active task.\n")
         end
@@ -73,7 +74,7 @@ describe Pomodoro::Commands::Done do
       end
 
       it "aborts saying there is no task in progress" do
-        expect { run(subject) }.to change { subject.sequence.length }.by(1)
+        run(subject)
         expect(subject.sequence[0]).to eql(abort: "<red>There is no task in progress.</red>")
       end
     end

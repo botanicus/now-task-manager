@@ -30,7 +30,7 @@ module CLITestHelpers
   end
 
   def puts(message)
-    self.sequence << {stdout: message} # TODO: "#{message}\n"
+    self.sequence << {stdout: message}
   end
 
   def warn(message)
@@ -62,6 +62,7 @@ RSpec.configure do |config|
 
     def run(command)
       command.run
+      command.sequence << {exit: 0}
     rescue ExecutionFinished
     end
   }

@@ -30,7 +30,7 @@ describe Pomodoro::Commands::Config do
     # successfuly, but that's not true.
     it "fails" do
       pending "See the comment above."
-      expect { run(subject) }.to change { subject.sequence.length }.by(1)
+      run(subject)
       expect(subject.sequence[0]).to eql(abort: "<red>#{message}</red>")
     end
   end
@@ -42,8 +42,9 @@ describe Pomodoro::Commands::Config do
 
     context "with no arguments" do
       it "prints out the whole config" do
-        expect { run(subject) }.to change { subject.sequence.length }.by(1)
+        run(subject)
         expect(subject.sequence[0][:p]).to be_kind_of(Pomodoro::Config)
+        expect(subject.sequence[1]).to eql(exit: 0)
       end
     end
 
@@ -51,8 +52,9 @@ describe Pomodoro::Commands::Config do
       let(:args) { ['today_path'] }
 
       it "prints out its value" do
-        expect { run(subject) }.to change { subject.sequence.length }.by(1)
+        run(subject)
         expect(subject.sequence[0][:stdout]).to match("/#{Date.today.strftime('%Y-%m-%d')}.today")
+        expect(subject.sequence[1]).to eql(exit: 0)
       end
     end
 
@@ -60,8 +62,9 @@ describe Pomodoro::Commands::Config do
       let(:args) { ['today_path', '2015-01-31'] }
 
       it "prints out its value" do
-        expect { run(subject) }.to change { subject.sequence.length }.by(1)
+        run(subject)
         expect(subject.sequence[0][:stdout]).to match("/2015-01-31.today")
+        expect(subject.sequence[1]).to eql(exit: 0)
       end
     end
   end

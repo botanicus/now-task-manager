@@ -22,7 +22,7 @@ RSpec.shared_examples(:missing_config) do
     end
 
     it "fails" do
-      expect { run(subject) }.to change { subject.sequence.length }.by(1)
+      run(subject)
       expect(subject.sequence[0]).to eql(abort: "<red>#{message}</red>")
     end
   end

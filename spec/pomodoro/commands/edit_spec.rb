@@ -43,15 +43,16 @@ describe Pomodoro::Commands::Edit do
         it "fails" do
           File.unlink(config.today_path)
 
-          expect { run(subject) }.to change { subject.sequence.length }.by(1)
+          run(subject)
           expect(subject.sequence[0]).to eql(abort: "<red>! File #{config.today_path} doesn't exist.</red>\n  Run the <yellow>g</yellow> command first.")
         end
       end
 
       it do
         pending
-        expect { run(subject) }.to change { subject.sequence.length }.by(1)
+        run(subject)
         expect(subject.sequence[0]).to eql(command: "vim #{config.today_path}")
+        expect(subject.sequence[1]).to eql(exit: 0)
       end
     end
 
@@ -68,8 +69,9 @@ describe Pomodoro::Commands::Edit do
 
         it "fails" do
           pending
-          expect { run(subject) }.to change { subject.sequence.length }.by(1)
+          run(subject)
           expect(subject.sequence[0]).to eql(abort: "<red>! File non-existent.today doesn't exist</red>\n  Run the g command first.")
+          expect(subject.sequence[1]).to eql(exit: 0)
         end
       end
 
@@ -85,8 +87,9 @@ describe Pomodoro::Commands::Edit do
       end
 
       it do
-        expect { run(subject) }.to change { subject.sequence.length }.by(1)
+        run(subject)
         expect(subject.sequence[0]).to eql(command: "vim -O2 #{config.today_path} #{config.task_list_path}")
+        expect(subject.sequence[1]).to eql(exit: 0)
       end
     end
 
@@ -96,8 +99,9 @@ describe Pomodoro::Commands::Edit do
       it do
         pending "Config is just an open struct right now, it doesn't take arguments."
 
-        expect { run(subject) }.to change { subject.sequence.length }.by(1)
+        run(subject)
         expect(subject.sequence[0]).to eql(command: "vim #{config.today_path(Date.today + 1)}")
+        expect(subject.sequence[1]).to eql(exit: 0)
       end
     end
 
@@ -105,8 +109,9 @@ describe Pomodoro::Commands::Edit do
       let(:args) { ['tasks'] }
 
       it do
-        expect { run(subject) }.to change { subject.sequence.length }.by(1)
+        run(subject)
         expect(subject.sequence[0]).to eql(command: "vim #{config.task_list_path}")
+        expect(subject.sequence[1]).to eql(exit: 0)
       end
     end
 
@@ -114,7 +119,7 @@ describe Pomodoro::Commands::Edit do
       let(:args) { ['pastika'] }
 
       it do
-        expect { run(subject) }.to change { subject.sequence.length }.by(1)
+        run(subject)
         expect(subject.sequence[0]).to eql(abort: described_class.help)
       end
     end

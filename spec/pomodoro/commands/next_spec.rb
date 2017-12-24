@@ -21,7 +21,7 @@ describe Pomodoro::Commands::Next do
     end
 
     it "fails" do
-      expect { run(subject) }.to change { subject.sequence.length }.by(1)
+      run(subject)
       expect(subject.sequence[0]).to eql(abort: "<red>! File #{config.today_path} doesn't exist.</red>\n  Run the <yellow>g</yellow> command first.")
     end
   end
@@ -64,9 +64,10 @@ describe Pomodoro::Commands::Next do
     context "and an active task" do
       context "and a next task" do
         it "warns about the task in progress and prints out the upcoming one" do
-          expect { run(subject) }.to change { subject.sequence.length }.by(2)
+          run(subject)
           expect(subject.sequence[0]).to eql(warn: "<yellow>There is a task in progress already:</yellow> active task.\n\n")
           expect(subject.sequence[1]).to eql(stdout: "<bold>~</bold> The upcoming task is <green>upcoming task</green>.")
+          expect(subject.sequence[2]).to eql(exit: 0)
         end
       end
 
@@ -74,7 +75,7 @@ describe Pomodoro::Commands::Next do
         let(:coming_task) { }
 
         it "warns about the task in progress and prints out the upcoming one" do
-          expect { run(subject) }.to change { subject.sequence.length }.by(2)
+          run(subject)
           expect(subject.sequence[0]).to eql(warn: "<yellow>There is a task in progress already:</yellow> active task.\n\n")
           expect(subject.sequence[1]).to eql(abort: "<red>No more tasks in Admin.</red>")
         end
@@ -87,7 +88,7 @@ describe Pomodoro::Commands::Next do
 
         it "warns about the task in progress and aborts saying there is no active time frame" do
           Timecop.freeze(h('10:00').to_time) do
-            expect { run(subject) }.to change { subject.sequence.length }.by(2)
+            run(subject)
             expect(subject.sequence[0]).to eql(warn: "<yellow>There is a task in progress already:</yellow> active task.\n\n")
             expect(subject.sequence[1]).to eql(abort: "<red>There is no active time frame.</red>")
           end
@@ -100,7 +101,7 @@ describe Pomodoro::Commands::Next do
 
       context "and a next task" do
         it "prints out the upcoming one" do
-          expect { run(subject) }.to change { subject.sequence.length }.by(1)
+          run(subject)
           expect(subject.sequence[0]).to eql(stdout: "<bold>~</bold> The upcoming task is <green>upcoming task</green>.")
         end
       end
@@ -109,7 +110,7 @@ describe Pomodoro::Commands::Next do
         let(:coming_task) { }
 
         it "aborts saying there are no more tasks" do
-          expect { run(subject) }.to change { subject.sequence.length }.by(1)
+          run(subject)
           expect(subject.sequence[0]).to eql(abort: "<red>No more tasks in Admin.</red>")
         end
       end
@@ -124,7 +125,7 @@ describe Pomodoro::Commands::Next do
 
       it "aborts saying there are no more tasks" do
         Timecop.freeze(h('10:00').to_time) do
-          expect { run(subject) }.to change { subject.sequence.length }.by(1)
+          run(subject)
           expect(subject.sequence[0]).to eql(abort: "<red>There is no active time frame.</red>")
         end
       end

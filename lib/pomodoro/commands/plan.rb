@@ -32,7 +32,9 @@ class Pomodoro::Commands::Plan < Pomodoro::Commands::Command
   end
 
   def year_plan_path
-    self.config.data_root_path(@date.year + 1, 'year.plan')
+    # self.config.data_root_path(@date.year + 1, 'year.plan')
+    year = @date.year + 1
+    self.config.data_root_path(year, 'features', "#{year}.feature")
   end
 
   def run

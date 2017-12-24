@@ -171,6 +171,9 @@ module Pomodoro
     require 'pomodoro/commands/plan'
     self.command(:plan, Commands::Plan)
 
+    require 'pomodoro/commands/test'
+    self.command(:test, Commands::Test)
+
     require 'pomodoro/commands/review'
     self.command(:review, Commands::Review)
 

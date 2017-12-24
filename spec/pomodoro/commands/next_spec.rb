@@ -25,7 +25,7 @@ describe Pomodoro::Commands::Next do
 
     it "fails" do
       expect { run(subject) }.to change { subject.sequence.length }.by(1)
-      expect(subject.sequence[0]).to eql(abort: "<red>The config file non-existent-now-task-manager.yml doesn't exist.</red>")
+      expect(subject.sequence[0]).to eql(abort: "<red>#{I18n.t('errors.config.missing_file', path: 'non-existent-now-task-manager.yml')}</red>")
     end
   end
 

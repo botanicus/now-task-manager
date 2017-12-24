@@ -1,4 +1,5 @@
 require 'yaml'
+require 'pomodoro/locale'
 
 module Pomodoro
   def self.config
@@ -11,7 +12,10 @@ module Pomodoro
 
     class ConfigFileMissingError < ConfigError
       def initialize(config_path)
-        super("The config file #{config_path.sub(ENV['HOME'], '~')} doesn't exist.")
+        super(
+          I18n.t(
+            'errors.config.missing_file',
+            path: config_path.sub(ENV['HOME'], '~')))
       end
     end
 

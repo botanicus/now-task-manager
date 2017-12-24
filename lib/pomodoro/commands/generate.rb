@@ -32,9 +32,7 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
     self.config.today_path(@date)
   end
 
-  def get_schedule(**options)
-    scheduler = Pomodoro::Scheduler.load([self.config.schedule_path, self.config.routine_path], @date)
-
+  def get_schedule(scheduler, **options)
     if schedule_name = options.delete(:schedule)
       schedule = scheduler.schedules.find { |schedule| schedule.name == schedule_name.to_sym }
       unless schedule
@@ -51,7 +49,8 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
   end
 
   def populate_from_schedule_and_rules(**options)
-    schedule = self.get_schedule(**options)
+    scheduler = Pomodoro::Scheduler.load([self.config.schedule_path, self.config.routine_path], @date)
+    schedule = self.get_schedule(scheduler, **options)
 
     puts "~ Schedule: <magenta>#{schedule.name}</magenta>."
 

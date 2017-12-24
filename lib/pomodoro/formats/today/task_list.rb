@@ -129,13 +129,6 @@ module Pomodoro::Formats::Today
       end
     end
 
-    def save(path)
-      data = self.to_s
-      File.open(path, 'w:utf-8') do |file|
-        file.puts(data)
-      end
-    end
-
     # @!group Finders
 
     # Return the currently active task, regardless of the time frame we are in.

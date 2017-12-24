@@ -158,7 +158,7 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
     scheduled_task_list = parse_task_list(self.config)
     self.populate_from_scheduled_task_list(day, scheduled_task_list)
 
-    day.task_list.save(self.date_path)
+    day.save(self.date_path)
     scheduled_task_list.save(self.config.task_list_path)
 
     puts "~ <green>File #{Pomodoro::Tools.format_path(date_path)} has been created.</green>"

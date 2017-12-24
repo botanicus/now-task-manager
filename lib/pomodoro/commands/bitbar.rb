@@ -1,6 +1,6 @@
 class Pomodoro::Commands::BitBar < Pomodoro::Commands::Command
   def run
-    today_list = parse_today_list(self.config) if File.exist?(self.config.today_path)
+    today_list = parse_today_list(self.config).task_list if File.exist?(self.config.today_path)
     task_list  = parse_task_list(self.config)  if File.exist?(self.config.task_list_path)
     Pomodoro::Commands::BitBarUI.main(today_list, task_list)
   rescue Pomodoro::Config::ConfigError => error

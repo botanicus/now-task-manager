@@ -42,5 +42,17 @@ module Pomodoro::Formats::Today
     def normal?
       ([:holidays, :bedbound] & self.tags).empty?
     end
+
+    def save(path)
+      data = self.to_s
+      File.open(path, 'w:utf-8') do |file|
+        file.puts(data)
+      end
+    end
+
+    def to_s
+      self.tags.map { |tag| "@#{tag}" }.join(' ')
+      [(tags unless tags.empty?), self.task_list].compact.join("\n\n")
+    end
   end
 end

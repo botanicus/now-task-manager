@@ -1,3 +1,4 @@
+require 'yaml'
 require 'i18n'
 
 path = File.expand_path('../../../i18n/en.yml', __FILE__)

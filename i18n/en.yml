@@ -4,4 +4,4 @@ errors:
     missing_key: "No such key: %{key}."
 commands:
   generate:
-    alredy_exists: "<red>Error:</red> File %{path} already exists."
+    already_exists: "<red>Error:</red> File %{path} already exists."

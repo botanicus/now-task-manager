@@ -51,8 +51,8 @@ module Pomodoro::Formats::Today
     end
 
     def to_s
-      self.tags.map { |tag| "@#{tag}" }.join(' ')
-      [(tags unless tags.empty?), self.task_list].compact.join("\n\n")
+      header = self.tags.map { |tag| "@#{tag}" }.join(' ')
+      [(header unless tags.empty?), self.task_list].compact.join("\n\n")
     end
   end
 end

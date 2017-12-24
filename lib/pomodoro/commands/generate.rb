@@ -118,7 +118,7 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
     @date = self.parse_date
 
     if File.exist?(self.date_path)
-      abort "<red>Error:</red> File #{self.date_path.sub(ENV['HOME'], '~')} already exists."
+      abort(I18n.t('commands.generate.already_exists', path: Pomodoro::Tools.format_path(self.date_path)))
     end
 
     previous_day_task_list_path = self.config.today_path(@date - 1)

@@ -21,7 +21,7 @@ describe Pomodoro::Commands::Generate do
 
     it do
       # require 'pry'; binding.pry ###
-      run(subject)
+      # run(subject)
     end
   end
 end

@@ -48,8 +48,12 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
     schedule
   end
 
+  def get_scheduler(date)
+    Pomodoro::Scheduler.load([self.config.schedule_path, self.config.routine_path], date)
+  end
+
   def populate_from_schedule_and_rules(**options)
-    scheduler = Pomodoro::Scheduler.load([self.config.schedule_path, self.config.routine_path], @date)
+    scheduler = self.get_scheduler(@date)
     schedule = self.get_schedule(scheduler, **options)
 
     puts "~ Schedule: <magenta>#{schedule.name}</magenta>."

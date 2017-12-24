@@ -9,7 +9,7 @@ class Pomodoro::Commands::Edit < Pomodoro::Commands::Command
 
   def run
     if @args.empty?
-      self.ensure_today && command("vim #{self.config.today_path}")
+      self.ensure_today; command("vim #{self.config.today_path}")
     elsif @args.first.to_i == 2 # This could also be tomorrow + tasks, not just today + tasks.
       self.ensure_today; self.ensure_task_list
       command("vim -O2 #{self.config.today_path} #{self.config.task_list_path}")

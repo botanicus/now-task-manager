@@ -87,7 +87,7 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
 
           time_frame ||= day.task_list.time_frames.first
 
-          puts "~ Adding <green>#{task.body}</green> to <magenta>#{time_frame.name.downcase}</magenta>."
+          puts "~ Adding <green>#{Pomodoro::Tools.unsentence(task.body)}</green> to <magenta>#{time_frame.name.downcase}</magenta>."
           time_frame.items << Pomodoro::Formats::Today::Task.new(
             status: :not_done, body: task.body, tags: task.tags,
             fixed_start_time: task.start_time)
@@ -130,7 +130,7 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
         scheduled_task_list = parse_task_list(self.config)
         postponed_tasks.each do |time_frame, task|
           scheduled_date = add_postponed_task_to_scheduled_list(scheduled_task_list, time_frame, task)
-          puts "  ~ Scheduling <green>#{task.body}</green> for <yellow>#{scheduled_date.downcase}</yellow>."
+          puts "  ~ Scheduling <green>#{Pomodoro::Tools.unsentence(task.body)}</green> for <yellow>#{scheduled_date.downcase}</yellow>."
         end
         scheduled_task_list.save(self.config.task_list_path)
         puts

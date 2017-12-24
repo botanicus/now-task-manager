@@ -1,4 +1,4 @@
-class Pomodoro::Commands::Done < Pomodoro::Commands::Command
+class Pomodoro::Commands::Commit < Pomodoro::Commands::Command
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>commit</magenta> <bright_black># ...</bright_black>
     now commit -a|-v
@@ -11,6 +11,7 @@ class Pomodoro::Commands::Done < Pomodoro::Commands::Command
 
     if  with_active_task(self.config) do |active_task|
           arguments = [*@args, '-m', "'#{active_task.body}'"].join(' ')
+          puts("<bold>~</bold> Running <bright_black>git commit #{arguments}</bright_black>.\n\n")
           command("git commit #{arguments}")
         end
     else

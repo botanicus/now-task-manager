@@ -11,7 +11,7 @@ class Pomodoro::Commands::Start < Pomodoro::Commands::Command
     end
 
     edit_next_task_when_no_task_active(self.config) do |next_task|
-      puts "<bold>~</bold> <green>#{Pomodoro::Tools.unsentence(next_task.body)}</green> has been started."
+      puts "<bold>~</bold> Task <green>#{Pomodoro::Tools.unsentence(next_task.body)}</green> has been started."
       next_task.start!
     end
   rescue Pomodoro::Config::ConfigError => error

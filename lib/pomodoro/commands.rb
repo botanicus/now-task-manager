@@ -165,6 +165,9 @@ module Pomodoro
     require 'pomodoro/commands/console'
     self.command(:console, Commands::Console)
 
+    require 'pomodoro/commands/show-schedule'
+    self.command(:'show-schedule', Commands::ShowSchedule)
+
     require 'pomodoro/commands/bitbar'
     self.command(:bitbar, Commands::BitBar)
   end

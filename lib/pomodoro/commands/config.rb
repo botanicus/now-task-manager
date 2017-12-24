@@ -15,7 +15,7 @@ class Pomodoro::Commands::Config < Pomodoro::Commands::Command
 
       puts self.config.send(@args.first, *convert_arguments)
     end
-  rescue Pomodoro::Config::ConfigFileMissingError => error
+  rescue Pomodoro::Config::ConfigError => error
     abort "<red>#{error.message}</red>"
   end
 

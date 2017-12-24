@@ -29,8 +29,24 @@ module Pomodoro
 
       def must_exist(path, additional_info = nil)
         unless File.exist?(path)
-          abort ["<red>! File #{path.sub(ENV['HOME'], '~')} doesn't exist</red>", additional_info].compact.join("\n  ")
+          abort ["<red>! File #{path.sub(ENV['HOME'], '~')} doesn't exist.</red>", additional_info].compact.join("\n  ")
         end
+      end
+
+      def ensure_today(*args)
+        unless self.config.today_path
+          raise Pomodoro::Config::ConfigError.new('today_path')
+        end
+
+        self.must_exist(self.config.today_path(*args), "Run the <yellow>g</yellow> command first.")
+      end
+
+      def ensure_task_list
+        unless self.config.task_list_path
+          raise Pomodoro::Config::ConfigError.new('task_list_path')
+        end
+
+        self.must_exist(self.config.task_list_path)
       end
 
       def parse_today_list(config)

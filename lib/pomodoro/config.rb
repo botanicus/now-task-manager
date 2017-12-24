@@ -6,13 +6,16 @@ module Pomodoro
   end
 
   class Config
-    class ConfigFileMissingError < StandardError
+    class ConfigError < StandardError
+    end
+
+    class ConfigFileMissingError < ConfigError
       def initialize(config_path)
         super("The config file #{config_path.sub(ENV['HOME'], '~')} doesn't exist.")
       end
     end
 
-    class ConfigError < StandardError
+    class MissingKeyError < ConfigError
       def initialize(key)
         super("No such key: #{key}")
       end
@@ -49,7 +52,7 @@ module Pomodoro
     ].each do |key|
       define_method(key) do |time = Time.now|
         value = self.data.fetch(key.to_s) do
-          raise ConfigError.new(key)
+          raise MissingKeyError.new(key)
         end
 
         path = File.expand_path(time.strftime(value))

@@ -4,9 +4,7 @@ class Pomodoro::Commands::Next < Pomodoro::Commands::Command
   EOF
 
   def run
-    unless File.exist?(self.config.today_path)
-      abort "<red>! File #{self.config.today_path.sub(ENV['HOME'], '~')} doesn't exist</red>"
-    end
+    ensure_today
 
     with_active_task(self.config) do |active_task|
       warn "<yellow>There is a task in progress already:</yellow> #{unsentence(active_task.body)}.\n\n"
@@ -19,7 +17,7 @@ class Pomodoro::Commands::Next < Pomodoro::Commands::Command
         abort "<red>No more tasks in #{current_time_frame.name}.</red>"
       end
     end
-  rescue Pomodoro::Config::ConfigFileMissingError => error
+  rescue Pomodoro::Config::ConfigError => error
     abort "<red>#{error.message}</red>"
   end
 end

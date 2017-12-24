@@ -7,22 +7,6 @@ class Pomodoro::Commands::Edit < Pomodoro::Commands::Command
       <bright_black>now e <yellow>tomorrow</yellow></bright_black> Plan tomorrow.
   EOF
 
-  def ensure_today(*args)
-    unless self.config.today_path
-      raise Pomodoro::Config::ConfigError.new('today_path')
-    end
-
-    self.must_exist(self.config.today_path(*args), "Run the g command first.")
-  end
-
-  def ensure_task_list
-    unless self.config.task_list_path
-      raise Pomodoro::Config::ConfigError.new('task_list_path')
-    end
-
-    self.must_exist(self.config.task_list_path)
-  end
-
   def run
     if @args.empty?
       self.ensure_today && command("vim #{self.config.today_path}")
@@ -37,7 +21,7 @@ class Pomodoro::Commands::Edit < Pomodoro::Commands::Command
     else
       abort(self.class.help)
     end
-  rescue Pomodoro::Config::ConfigFileMissingError, Pomodoro::Config::ConfigError => error
+  rescue Pomodoro::Config::ConfigError => error
     abort "<red>#{error.message}</red>"
   end
 end

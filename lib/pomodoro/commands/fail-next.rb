@@ -15,7 +15,7 @@ class Pomodoro::Commands::FailNext < Pomodoro::Commands::Command
       next_task.fail!(reason)
       puts "<bold>~</bold> <green>#{next_task.body}</green> has been failed."
     end
-  rescue Pomodoro::Config::ConfigFileMissingError => error
+  rescue Pomodoro::Config::ConfigError => error
     abort "<red>#{error.message}</red>"
   end
 end

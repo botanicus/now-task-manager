@@ -17,7 +17,7 @@ class Pomodoro::Commands::PostponeNext < Pomodoro::Commands::Command
       review_at.empty? ? next_task.postpone!(reason) : next_task.postpone!(reason, review_at)
       puts "<bold>~</bold> <green>#{next_task.body}</green> has been postponed."
     end
-  rescue Pomodoro::Config::ConfigFileMissingError => error
+  rescue Pomodoro::Config::ConfigError => error
     abort "<red>#{error.message}</red>"
   end
 end

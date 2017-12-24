@@ -4,7 +4,7 @@ class Pomodoro::Commands::Start < Pomodoro::Commands::Command
   EOF
 
   def run
-    must_exist(self.config.today_path)
+    ensure_today
 
     with_active_task(self.config) do |active_task|
       abort "<red>There is an active task already:</red> #{unsentence(active_task.body)}."
@@ -14,7 +14,7 @@ class Pomodoro::Commands::Start < Pomodoro::Commands::Command
       puts "<bold>~</bold> <green>#{unsentence(next_task.body)}</green> has been started."
       next_task.start!
     end
-  rescue Pomodoro::Config::ConfigFileMissingError => error
+  rescue Pomodoro::Config::ConfigError => error
     abort "<red>#{error.message}</red>"
   end
 end

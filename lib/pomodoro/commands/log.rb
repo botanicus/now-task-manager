@@ -12,7 +12,7 @@ class Pomodoro::Commands::Log < Pomodoro::Commands::Command
       abort "<red>Usage:</red> now log key=value key=value"
     end
 
-    must_exist(self.config.today_path)
+    ensure_today
 
     data = @args.reduce(Hash.new) do |hash, pair_string|
       key, value = pair_string.split('=')
@@ -25,7 +25,7 @@ class Pomodoro::Commands::Log < Pomodoro::Commands::Command
       current_time_frame.items << item
       today_list.save(config.today_path)
     end
-  rescue Pomodoro::Config::ConfigFileMissingError => error
+  rescue Pomodoro::Config::ConfigError => error
     abort "<red>#{error.message}</red>"
   end
 end

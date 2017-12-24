@@ -3,6 +3,7 @@ PATH
   specs:
     now-task-manager (0.1.0)
       filewatcher (~> 1.0)
+      i18n (~> 0.9)
       parslet (~> 1.8)
       refined-refinements (~> 0.0.2)
       rufus-scheduler (~> 3.4)
@@ -12,6 +13,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     coderay (1.1.2)
+    concurrent-ruby (1.0.5)
     coveralls (0.8.21)
       json (>= 1.8, < 3)
       simplecov (~> 0.14.1)
@@ -25,6 +27,8 @@ GEM
     filewatcher (1.0.1)
       trollop (~> 2.1, >= 2.1.2)
     github-markup (1.6.2)
+    i18n (0.9.1)
+      concurrent-ruby (~> 1.0)
     json (2.1.0)
     method_source (0.9.0)
     parslet (1.8.1)

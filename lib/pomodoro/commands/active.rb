@@ -34,7 +34,7 @@ class Pomodoro::Commands::Active < Pomodoro::Commands::Command
   EOF
 
   def run
-    must_exist(self.config.today_path)
+    ensure_today
     today_list = parse_today_list(self.config)
 
     active_task = today_list.active_task
@@ -57,7 +57,7 @@ class Pomodoro::Commands::Active < Pomodoro::Commands::Command
     else
       p active_task
     end
-  rescue Pomodoro::Config::ConfigFileMissingError => error
+  rescue Pomodoro::Config::ConfigError => error
     abort "<red>#{error.message}</red>"
   end
 end

@@ -4,7 +4,7 @@ class Pomodoro::Commands::Postpone < Pomodoro::Commands::Command
   EOF
 
   def run
-    must_exist(self.config.today_path)
+    ensure_today
 
     if  with_active_task(self.config) do |active_task|
           print "<bold>Why?</bold> "
@@ -24,7 +24,7 @@ class Pomodoro::Commands::Postpone < Pomodoro::Commands::Command
     else
       abort "<red>There is no task in progress.</red>"
     end
-  rescue Pomodoro::Config::ConfigFileMissingError => error
+  rescue Pomodoro::Config::ConfigError => error
     abort "<red>#{error.message}</red>"
   end
 end

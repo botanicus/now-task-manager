@@ -36,7 +36,7 @@ describe Pomodoro::Commands::Postpone do
 
     it "fails" do
       expect { run(subject) }.to change { subject.sequence.length }.by(1)
-      expect(subject.sequence[0]).to eql(abort: "<red>! File #{config.today_path} doesn't exist</red>")
+      expect(subject.sequence[0]).to eql(abort: "<red>! File #{config.today_path} doesn't exist.</red>\n  Run the <yellow>g</yellow> command first.")
     end
   end
 

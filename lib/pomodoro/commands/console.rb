@@ -23,7 +23,7 @@ class Pomodoro::Commands::Console < Pomodoro::Commands::Command
 
     # Run ls to see the list of the local variables.
     require 'pry'; binding.pry
-  rescue Pomodoro::Config::ConfigFileMissingError => error
+  rescue Pomodoro::Config::ConfigError => error
     abort "<red>#{error.message}</red>"
   end
 end

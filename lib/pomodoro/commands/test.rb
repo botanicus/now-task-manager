@@ -4,6 +4,8 @@ class Pomodoro::Commands::Test < Pomodoro::Commands::Command
     now test # Defaults to the current year.
     now test 2018
     now test Q1
+    now test week # Test the last week.
+    now test weeks # Test all the weeks.
   EOF
 
   def run
@@ -11,10 +13,23 @@ class Pomodoro::Commands::Test < Pomodoro::Commands::Command
       @args.unshift(Date.today.year.to_s)
     end
 
-    Dir.chdir(self.config.data_root_path(@args.shift)) do
+    year = @args.shift
+
+    @args.map! do |argument|
+      if File.directory?("features/#{argument}") # months, weeks
+        "features/#{argument}"
+      elsif File.exist?("features/#{argument}.feature") # Q{1-4}
+        "features/#{argument}.feature"
+      elsif Date::MONTHNAMES.compact.include?(argument)
+        "features/months/#{argument}.feature"
+      elsif argument.match(/^\d+$/) && (1..52).include?(argument.to_i)
+        "features/weeks/#{argument}.feature"
+      end
+    end
+
+    Dir.chdir(self.config.data_root_path(year)) do
       puts "<bold>~</bold> Current directory: <green>#{Pomodoro::Tools.format_path(Dir.pwd)}</green>."
-      paths = @args.map { |i| "features/#{i}.feature"}
-      command("cucumber #{paths.join(' ')}") #bundle exec
+      command("cucumber #{@args.join(' ')}") #bundle exec
     end
   end
 end

@@ -1,63 +1,45 @@
+require 'pomodoro/router'
+
 class Pomodoro::Commands::Plan < Pomodoro::Commands::Command
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>plan</magenta> [<cyan>year</cyan>|<cyan>quarter</cyan>|<cyan>month</cyan>|<cyan>week</cyan>] <bright_black># Plan the coming time period.</bright_black>
+    now <magenta>plan</magenta> -1 [<cyan>year</cyan>|<cyan>quarter</cyan>|<cyan>month</cyan>|<cyan>week</cyan>] <bright_black># Open plan for the current time period.</bright_black>
   EOF
 
   def week_plan_path
-    if Date.new(@date.year, 12, 31).cweek == @date.cweek
-      # self.config.data_root_path(@date.year + 1, 1, "week-1.plan")
-      self.config.data_root_path(@date.year + 1, 'features', 'weeks', '1.plan')
-    else
-      monday_next_week = Date.new(@date.year, 1, 1) + (@date.cweek * 7) + 1
-      # self.config.data_root_path(@date.year, monday_next_week.month, "week-#{monday_next_week.cweek}.plan")
-      self.config.data_root_path(@date.year, 'features', 'weeks', "#{monday_next_week.cweek}.plan")
-    end
+    date = @args.include?('-1') ? Date.today : Date.today + 7
+    @router = Pomodoro::Router.new(self.config.data_root_path, date)
+    @router.week_plan_path
   end
 
   def month_plan_path
-    if @date.month == 12
-      year, month = @date.year + 1, 1
-    else
-      year, month = @date.year, @date.month + 1
-    end
-
-    # self.config.data_root_path(year, month, 'month.plan')
-    self.config.data_root_path(year, 'features', 'months', "#{month}.feature")
+    date = @args.include?('-1') ? Date.today : Date.today.next_month
+    @router = Pomodoro::Router.new(self.config.data_root_path, date)
+    @router.month_plan_path
   end
 
   def quarter_plan_path
-    # coming_quarter = (@date.month / 4) + 2
-    # if coming_quarter == 5
-    #   self.config.data_root_path(@date.year + 1, "Q1.plan")
-    # else
-    #   self.config.data_root_path(@date.year, "Q#{coming_quarter}.plan")
-    # end
-    coming_quarter = (@date.month / 4) + 2
-    if coming_quarter == 5
-      self.config.data_root_path(@date.year + 1, 'features', 'Q1.feature')
-    else
-      self.config.data_root_path(@date.year, 'features', "Q#{coming_quarter}.feature")
-    end
+    date = @args.include?('-1') ? Date.today : Date.today.next_month.next_month.next_month
+    @router = Pomodoro::Router.new(self.config.data_root_path, date)
+    @router.quarter_plan_path
   end
 
   def year_plan_path
-    # self.config.data_root_path(@date.year + 1, 'year.plan')
-    year = @date.year + 1
-    self.config.data_root_path(year, 'features', "#{year}.feature")
+    date = @args.include?('-1') ? Date.today : Date.today.next_year
+    @router = Pomodoro::Router.new(self.config.data_root_path, date)
+    @router.year_plan_path
   end
 
   def run
-    @date = Date.today
     period = @args.shift
-    root_dir = self.config.data_root_path(@date.year, 'features') ### This is imprecise.
 
     if self.respond_to?(:"#{period}_plan_path")
       path = self.send(:"#{period}_plan_path")
-      unless File.directory?(root_dir)
-        abort "<red>Features</red> in #{Pomodoro::Tools.format_path(root_dir)} are not initialised."
+      unless @router.features_path.directory?
+        abort "<red>Features</red> in #{Pomodoro::Tools.format_path(@router.features_path.to_s)} are not initialised."
       end
 
-      Dir.chdir(root_dir) do
+      Dir.chdir(@router.features_path.to_s) do
         unless File.directory?(File.dirname(path))
           command("mkdir -p #{File.dirname(path)}")
         end

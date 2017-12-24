@@ -21,35 +21,36 @@ module Pomodoro
 
     class MissingKeyError < ConfigError
       def initialize(key)
-        super("No such key: #{key}")
+        super(I18n.t('errors.config.missing_key', key: key))
       end
     end
 
     CONFIG_PATH ||= File.expand_path('~/.config/now-task-manager.yml')
 
     # Use Pomodoro.config instead of instantiating a new Config object.
-    def initialize(config_path = CONFIG_PATH)
-      @config_path = config_path
+    attr_reader :path
+    def initialize(path = CONFIG_PATH)
+      @path = path
     end
 
     def data
-      @data ||= YAML.load_file(@config_path)
+      @data ||= YAML.load_file(@path)
     rescue Errno::ENOENT
-      raise ConfigFileMissingError.new(@config_path)
+      raise ConfigFileMissingError.new(@path)
     end
 
     def inspect
       self.data && super
     end
-
-    def data_root_path
-      data_root_path = File.expand_path(self.data.fetch('data_root_path'))
-      if File.directory?(data_root_path)
-        data_root_path
-      else
-        raise "data_root_path was supposed to be #{data_root_path}, but such path doesn't exist."
-      end
-    end
+    #
+    # def data_root_path
+    #   data_root_path = File.expand_path(self.data.fetch('data_root_path'))
+    #   if File.directory?(data_root_path)
+    #     data_root_path
+    #   else
+    #     raise "data_root_path was supposed to be #{data_root_path}, but such path doesn't exist."
+    #   end
+    # end
 
     [
       :task_list_path, :today_path, :schedule_path, :routine_path

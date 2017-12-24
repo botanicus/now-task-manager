@@ -1,0 +1,4 @@
+errors:
+  config:
+    missing_file: The config file %{path} doesn't exist.
+    missing_key: "No such key: %{key}."

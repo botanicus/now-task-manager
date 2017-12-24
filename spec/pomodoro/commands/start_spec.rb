@@ -72,7 +72,7 @@ describe Pomodoro::Commands::Start do
         Timecop.freeze(h('9:00').to_time) do
           run(subject)
 
-          expect(subject.sequence[0]).to eql(stdout: "<bold>~</bold> <green>unstarted task</green> has been started.")
+          expect(subject.sequence[0]).to eql(stdout: "<bold>~</bold> Task <green>unstarted task</green> has been started.")
           expect(subject.sequence[1]).to eql(exit: 0)
 
           expect(File.read(config.today_path)).to eql("Admin (0:00 – 23:59)\n- [9:00-????] Unstarted task.\n")

@@ -49,7 +49,6 @@ describe Pomodoro::Commands::Edit do
       end
 
       it do
-        pending
         run(subject)
         expect(subject.sequence[0]).to eql(command: "vim #{config.today_path}")
         expect(subject.sequence[1]).to eql(exit: 0)

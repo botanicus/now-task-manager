@@ -10,7 +10,7 @@ module Pomodoro
 
       [:puts, :print, :warn, :abort].each do |method_name|
         define_method(method_name) do |message|
-          Kernel.send(method_name, message.colourise)
+          Kernel.send(method_name, message.to_s.colourise)
         end
       end
 

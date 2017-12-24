@@ -10,10 +10,11 @@ class Pomodoro::Commands::ShowSchedule < Pomodoro::Commands::Generate
   def run
     @date = self.parse_date
     options = self.group_args
-    schedule = self.get_schedule(**options)
+    scheduler = self.get_scheduler(@date)
+    schedule = self.get_schedule(scheduler, **options)
     day = schedule.call
     day.task_list.time_frames.each do |time_frame|
-      STDOUT.puts time_frame
+      puts time_frame
     end
   rescue Pomodoro::Config::ConfigError => error
     abort "<red>#{error.message}</red>"

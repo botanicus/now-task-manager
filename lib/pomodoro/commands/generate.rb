@@ -145,14 +145,14 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
 
     day = self.populate_from_schedule_and_rules(**options)
 
-    system("vim #{self.config.task_list_path}")
+    command("vim #{self.config.task_list_path}")
     scheduled_task_list = parse_task_list(self.config)
     self.populate_from_scheduled_task_list(day, scheduled_task_list)
 
     day.task_list.save(self.date_path)
     scheduled_task_list.save(self.config.task_list_path)
 
-    puts "~ <green>File #{date_path} has been created.</green>"
+    puts "~ <green>File #{Pomodoro::Tools.format_path(date_path)} has been created.</green>"
   rescue Pomodoro::Config::ConfigError => error
     abort "<red>#{error.message}</red>"
   end

@@ -19,9 +19,15 @@ describe Pomodoro::Commands::Generate do
       Pomodoro::Config.new('spec/data/now-task-manager.yml')
     end
 
+    after do
+      File.unlink(config.today_path)
+    end
+
     it do
-      # require 'pry'; binding.pry ###
-      # run(subject)
+      expect { run(subject) }.to change { subject.sequence.length }.by(3)
+      expect(subject.sequence[0]).to eql(stdout: "~ Schedule: <magenta>any</magenta>.")
+      expect(subject.sequence[1]).to eql(command: "vim #{config.task_list_path}")
+      expect(subject.sequence[2]).to eql(stdout: "~ <green>File #{Pomodoro::Tools.format_path(config.today_path)} has been created.</green>")
     end
   end
 end

@@ -21,7 +21,7 @@ describe Pomodoro::Commands::Active do
     end
 
     it "fails" do
-      expect { run(subject) }.to change { subject.sequence.length }.by(1)
+      run(subject)
       expect(subject.sequence[0]).to eql(abort: "<red>! File #{config.today_path} doesn't exist.</red>\n  Run the <yellow>g</yellow> command first.")
     end
   end
@@ -65,14 +65,14 @@ describe Pomodoro::Commands::Active do
       end
 
       it "exits with 1" do
-        expect { run(subject) }.to change { subject.sequence.length }.by(1)
+        run(subject)
         expect(subject.sequence[0]).to eql(exit: 1)
       end
     end
 
     context "with an active task" do
       it "prints out the active task" do
-        expect { run(subject) }.to change { subject.sequence.length }.by(1)
+        run(subject)
         expect(subject.sequence[0][:p]).to be_kind_of(Pomodoro::Formats::Today::Task)
       end
     end
@@ -88,7 +88,7 @@ describe Pomodoro::Commands::Active do
         end
 
         it "displays the task body" do
-          expect { run(subject) }.to change { subject.sequence.length }.by(1)
+          run(subject)
           expect(subject.sequence[0]).to eql(stdout: "Active task.")
         end
       end
@@ -101,7 +101,7 @@ describe Pomodoro::Commands::Active do
         end
 
         it "displays the task start time" do
-          expect { run(subject) }.to change { subject.sequence.length }.by(1)
+          run(subject)
           expect(subject.sequence[0]).to eql(stdout: "7:50")
         end
       end
@@ -115,7 +115,7 @@ describe Pomodoro::Commands::Active do
 
         context "it has duration" do
           it "displays the task duration" do
-            expect { run(subject) }.to change { subject.sequence.length }.by(1)
+            run(subject)
             expect(subject.sequence[0]).to eql(stdout: "0:20")
           end
         end
@@ -124,7 +124,8 @@ describe Pomodoro::Commands::Active do
           let(:task) { '[7:50-???] Active task.' }
 
           it "displays nothing" do
-            expect { run(subject) }.not_to change { subject.sequence.length }
+            run(subject)
+            expect(subject.sequence[0]).to eql(exit: 0)
           end
         end
       end
@@ -139,15 +140,17 @@ describe Pomodoro::Commands::Active do
         context "it has duration and the time frame ends after the task does" do
           it "displays the task remaining duration" do
             Timecop.freeze(h('8:00').to_time) do
-              expect { run(subject) }.to change { subject.sequence.length }.by(1)
+              run(subject)
               expect(subject.sequence[0]).to eql(stdout: "0:10")
+              expect(subject.sequence[1]).to eql(exit: 0)
             end
           end
 
           it "displays 0 if the task already ended" do
             Timecop.freeze(h('9:00').to_time) do
-              expect { run(subject) }.to change { subject.sequence.length }.by(1)
+              run(subject)
               expect(subject.sequence[0]).to eql(stdout: "0")
+              expect(subject.sequence[1]).to eql(exit: 0)
             end
           end
         end
@@ -157,15 +160,17 @@ describe Pomodoro::Commands::Active do
 
           it "displays the time frame remaining duration" do
             Timecop.freeze(h('8:00').to_time) do
-              expect { run(subject) }.to change { subject.sequence.length }.by(1)
+              run(subject)
               expect(subject.sequence[0]).to eql(stdout: "0:05")
+              expect(subject.sequence[1]).to eql(exit: 0)
             end
           end
 
           it "displays 0 if the task already ended" do
             Timecop.freeze(h('9:00').to_time) do
-              expect { run(subject) }.to change { subject.sequence.length }.by(1)
+              run(subject)
               expect(subject.sequence[0]).to eql(stdout: "0")
+              expect(subject.sequence[1]).to eql(exit: 0)
             end
           end
         end
@@ -174,7 +179,8 @@ describe Pomodoro::Commands::Active do
           let(:task) { '[7:50-???] Active task.' }
 
           it "displays nothing" do
-            expect { run(subject) }.not_to change { subject.sequence.length }
+            run(subject)
+            expect(subject.sequence[0]).to eql(exit: 0)
           end
         end
       end
@@ -187,8 +193,9 @@ describe Pomodoro::Commands::Active do
         end
 
         it "displays the task body" do
-          expect { run(subject) }.to change { subject.sequence.length }.by(1)
+          run(subject)
           expect(subject.sequence[0]).to eql(stdout: "Admin")
+          expect(subject.sequence[1]).to eql(exit: 0)
         end
       end
     end

@@ -21,7 +21,7 @@ describe Pomodoro::Commands::Start do
     end
 
     it "fails" do
-      expect { run(subject) }.to change { subject.sequence.length }.by(1)
+      run(subject)
       expect(subject.sequence[0]).to eql(abort: "<red>! File #{config.today_path} doesn't exist.</red>\n  Run the <yellow>g</yellow> command first.")
     end
   end
@@ -58,7 +58,7 @@ describe Pomodoro::Commands::Start do
 
     context "with an active task" do
       it "aborts saying there is an active task already" do
-        expect { run(subject) }.to change { subject.sequence.length }.by(1)
+        run(subject)
         expect(subject.sequence[0]).to eql(abort: "<red>There is an active task already:</red> active task.")
       end
     end
@@ -70,8 +70,10 @@ describe Pomodoro::Commands::Start do
 
       it "starts it" do
         Timecop.freeze(h('9:00').to_time) do
-          expect { run(subject) }.to change { subject.sequence.length }.by(1)
+          run(subject)
+          
           expect(subject.sequence[0]).to eql(stdout: "<bold>~</bold> <green>unstarted task</green> has been started.")
+          expect(subject.sequence[1]).to eql(exit: 0)
 
           expect(File.read(config.today_path)).to eql("Admin (0:00 – 23:59)\n- [9:00-????] Unstarted task.\n")
         end

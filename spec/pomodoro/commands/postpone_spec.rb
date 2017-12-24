@@ -21,7 +21,7 @@ describe Pomodoro::Commands::Postpone do
     end
 
     it "fails" do
-      expect { run(subject) }.to change { subject.sequence.length }.by(1)
+      run(subject)
       expect(subject.sequence[0]).to eql(abort: "<red>! File #{config.today_path} doesn't exist.</red>\n  Run the <yellow>g</yellow> command first.")
     end
   end
@@ -64,11 +64,12 @@ describe Pomodoro::Commands::Postpone do
           $stdin.rewind
 
           Timecop.freeze(Time.new(2017, 12, 23, 9)) do
-            expect { run(subject) }.to change { subject.sequence.length }.by(3)
+            run(subject)
 
             expect(subject.sequence[0]).to eql(stdout: "<bold>Why?</bold> ")
             expect(subject.sequence[1]).to eql(stdout: "<bold>When do you want to review?</bold> Defaults to tomorrow. Format <yellow>%d/%m</yellow> ")
             expect(subject.sequence[2]).to eql(stdout: "<bold>~</bold> <green>active task</green> has been postponed to <yellow>24/12</yellow>.")
+            expect(subject.sequence[3]).to eql(exit: 0)
 
             expect(File.read(config.today_path)).to eql("Admin (0:00 – 23:59)\n✘ [7:50-9:00] Active task.\n  Postponed: I need XYZ first.\n  Review at: 2017-12-24\n")
           end
@@ -82,11 +83,12 @@ describe Pomodoro::Commands::Postpone do
           $stdin.rewind
 
           Timecop.freeze(h('9:00').to_time) do
-            expect { run(subject) }.to change { subject.sequence.length }.by(3)
+            run(subject)
 
             expect(subject.sequence[0]).to eql(stdout: "<bold>Why?</bold> ")
             expect(subject.sequence[1]).to eql(stdout: "<bold>When do you want to review?</bold> Defaults to tomorrow. Format <yellow>%d/%m</yellow> ")
             expect(subject.sequence[2]).to eql(stdout: "<bold>~</bold> <green>active task</green> has been postponed to <yellow>31/1</yellow>.")
+            expect(subject.sequence[3]).to eql(exit: 0)
 
             expect(File.read(config.today_path)).to eql("Admin (0:00 – 23:59)\n✘ [7:50-9:00] Active task.\n  Postponed: I need XYZ first.\n  Review at: 2017-01-31\n")
           end
@@ -100,7 +102,7 @@ describe Pomodoro::Commands::Postpone do
       end
 
       it "aborts saying there is no task in progress" do
-        expect { run(subject) }.to change { subject.sequence.length }.by(1)
+        run(subject)
         expect(subject.sequence[0]).to eql(abort: "<red>There is no task in progress.</red>")
       end
     end

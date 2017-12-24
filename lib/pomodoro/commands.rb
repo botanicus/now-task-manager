@@ -155,6 +155,9 @@ module Pomodoro
     require 'pomodoro/commands/config'
     self.command(:config, Commands::Config)
 
+    require 'pomodoro/commands/commit'
+    self.command(:commit, Commands::Commit)
+
     require 'pomodoro/commands/report'
     self.command(:report, Commands::Report)
 

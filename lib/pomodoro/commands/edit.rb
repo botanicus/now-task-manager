@@ -18,6 +18,8 @@ class Pomodoro::Commands::Edit < Pomodoro::Commands::Command
       command("vim #{self.config.today_path(tomorrow)}")
     elsif ['tasks', 't'].include?(@args.first)
       self.ensure_task_list; command("vim #{self.config.task_list_path}")
+    elsif ['config', 'c'].include?(@args.first)
+      command("vim #{self.config.path}") # TODO: spec
     else
       abort(self.class.help)
     end

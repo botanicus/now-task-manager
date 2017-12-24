@@ -22,9 +22,13 @@ describe Pomodoro::Commands::Edit do
       Pomodoro::Config.new('non-existent-now-task-manager.yml')
     end
 
+    let(:message) do
+      I18n.t('errors.config.missing_file', path: 'non-existent-now-task-manager.yml')
+    end
+
     it "fails" do
       expect { run(subject) }.to change { subject.sequence.length }.by(1)
-      expect(subject.sequence[0]).to eql(abort: "<red>#{I18n.t('errors.config.missing_file', path: 'non-existent-now-task-manager.yml')}</red>")
+      expect(subject.sequence[0]).to eql(abort: "<red>#{message}</red>")
     end
   end
 

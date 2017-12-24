@@ -80,6 +80,19 @@ describe Pomodoro::Commands::Active do
     describe "formatters" do
       let(:args) { [format_string] }
 
+      describe "the body formatter %B" do
+        let(:format_string) { '%B' }
+
+        it "is described in help" do
+          expect(described_class.help).to match(format_string)
+        end
+
+        it "displays the task body" do
+          run(subject)
+          expect(subject.sequence[0]).to eql(stdout: "Active task.")
+        end
+      end
+
       describe "the body formatter %b" do
         let(:format_string) { '%b' }
 
@@ -89,7 +102,7 @@ describe Pomodoro::Commands::Active do
 
         it "displays the task body" do
           run(subject)
-          expect(subject.sequence[0]).to eql(stdout: "Active task.")
+          expect(subject.sequence[0]).to eql(stdout: "active task")
         end
       end
 

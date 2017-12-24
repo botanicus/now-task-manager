@@ -52,17 +52,7 @@ module CLITestHelpers
   end
 end
 
-# shared_examples_for(:command_with_help) do
-#   describe '.help' do
-#     it "has it" do
-#       expect(described_class).to respond_to(:help)
-#       expect(described_class.help.length).not_to be(0)
-#     end
-#   end
-# end
-#
-# shared_examples_for(:command_requiring_config) do
-# end
+require 'support/shared_command_examples'
 
 RSpec.configure do |config|
   config.include Module.new {

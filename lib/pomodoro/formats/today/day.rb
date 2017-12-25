@@ -23,7 +23,7 @@ module Pomodoro::Formats::Today
       @tags ||= if @nodes.first.is_a?(TimeFrame) || @nodes.first.nil?
         Array.new
       else
-        @nodes.first
+        @nodes.first[:tags]
       end
     end
 

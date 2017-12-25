@@ -10,7 +10,7 @@ class Pomodoro::Commands::Review < Pomodoro::Commands::Command
     period = @args.shift
 
     # TODO: refactor this.
-    if period == 'today'
+    if period.nil? || period == 'today'
       exec("vim #{self.config.today_path.sub(/\.today$/, '_review.md')}")
     end
 

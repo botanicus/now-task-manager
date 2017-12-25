@@ -29,19 +29,19 @@ module Pomodoro
 
     # Review.
     def week_review_path
-      self.week_plan_path.sub(/\.feature$/, '.review')
+      self.week_plan_path.sub(/\.feature$/, '_review.md')
     end
 
     def month_review_path
-      self.month_plan_path.sub(/\.feature$/, '.review')
+      self.month_plan_path.sub(/\.feature$/, '_review.md')
     end
 
     def quarter_review_path
-      self.quarter_plan_path.sub(/\.feature$/, '.review')
+      self.quarter_plan_path.sub(/\.feature$/, '_review.md')
     end
 
     def year_review_path
-      self.year_plan_path.sub(/\.feature$/, '.review')
+      self.year_plan_path.sub(/\.feature$/, '_review.md')
     end
   end
 end

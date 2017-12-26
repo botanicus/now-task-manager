@@ -29,9 +29,14 @@ class Pomodoro::Commands::BitBarUI
 
   def self.heading_work_in_progress(current_time_frame)
     colour = self.colour_based_on_remaining_duration(current_time_frame)
-    [colour, "#{current_time_frame.name} | color=#{colour}"]
+    if current_time_frame.active_task
+      [colour, "▶ #{current_time_frame.name} | color=#{colour}"]
+    else
+      [colour, "❙❙ #{current_time_frame.name} | color=#{colour}"]
+    end
   end
 
+  # TODO: grey if all done.
   def self.colour_based_on_remaining_duration(current_time_frame)
     if current_time_frame.remaining_duration.nil?
       'gray'

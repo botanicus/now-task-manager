@@ -144,7 +144,7 @@ module Pomodoro::Formats::Today
       @name.downcase.tr(' ', '_').to_sym
     end
 
-    def create_task(body, duration = nil, tags = Array.new)
+    def create_task(body, *tags)
       task = Task.new(status: :not_done, body: body, tags: tags)
       @items << task
       task

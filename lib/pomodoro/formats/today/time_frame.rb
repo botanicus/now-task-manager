@@ -145,7 +145,9 @@ module Pomodoro::Formats::Today
     end
 
     def create_task(body, duration = nil, tags = Array.new)
-      @items << Task.new(status: :not_done, body: body, tags: tags)
+      task = Task.new(status: :not_done, body: body, tags: tags)
+      @items << task
+      task
     end
 
     # def clear

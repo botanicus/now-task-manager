@@ -18,7 +18,7 @@ class Pomodoro::Commands::Review < Pomodoro::Commands::Command
     router = Pomodoro::Router.new(self.config.data_root_path, date)
 
     # TODO: refactor this.
-    if period.nil? || period == 'day'
+    if period.nil? || period == :day
       exec("vim #{self.config.today_path(date).sub(/\.today$/, '_review.md')}")
     end
 

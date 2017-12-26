@@ -29,7 +29,8 @@ module Pomodoro::Formats::Today
     include TaskStatuses
     include DynamicAdditions
 
-    attr_reader :status, :body, :start_time, :end_time, :fixed_start_time, :duration, :tags, :lines, :metadata
+    attr_reader :status, :body, :start_time, :end_time, :fixed_start_time, :tags, :lines, :metadata
+    attr_accessor :duration
     def initialize(status:, body:, start_time: nil, end_time: nil, fixed_start_time: nil, duration: nil, tags: [], lines: [])
       @status, @body, @tags, @duration, @lines = status, body, tags, duration, lines
       @start_time, @end_time, @fixed_start_time = start_time, end_time, fixed_start_time

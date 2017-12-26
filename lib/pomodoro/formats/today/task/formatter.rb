@@ -5,7 +5,7 @@ module Pomodoro::Formats::Today
       if task.start_time || task.end_time
         output << "[#{self.format_duration(task.start_time, task.end_time)}]"
       else
-        output << "[#{task.duration}]" if task.duration
+        output << "[#{task.duration.minutes}]" if task.duration
       end
       output << task.body
       output << task.tags.map { |tag| "##{tag}"}.join(' ') unless task.tags.empty?

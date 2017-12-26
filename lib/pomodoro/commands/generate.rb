@@ -134,7 +134,7 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
     previous_day_task_list_path = self.config.today_path(@date - 1)
     if File.exist?(previous_day_task_list_path)
       previous_day = Pomodoro::Formats::Today.parse(File.new(previous_day_task_list_path, encoding: 'utf-8'))
-      postponed_tasks = previous_day.task_list.each_task_with_time_frame.select { |tf, task| task.postponed? }
+      postponed_tasks = previous_day.task_list.each_task_with_time_frame.select { |tf, task| task.postponed? || task.skipped?(tf) }
       unless postponed_tasks.empty?
         puts "~ <green>Migrating postponed tasks</green> from #{previous_day.date.strftime('%d/%m')}."
         scheduled_task_list = parse_task_list(self.config)

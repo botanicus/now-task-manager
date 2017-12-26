@@ -29,15 +29,43 @@ module Pomodoro
         @args, @config = args, config || Pomodoro.config
       end
 
-      def get_date
-        case (res = @args.grep(/^[-+]\d$/)).length
+      def get_period_and_date(default_period)
+        res = @args.grep(/^[-+]\d$/).grep_v(/^[-+]0$/).map(&:to_i)
+        period = (@args.shift && @args.shift || default_period).to_sym
+
+        case res.length
         when 0
-          Date.today
+          [period, Date.today]
         when 1
+          today = Date.today
+
+          today.define_singleton_method(:prev_week) do
+            self - 7
+          end
+
+          today.define_singleton_method(:next_week) do
+            self + 7
+          end
+
+          today.define_singleton_method(:prev_quarter) do
+            self.prev_month.prev_month.prev_month
+          end
+
+          today.define_singleton_method(:next_quarter) do
+            self.next_month.next_month.next_month
+          end
+
+          direction = (res[0] < 0) ? :prev : :next
+          method_name = :"#{direction}_#{period || :day}"
+
+          unless today.respond_to?(method_name)
+            raise ArgumentError.new("Unknown period: #{period}")
+          end
+
           @args.delete(res[0])
-          Date.today + res[0].to_i
+          [period, today.send(method_name)]
         else
-          raise ArgumentError.new("TODO")
+          raise ArgumentError.new("There cannot be more than 1 date indicator, was #{res.inspect}.")
         end
       end
 

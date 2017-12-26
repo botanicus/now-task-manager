@@ -191,6 +191,9 @@ module Pomodoro
     require 'pomodoro/commands/review'
     self.command(:review, Commands::Review)
 
+    require 'pomodoro/commands/run'
+    self.command(:run, Commands::Run)
+
     require 'pomodoro/commands/bitbar'
     self.command(:bitbar, Commands::BitBar)
   end

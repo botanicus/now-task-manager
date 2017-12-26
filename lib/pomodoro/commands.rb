@@ -29,6 +29,18 @@ module Pomodoro
         @args, @config = args, config || Pomodoro.config
       end
 
+      def get_date
+        case (res = @args.grep(/^[-+]\d$/)).length
+        when 0
+          Date.today
+        when 1
+          @args.delete(res[0])
+          Date.today + res[0].to_i
+        else
+          raise ArgumentError.new("TODO")
+        end
+      end
+
       def must_exist(path, additional_info = nil)
         unless File.exist?(path)
           abort ["<red>! File #{Pomodoro::Tools.format_path(path)} doesn't exist.</red>", additional_info].compact.join("\n  ")

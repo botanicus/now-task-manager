@@ -9,8 +9,10 @@ module Pomodoro
       using RR::ColourExts
 
       [:puts, :print, :warn, :abort].each do |method_name|
-        define_method(method_name) do |message|
-          Kernel.send(method_name, message.to_s.colourise)
+        define_method(method_name) do |*args|
+          Kernel.send(method_name, *args.map do |argument|
+            argument.is_a?(String) ? argument.colourise : argument
+          end)
         end
       end
 

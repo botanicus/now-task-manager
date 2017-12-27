@@ -3,6 +3,8 @@ require 'pomodoro/scheduler'
 
 # TODO: maybe better "now plan tomorrow"?
 class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
+  self.description = "Generate today list for today or tomorrow."
+
   # TODO: now g u_ani +normal_daily_routine -swimming_daily_routine
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <red>g</red> holidays     <bright_black># Generate task list for today.</bright_black>

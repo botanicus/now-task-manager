@@ -1,6 +1,8 @@
 class Pomodoro::Commands::FailNext < Pomodoro::Commands::Command
+  self.description = "<red>Fail</red> the next command."
+
   self.help = <<-EOF.gsub(/^\s*/, '')
-    now <magenta>fail-next</magenta> <bright_black># ...</bright_black>
+    now <magenta>fail-next</magenta> <bright_black># #{self.description}</bright_black>
   EOF
 
   def run

@@ -6,6 +6,6 @@ require 'refined-refinements/colours'
 using RR::ColourExts
 
 puts Pomodoro::Commander.commands.map { |key, cmd|
-  next unless cmd.help
-  "'#{key}:#{cmd.help.split("\n").first.gsub("'", "''")}'"
+  next unless cmd.description
+  "'#{key}:#{cmd.description.gsub("'", "''")}'"
 }.compact.join("\n").colourise

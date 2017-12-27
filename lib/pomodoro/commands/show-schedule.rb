@@ -1,6 +1,8 @@
 require_relative 'generate'
 
 class Pomodoro::Commands::ShowSchedule < Pomodoro::Commands::Generate
+  self.description = "Print out the <magenta>schedule</magenta>."
+
   self.help = <<-EOF.gsub(/^\s*/, '')
     now show-schedule
     now show-schedule +1

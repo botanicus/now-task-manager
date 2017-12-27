@@ -1,6 +1,8 @@
 require 'pomodoro/router'
 
 class Pomodoro::Commands::Plan < Pomodoro::Commands::Command
+  self.description = "Plan given time period."
+
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>plan</magenta> [<cyan>year</cyan>|<cyan>quarter</cyan>|<cyan>month</cyan>|<cyan>week</cyan>] <bright_black># Plan the coming time period.</bright_black>
     now <magenta>plan</magenta> -1 [<cyan>year</cyan>|<cyan>quarter</cyan>|<cyan>month</cyan>|<cyan>week</cyan>] <bright_black># Open plan for the current time period.</bright_black>

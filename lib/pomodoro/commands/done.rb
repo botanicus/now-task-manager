@@ -1,6 +1,8 @@
 class Pomodoro::Commands::Done < Pomodoro::Commands::Command
+  self.description = "<green>Complete</green> the active task."
+
   self.help = <<-EOF.gsub(/^\s*/, '')
-    now <magenta>done</magenta> <bright_black># Complete the active task.</bright_black>
+    now <magenta>done</magenta> <bright_black># #{self.description}</bright_black>
   EOF
 
   def run

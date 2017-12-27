@@ -24,6 +24,14 @@ module Pomodoro
     class Command < RR::Command
       include EnvironmentCommunication
 
+      def self.description
+        @description
+      end
+
+      def self.description=(description)
+        @description = description
+      end
+
       attr_reader :config
       def initialize(args, config = nil)
         @args, @config = args, config || Pomodoro.config

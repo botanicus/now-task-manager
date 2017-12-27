@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+require 'pomodoro/commands'
+require 'refined-refinements/colours'
+
+using RR::ColourExts
+
+puts Pomodoro::Commander.commands.map { |key, cmd|
+  next unless cmd.help
+  "'#{key}:#{cmd.help.split("\n").first.gsub("'", "''")}'"
+}.compact.join("\n").colourise

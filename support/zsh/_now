@@ -1,0 +1,37 @@
+#compdef now
+_now() {
+  local -a commands
+  commands=(
+    'active:    [90m# Print the active task. Exit 1 if there is none.[0m'
+    'next:now [32mnext[0m [90m# Print the next task. Exit 1 if there is none.[0m'
+    'start:now [35mstart[0m [90m# Start a new task.[0m'
+    'done:now [35mdone[0m [90m# Complete the active task.[0m'
+    'move_on:now [35mmove_on[0m [90m# Move on from the active task. Mark its end time, but don''t set it as completed.[0m'
+    'postpone:now [35mpostpone[0m [90m# Postpone the active task.[0m'
+    'fail-next:now [35mfail-next[0m [90m# ...[0m'
+    'postpone-next:now [35mpostpone-next[0m [90m# ...[0m'
+    'tick-off-next:now [35mtick-off-next[0m [90m# ...[0m'
+    'e:now [32medit[0m, now [32me[0m'
+    'g:now [31mg[0m holidays     [90m# Generate task list for today.[0m'
+    '+:now [31m+[0m [strings][90m # Add a task for later.[0m'
+    'generate-upcoming-events:now [34mgenerate-upcoming-events[0m [90m# ...[0m'
+    'log:now [32mlog[0m key=value key=value [90m# ...[0m'
+    'config:now [33mconfig[0m'
+    'commit:now [35mcommit[0m [90m# ...[0m'
+    'report:now [35mreport[0m pattern[90m# ...[0m'
+    'console:now [33mconsole[0m, now [33mc[0m [90m# Load the tasks and launch IRB.[0m'
+    'show-schedule:now show-schedule'
+    'plan:now [35mplan[0m [[36myear[0m|[36mquarter[0m|[36mmonth[0m|[36mweek[0m] [90m# Plan the coming time period.[0m'
+    'test:now [35mtest[0m [[36myear[0m|[36mquarter[0m|[36mmonth[0m|[36mweek[0m] [90m# Plan the coming time period.[0m'
+    'review:now [35mreview[0m                                    [90m# Journal for today.[0m'
+    'run:now [35mrun[0m [90m# ...[0m'
+  )
+
+  if (( CURRENT == 2 )); then
+    _describe -t commands 'commands' commands
+  fi
+
+  return 0
+}
+
+_now

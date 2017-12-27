@@ -1,4 +1,5 @@
 #compdef now
+
 _now() {
   local -a commands
   commands=(

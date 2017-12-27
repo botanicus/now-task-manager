@@ -68,5 +68,6 @@ class NamedCommandDSL
         puts line
       end
     end
+  rescue EOFError
   end
 end

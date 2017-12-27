@@ -39,7 +39,7 @@ module Pomodoro
 
       def get_period_and_date(default_period)
         res = @args.grep(/^[-+]\d$/).grep_v(/^[-+]0$/).map(&:to_i)
-        period = (@args.shift && @args.shift || default_period).to_sym
+        period = (@args.first && @args.shift || default_period).to_sym
 
         case res.length
         when 0
@@ -70,8 +70,12 @@ module Pomodoro
             raise ArgumentError.new("Unknown period: #{period}")
           end
 
+          result = res[0].abs.times.reduce(today) do |last_result|
+            last_result.send(method_name)
+          end
+
           @args.delete(res[0])
-          [period, today.send(method_name)]
+          [period, result]
         else
           raise ArgumentError.new("There cannot be more than 1 date indicator, was #{res.inspect}.")
         end

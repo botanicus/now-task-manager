@@ -11,7 +11,7 @@ class Pomodoro::Commands::Start < Pomodoro::Commands::Command
 
     unless (@args & ['--confirm', '-c']).empty?
       Pomodoro::Commands::Next.new(Array.new).run
-      print "\n<bold>Start?</bold> "
+      print "\n<bold>Start?</bold> " # TODO: Allow edit.
       STDIN.readline
     end
 

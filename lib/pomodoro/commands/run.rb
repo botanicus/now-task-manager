@@ -64,12 +64,7 @@ class NamedCommandDSL
   end
 
   def sh(command)
-    puts "~ Running <bright_black>#{command}</bright_black>." # TODO: colourise
-    IO.popen(command, err: [:child, :out]) do |io|
-      while line = io.readline
-        puts line
-      end
-    end
-  rescue EOFError
+    system("zsh -c #{command}")
+  rescue Interrupt
   end
 end

@@ -119,6 +119,16 @@ module Pomodoro::Formats::Today
       start_time <= current_time && end_time > current_time
     end
 
+    def ended?(current_time = Hour.now, next_time_frame_start_time = nil)
+      unless current_time.is_a?(Hour)
+        raise ArgumentError.new("Current time has to be an Hour instance, was #{current_time.class}.")
+      end
+
+      end_time = @end_time || (next_time_frame_start_time || Hour.parse('23:59'))
+
+      end_time > current_time
+    end
+
     # Return a today task list formatted string.
     #
     # @since 0.2

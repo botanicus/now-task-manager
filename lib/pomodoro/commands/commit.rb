@@ -1,8 +1,10 @@
 require 'shellwords'
 
 class Pomodoro::Commands::Commit < Pomodoro::Commands::Command
+  self.description = "Commit the active task."
+
   self.help = <<-EOF.gsub(/^\s*/, '')
-    now <magenta>commit</magenta> <bright_black># ...</bright_black>
+    now <magenta>commit</magenta> <bright_black># #{self.description}</bright_black>
     now commit -a|-v
     now commit spec
       For this to work you have to be in the right directory.

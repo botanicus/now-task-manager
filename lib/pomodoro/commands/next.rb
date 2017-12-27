@@ -1,4 +1,6 @@
 class Pomodoro::Commands::Next < Pomodoro::Commands::Command
+  self.description = "Display the next task."
+
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <green>next</green> <bright_black># Print the next task. Exit 1 if there is none.</bright_black>
   EOF

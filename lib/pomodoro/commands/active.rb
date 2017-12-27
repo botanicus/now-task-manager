@@ -29,8 +29,10 @@ class Pomodoro::Commands::Active < Pomodoro::Commands::Command
     end
   ]
 
+  self.description = "Print the active task. Exit 1 if there is none."
+
   self.help = <<-EOF
-    <bright_black># Print the active task. Exit 1 if there is none.</bright_black>
+    <bright_black># #{self.description}</bright_black>
     now <green>active</green>, now <green>active</green> [format string]
       #{FORMATTERS.map { |formatter| "<red>#{formatter.pattern}</red> #{formatter.name}" }.join("\n" + " " * 6)}
   EOF

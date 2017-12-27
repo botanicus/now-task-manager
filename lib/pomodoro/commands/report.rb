@@ -1,4 +1,6 @@
 class Pomodoro::Commands::Report < Pomodoro::Commands::Command
+  self.description = "End of the day <magenta>report</magenta>."
+
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>report</magenta> pattern<bright_black># ...</bright_black>
   EOF

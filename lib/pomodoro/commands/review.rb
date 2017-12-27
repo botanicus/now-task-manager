@@ -1,6 +1,8 @@
 require 'pomodoro/router'
 
 class Pomodoro::Commands::Review < Pomodoro::Commands::Command
+  self.description = "Review given time period."
+
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>review</magenta>                                    <bright_black># Journal for today.</bright_black>
     now <magenta>review</magenta> [<cyan>year</cyan>|<cyan>quarter</cyan>|<cyan>month</cyan>|<cyan>week</cyan>|<cyan>day</cyan>] <bright_black>   # Review the current time period.</bright_black>

@@ -1,4 +1,6 @@
 class Pomodoro::Commands::Config < Pomodoro::Commands::Command
+  self.description = "Print out <magenta>configuration</magenta>."
+
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <yellow>config</yellow>
     now <yellow>config</yellow> today_path

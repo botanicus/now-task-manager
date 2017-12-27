@@ -1,4 +1,6 @@
 class Pomodoro::Commands::Postpone < Pomodoro::Commands::Command
+  self.description = "<yellow>Postpone</yellow> the current task."
+
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>postpone</magenta> <bright_black># Postpone the active task.</bright_black>
   EOF

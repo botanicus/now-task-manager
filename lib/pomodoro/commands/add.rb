@@ -1,6 +1,8 @@
 class Pomodoro::Commands::Add < Pomodoro::Commands::Command
+  self.description = "Add a task for later."
+
   self.help = <<-EOF.gsub(/^\s*/, '')
-    now <red>+</red> [strings]<bright_black> # Add a task for later.</bright_black>
+    now <red>+</red> [strings]<bright_black> # #{self.description}</bright_black>
   EOF
 
   def run

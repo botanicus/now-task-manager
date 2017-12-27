@@ -1,10 +1,17 @@
 class Pomodoro::Commands::Start < Pomodoro::Commands::Command
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>start</magenta> <bright_black># Start a new task.</bright_black>
+    now <magenta>start</magenta> --confirm or -c <bright_black># Display the task and ask whether you want to start it.</bright_black>
   EOF
 
   def run
     ensure_today
+
+    unless (@args & ['--confirm', '-c']).empty?
+      Pomodoro::Commands::Next.new(Array.new).run
+      print "\n<bold>Start?</bold> "
+      STDIN.readline
+    end
 
     with_active_task(self.config) do |active_task|
       abort "<red>There is an active task already:</red> #{Pomodoro::Tools.unsentence(active_task.body)}."
@@ -14,6 +21,8 @@ class Pomodoro::Commands::Start < Pomodoro::Commands::Command
       puts "<bold>~</bold> Task <green>#{Pomodoro::Tools.unsentence(next_task.body)}</green> has been started."
       next_task.start!
     end
+  rescue Interrupt
+    puts
   rescue Pomodoro::Config::ConfigError => error
     abort "<red>#{error.message}</red>"
   end

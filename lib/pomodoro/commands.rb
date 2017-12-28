@@ -1,20 +1,12 @@
 require 'date'
-require 'pomodoro'
+require 'pomodoro/tools'
 require 'refined-refinements/colours'
 require 'refined-refinements/cli/commander'
 
 module Pomodoro
   module Commands
     module EnvironmentCommunication
-      using RR::ColourExts
-
-      [:puts, :print, :warn, :abort].each do |method_name|
-        define_method(method_name) do |*args|
-          Kernel.send(method_name, *args.map do |argument|
-            argument.is_a?(String) ? argument.colourise : argument
-          end)
-        end
-      end
+      using RR::ColouredTerminal
 
       def command(command)
         system(command)
@@ -40,7 +32,11 @@ module Pomodoro
     end
 
     class Command < RR::Command
-      include EnvironmentCommunication
+      include RR::ColouredTerminal
+
+      def command(command)
+        system(command)
+      end
 
       def self.description
         @description

@@ -1,4 +1,5 @@
 class Pomodoro::Commands::Next < Pomodoro::Commands::Command
+  # using RR::ColouredTerminal
   self.description = "Display the next task."
 
   self.help = <<-EOF.gsub(/^\s*/, '')

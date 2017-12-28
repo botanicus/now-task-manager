@@ -111,23 +111,23 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
   end
 
   def add_postponed_task_to_scheduled_list(scheduled_task_list, time_frame, task)
-    scheduled_date = task.metadata['Review at'] || Date.today.iso8601
+    scheduled_date = task.metadata['Review at'] || (Date.today + 1).iso8601
+
+    if Date.parse(scheduled_date) >= (@date + 1)
+      raise "Scheduled date cannot be today or earlier, was #{scheduled_date} for task #{task}."
+    end
 
     if Date.parse(scheduled_date) == (@date + 1)
-      scheduled_date = 'Tomorrow' # FIXME: What about if it is today?
+      formatted_scheduled_date = 'Tomorrow' # FIXME: What about if it is today?
     elsif Date.parse(scheduled_date) < (@date + 7)
-      scheduled_date = Date.parse(scheduled_date).strftime('%A')
+      formatted_scheduled_date = Date.parse(scheduled_date).strftime('%A')
     else
-      scheduled_date = Date.parse(scheduled_date).strftime('%-d/%-m')
+      formatted_scheduled_date = Date.parse(scheduled_date).strftime('%-d/%-m')
     end
 
-    if Date.parse(scheduled_date) <= (@date + 1)
-      raise "Scheduled date cannot be today or earlier, was #{scheduled_date}."
-    end
-
-    task_group = scheduled_task_list[scheduled_date] || (
+    task_group = scheduled_task_list[formatted_scheduled_date] || (
       scheduled_task_list << Pomodoro::Formats::Scheduled::TaskGroup.new(header: scheduled_date)
-      scheduled_task_list[scheduled_date]
+      scheduled_task_list[formatted_scheduled_date]
     )
     task_group << Pomodoro::Formats::Scheduled::Task.new(time_frame: time_frame.name, body: task.body, tags: task.tags)
 
@@ -147,7 +147,7 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
       # TODO: For skipped tasks, add them only if they weren't added by the rules.
       postponed_tasks = previous_day.task_list.each_task_with_time_frame.select { |tf, task| task.postponed? || task.skipped?(tf) }
       unless postponed_tasks.empty?
-        puts "~ <green>Migrating postponed tasks</green> from #{previous_day.date.strftime('%d/%m')}."
+        puts "~ <green>Migrating postponed tasks</green> from <yellow>#{previous_day.date.strftime('%d/%m')}</yellow>."
         scheduled_task_list = parse_task_list(self.config)
         postponed_tasks.each do |time_frame, task|
           scheduled_date = add_postponed_task_to_scheduled_list(scheduled_task_list, time_frame, task)
@@ -156,10 +156,8 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
         scheduled_task_list.save(self.config.task_list_path)
         puts
       else
-        puts "~ <green>No postponed tasks</green> from #{previous_day.date.strftime('%m/%d')}."
+        puts "~ <green>No postponed tasks</green> from <yellow>#{previous_day.date.strftime('%m/%d')}</yellow>."
       end
-
-      # TODO: Warn about skipped tasks and print their list, wait for the user to acknowledge (STDIN.readline).
     end
 
     options = self.group_args

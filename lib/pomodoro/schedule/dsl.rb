@@ -36,6 +36,10 @@ module Pomodoro
       def initialize(schedule_dir, today = Date.today)
         @schedule_dir, @today = schedule_dir, today
         @rules, @schedules = Array.new, Array.new
+
+        today.define_singleton_method(:weekend?) do # TODO: Put elsewhere.
+          self.saturday? || self.sunday?
+        end
       end
 
       alias_method :_require, :require

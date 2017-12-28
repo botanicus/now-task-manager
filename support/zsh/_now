@@ -1,29 +1,15 @@
 #compdef now
+
 _now() {
   local -a commands
-  commands=(
-    'active:Print the active task. Exit 1 if there is none.'
-    'next:Display the next task.'
-    'start:[32mStart[0m the next task.'
-    'done:[32mComplete[0m the active task.'
-    'move_on:Move on from the current task.'
-    'postpone:[33mPostpone[0m the current task.'
-    'next-fail:[31mFail[0m the next command.'
-    'next-postpone:[33mPostpone[0m the next task.'
-    'next-done:[32mComplete[0m the next task.'
-    'e:Open one of the files for edit.'
-    'g:Generate today list for today or tomorrow.'
-    '+:Add a task for later.'
-    'config:Print out [35mconfiguration[0m.'
-    'commit:Commit the active task.'
-    'report:End of the day [35mreport[0m.'
-    'console:Run Ruby console.'
-    'show-schedule:Print out the [35mschedule[0m.'
-    'plan:Plan given time period.'
-    'test:Run the acceptance tests for given period.'
-    'review:Review given time period.'
-    'run:[32mRun[0m the next task.'
-  )
+  commands=("${(@f)$(~/Dropbox/Projects/Software/pomodoro/tools/zsh_commands_gen)}")
+
+  # ... OR ...
+  # commands=(
+  #   'active:Print the active task. Exit 1 if there is none.'
+  #   'next:Display the next task.'
+  #   ...
+  # )
 
   if (( CURRENT == 2 )); then
     _describe -t commands 'commands' commands

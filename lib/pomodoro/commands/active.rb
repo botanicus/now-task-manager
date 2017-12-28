@@ -29,7 +29,7 @@ class Pomodoro::Commands::Active < Pomodoro::Commands::Command
     end
   ]
 
-  self.description = "Print the active task. Exit 1 if there is none."
+  self.description = "Print the active task."
 
   self.help = <<-EOF
     <bright_black># #{self.description}</bright_black>

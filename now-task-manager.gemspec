@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
   #   <green.bold>Welcome to NTM!</green.bold>
   #
   #   <green>Setup</green> wizzard: <bright_black>now setup</bright_black>
+  #   To create the config and install ZSH and Vim plugins.
   #
   #   Get the <magenta>man pages</magenta>:
   #   <bright_black>gem install manpages && gem manpages --update-all</bright_black>

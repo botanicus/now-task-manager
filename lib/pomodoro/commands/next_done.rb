@@ -1,8 +1,8 @@
-class Pomodoro::Commands::TickOffNext < Pomodoro::Commands::Command
+class Pomodoro::Commands::Next_Done < Pomodoro::Commands::Command
   self.description = "<green>Complete</green> the next task."
 
   self.help = <<-EOF.gsub(/^\s*/, '')
-    now <magenta>tick-off-next</magenta> <bright_black># #{self.description}</bright_black>
+    now <magenta>next:done</magenta> <bright_black># #{self.description}</bright_black>
   EOF
 
   def run

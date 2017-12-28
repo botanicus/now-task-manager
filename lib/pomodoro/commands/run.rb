@@ -64,7 +64,7 @@ class NamedCommandDSL
   end
 
   def sh(command)
-    system("zsh -c #{command}")
+    system("zsh -c '#{command}'") # TODO: use shell words
   rescue Interrupt
   end
 end

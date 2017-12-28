@@ -4,9 +4,8 @@ module Pomodoro::Formats::Today
       output = [task.class::STATUS_MAPPING[task.status][0]]
       if task.start_time || task.end_time
         output << "[#{self.format_duration(task.start_time, task.end_time)}]"
-      else
-        output << "[#{task.duration.minutes}]" if task.duration
       end
+      output << "[#{task.duration.minutes}]" if task.duration
       output << task.body
       output << task.tags.map { |tag| "##{tag}"}.join(' ') unless task.tags.empty?
       main_line = output.join(' ') + "\n"

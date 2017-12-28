@@ -1,8 +1,9 @@
 #!/usr/bin/env ruby
 
+require 'pomodoro'
 require 'pomodoro/commands'
 
-using RR::ColourExts
+using RR::ColouredTerminal
 
 commander = Pomodoro::Commander.new
 command_name = ARGV.first && ARGV.first.to_sym
@@ -10,7 +11,7 @@ command_name = ARGV.first && ARGV.first.to_sym
 if commander.commands.include?(command_name)
   commander.run(command_name, ARGV[1..-1] || Array.new)
 elsif [:'-h', :'--help'].include?(command_name)
-  puts(commander.help.colourise)
+  puts(commander.help)
 else
-  abort(commander.help.colourise)
+  abort(commander.help)
 end

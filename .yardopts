@@ -1,3 +1,7 @@
+--output-dir=yardoc
 --markup-provider=redcarpet
 --markup=markdown
+--no-private
+--embed-mixins
 --plugin rspec
+--files doc/*md

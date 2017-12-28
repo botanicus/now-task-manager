@@ -1,12 +1,15 @@
 #!/usr/bin/env ruby
 
+# This is WIP.
+
 require 'pomodoro/config'
 require 'pomodoro/formats/today'
 require 'filewatcher'
 require 'rufus-scheduler'
 require 'refined-refinements/colours'
+require 'refined-refinements/homepath'
 
-using RR::ColourExts
+using RR::ColouredTerminal
 
 def debug(message)
   warn message
@@ -22,9 +25,9 @@ def set_schedules(today_list_path)
   end
 
   scheduled_tasks.each do |scheduled_task|
-    debug "<bold>~</bold> Scheduling <green>#{scheduled_task.body}</green> for <yellow>#{scheduled_task.fixed_start_time}</yellow>.".colourise
+    debug "<bold>~</bold> Scheduling <green>#{scheduled_task.body}</green> for <yellow>#{scheduled_task.fixed_start_time}</yellow>."
     scheduler.at(scheduled_task.fixed_start_time.to_s) do
-      puts "<bold>~</bold> [<cyan>#{Hour.now}</cyan>] Task <green>#{scheduled_task.body}</green> is due.".colourise
+      puts "<bold>~</bold> [<cyan>#{Hour.now}</cyan>] Task <green>#{scheduled_task.body}</green> is due."
       system(%Q{osascript -e 'display notification "#{scheduled_task.body} is due." with title "Now task manager" sound name "Morse"'})
     end
   end
@@ -36,42 +39,42 @@ def set_schedules(today_list_path)
     begin
       start_time = time_frame.start_time || prev_time_frame_end_time
       if start_time >= Hour.now
-        debug "<bold>~</bold> Scheduling <green>#{time_frame.name}</green> <magenta>start</magenta> notification for <yellow>#{start_time}</yellow>.".colourise
+        debug "<bold>~</bold> Scheduling <green>#{time_frame.name}</green> <magenta>start</magenta> notification for <yellow>#{start_time}</yellow>."
         scheduler.at(start_time.to_s) do
-          puts "<bold>~</bold> [<cyan>#{Hour.now}</cyan>] Time frame <green>#{time_frame.name}</green> has started.".colourise
+          puts "<bold>~</bold> [<cyan>#{Hour.now}</cyan>] Time frame <green>#{time_frame.name}</green> has started."
           system(%Q{osascript -e 'display notification "#{time_frame.name} has started." with title "#{time_frame.header}" sound name "Morse"'})
         end
       end
     rescue => error
-      warn "<bold>~</bold> #{error.class} occured on #{time_frame.name}".colourise
+      warn "<bold>~</bold> #{error.class} occured on #{time_frame.name}"
     end
 
     begin
       end_time = time_frame.end_time || next_time_frame_start_time
       if end_time >= Hour.now
-        debug "<bold>~</bold> Scheduling <blue.bold>#{time_frame.name}</blue.bold> <magenta>end</magenta> notification for <yellow>#{end_time}</yellow>.".colourise
+        debug "<bold>~</bold> Scheduling <blue.bold>#{time_frame.name}</blue.bold> <magenta>end</magenta> notification for <yellow>#{end_time}</yellow>."
         scheduler.at(end_time.to_s) do
-          puts "<bold>~</bold> [<cyan>#{Hour.now}</cyan>] Time frame <blue.bold>#{time_frame.name}</blue.bold> has ended.".colourise
+          puts "<bold>~</bold> [<cyan>#{Hour.now}</cyan>] Time frame <blue.bold>#{time_frame.name}</blue.bold> has ended."
           system(%Q{osascript -e 'display notification "#{time_frame.name} has ended." with title "Now task manager" sound name "Pop"'})
         end
       end
     rescue => error
-      warn "<bold>~</bold> <red>#{error.class}</red> occured on <red>#{time_frame.name}</red>.".colourise
+      warn "<bold>~</bold> <red>#{error.class}</red> occured on <red>#{time_frame.name}</red>."
     end
   end
 
   scheduler
 end
 
-today_list_path = Pomodoro::Config.new.today_path
+today_list_path = RR::Homepath.new(Pomodoro::Config.new.today_path)
 
-puts "<bold>~</bold> Watching <bright_black>#{Pomodoro::Tools.format_path(today_list_path)}</bright_black>.".colourise
-set_schedules(today_list_path)
-Filewatcher.new([today_list_path]).watch do |filename, event|
+puts "<bold>~</bold> Watching <bright_black>#{today_list_path}</bright_black>."
+set_schedules(today_list_path.expand)
+Filewatcher.new([today_list_path.expand]).watch do |filename, event|
   begin
     puts "\n~ File has changed.\n\n"
-    $scheduler = set_schedules(today_list_path) # We have to keep the variable, otherwise the scheduler gets lost.
+    $scheduler = set_schedules(today_list_path.expand) # We have to keep the variable, otherwise the scheduler gets lost.
   rescue Parslet::ParseFailed => error
-    warn "<bold>~</bold> <red>Parsing has failed.</red>".colourise
+    warn "<bold>~</bold> <red>Parsing has failed.</red>"
   end
 end

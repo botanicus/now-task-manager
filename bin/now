@@ -1,9 +1,6 @@
 #!/usr/bin/env ruby
 
-require 'pomodoro'
 require 'pomodoro/commands'
-
-using RR::ColouredTerminal
 
 commander = Pomodoro::Commander.new
 command_name = ARGV.first && ARGV.first.to_sym

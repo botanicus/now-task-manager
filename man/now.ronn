@@ -1,0 +1,22 @@
+now(1) -- Now task manager interface
+=============================================
+
+## SYNOPSIS
+
+`now` [command] [<options>...]
+
+## DESCRIPTION
+
+**Now task manager** ....
+
+## OPTIONS
+
+These options control whether output is written to file(s), standard output, or
+directly to a man pager.
+
+  * `e`, `edit`:
+    ABCD
+
+## SEE ALSO
+
+today-format(1)

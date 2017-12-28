@@ -15,7 +15,7 @@ module Pomodoro
         super(
           I18n.t(
             'errors.config.missing_file',
-            path: Pomodoro::Tools.format_path(config_path)))
+            path: RR::Homepath.new(config_path).to_s))
       end
     end
 
@@ -65,7 +65,7 @@ module Pomodoro
           path
         else
           dir, base = File.split(path)
-          raise "#{self.class}##{key}: Root directory #{Pomodoro::Tools.format_path(dir)} for file #{base} doesn't exist..)"
+          raise "#{self.class}##{key}: Root directory #{RR::Homepath.new(dir)} for file #{base} doesn't exist..)"
         end
       end
     end

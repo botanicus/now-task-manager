@@ -3,9 +3,9 @@
 require 'pomodoro/commands'
 require 'refined-refinements/colours'
 
-using RR::ColourExts
+using RR::ColouredTerminal
 
 puts Pomodoro::Commander.commands.map { |key, cmd|
   next unless cmd.description
   "'#{key}:#{cmd.description.gsub("'", "''")}'"
-}.compact.join("\n").colourise
+}.compact.join("\n")

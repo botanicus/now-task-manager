@@ -15,7 +15,7 @@ class Pomodoro::Commands::Plan < Pomodoro::Commands::Command
     if router.respond_to?(:"#{period}_plan_path")
       path = router.send(:"#{period}_plan_path")
       unless router.features_path.directory?
-        abort "<red>Features</red> in #{Pomodoro::Tools.format_path(router.features_path.to_s)} are not initialised."
+        abort "<red>Features</red> in #{RR::Homepath.new(router.features_path.to_s)} are not initialised."
       end
 
       Dir.chdir(router.features_path.to_s) do

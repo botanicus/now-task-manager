@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency('parslet', ['~> 1.8'])
   s.add_runtime_dependency('term-ansicolor', ['~> 1.4'])
-  s.add_runtime_dependency('refined-refinements', ['~> 0.0.2'])
+  s.add_runtime_dependency('refined-refinements', ['~> 0.0.2.1'])
   s.add_runtime_dependency('i18n', ['~> 0.9'])
 
   # s.post_install_message = <<-EOF.gsub(/^\s*/, '').colourise

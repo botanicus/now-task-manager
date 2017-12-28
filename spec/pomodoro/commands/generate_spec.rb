@@ -28,7 +28,7 @@ describe Pomodoro::Commands::Generate do
 
       expect(subject.sequence[0]).to eql(stdout: "~ Schedule: <magenta>any</magenta>.")
       expect(subject.sequence[1]).to eql(command: "vim #{config.task_list_path}")
-      expect(subject.sequence[2]).to eql(stdout: "~ <green>File #{Pomodoro::Tools.format_path(config.today_path)} has been created.</green>")
+      expect(subject.sequence[2]).to eql(stdout: "~ <green>File #{RR::Homepath.new(config.today_path)} has been created.</green>")
       expect(subject.sequence[3]).to eql(exit: 0)
     end
   end

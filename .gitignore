@@ -1,4 +1,5 @@
 .bundle
 .yardoc
+yardoc
 coverage
 *.gem

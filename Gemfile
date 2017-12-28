@@ -8,6 +8,7 @@ gem 'yard'
 gem 'yard-rspec'
 gem 'redcarpet'
 gem 'github-markup'
+gem 'ronn'
 
 gem 'rspec'
 gem 'coveralls'

@@ -1,5 +1,6 @@
 require 'abbrev'
 require 'pomodoro/scheduler'
+require 'refined-refinements/homepath'
 
 # TODO: maybe better "now plan tomorrow"?
 class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
@@ -32,7 +33,7 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
   end
 
   def date_path
-    self.config.today_path(@date)
+    RR::Homepath.new(self.config.today_path(@date))
   end
 
   def get_schedule(scheduler, **options)
@@ -137,8 +138,8 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
   def run
     @date = self.parse_date
 
-    if File.exist?(self.date_path)
-      abort(I18n.t('commands.generate.already_exists', path: Pomodoro::Tools.format_path(self.date_path)))
+    if self.date_path.exist?
+      abort(I18n.t('commands.generate.already_exists', path: self.date_path))
     end
 
     previous_day_task_list_path = self.config.today_path(@date - 1)
@@ -168,10 +169,10 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
     scheduled_task_list = parse_task_list(self.config)
     self.populate_from_scheduled_task_list(day, scheduled_task_list)
 
-    day.save(self.date_path)
+    day.save(self.date_path.expand)
     scheduled_task_list.save(self.config.task_list_path)
 
-    puts "~ <green>File #{Pomodoro::Tools.format_path(date_path)} has been created.</green>"
+    puts "~ <green>File #{date_path} has been created.</green>"
   rescue Pomodoro::Config::ConfigError => error
     abort "<red>#{error.message}</red>"
   end

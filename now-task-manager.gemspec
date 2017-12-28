@@ -1,5 +1,7 @@
 #!/usr/bin/env gem build
 
+require 'refined-refinements/colours'
+
 Gem::Specification.new do |s|
   s.name        = 'now-task-manager'
   s.version     = '0.1.0'
@@ -11,13 +13,23 @@ Gem::Specification.new do |s|
   s.license     = 'MIT'
   s.metadata['yard.run'] = 'yri' # use 'yard' to build full HTML docs.
 
-  s.files       = Dir.glob('{bin,lib,doc}/**/*.{rb,md}') + ['README.md']
+  s.files       = Dir.glob('{bin,lib,doc,man,i18n,support}/**/*.{rb,md}') + ['README.md', '.yardopts']
   s.executables = Dir['bin/*'].map(&File.method(:basename))
 
   s.add_runtime_dependency('parslet', ['~> 1.8'])
   s.add_runtime_dependency('term-ansicolor', ['~> 1.4'])
   s.add_runtime_dependency('refined-refinements', ['~> 0.0.2'])
   s.add_runtime_dependency('i18n', ['~> 0.9'])
-  s.add_runtime_dependency('rufus-scheduler', ['~> 3.4'])
-  s.add_runtime_dependency('filewatcher', ['~> 1.0'])
+
+  # s.post_install_message = <<-EOF.gsub(/^\s*/, '').colourise
+  #   <green.bold>Welcome to NTM!</green.bold>
+  #
+  #   <green>Setup</green> wizzard: <bright_black>now setup</bright_black>
+  #
+  #   Get the <magenta>man pages</magenta>:
+  #   <bright_black>gem install manpages && gem manpages --update-all</bright_black>
+  #
+  #   Install dependencies for the <yellow>task loop</yellow>:
+  #   <bright_black>gem install rufus-scheduler filewatcher</bright_black>
+  # EOF
 end

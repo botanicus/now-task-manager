@@ -9,10 +9,10 @@ REPO = 'botanicus/now-task-manager'
 POINTS_ARRAY = ['1 pt', '2 pts', '3 pts', '5 pts']
 SUBPROJECTS  = ['BitBar', 'CLI', 'Vim', 'Loop', 'Scheduled format', 'Today format', 'User Ruby code']
 
-using RR::ColourExts
+using RR::ColouredTerminal
 
 def retrieve_issues(url)
-  puts "<bright_black>~ HTTP GET #{url}.</bright_black>".colourise
+  puts "<bright_black>~ HTTP GET #{url}.</bright_black>"
   request = HTTP.get(url)
   data = request.body
   issues = JSON.parse(data)
@@ -44,7 +44,7 @@ results = SUBPROJECTS.reduce(Hash.new) do |buffer, subproject|
 
   unless buffer[subproject].empty?
     total = buffer[subproject].sum { |line| line.match(/\d+/)[0].to_i }
-    buffer[subproject] << "<bold>Total: <yellow>#{total} pts</yellow></bold>".colourise
+    buffer[subproject] << "<bold>Total: <yellow>#{total} pts</yellow></bold>"
   else
     buffer.delete(subproject)
   end
@@ -54,6 +54,6 @@ end
 
 overall_total = results.reduce(0) { |sum, (_, lines)| sum + lines[-1].match(/\d+ pt/)[0].to_i }
 results.each do |key, lines|
-  puts "<cyan>#</cyan> <magenta>#{key}</magenta>\n- #{lines.join("\n- ")}\n\n".colourise
+  puts "<cyan>#</cyan> <magenta>#{key}</magenta>\n- #{lines.join("\n- ")}\n\n"
 end
-puts "<bold>Overall total: <yellow>#{overall_total} pts</yellow></bold>".colourise
+puts "<bold>Overall total: <yellow>#{overall_total} pts</yellow></bold>"

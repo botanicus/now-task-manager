@@ -1,4 +1,5 @@
 require 'date'
+require 'pomodoro'
 require 'pomodoro/tools'
 require 'refined-refinements/colours'
 require 'refined-refinements/cli/commander'
@@ -81,7 +82,7 @@ module Pomodoro
 
       def must_exist(path, additional_info = nil)
         unless File.exist?(path)
-          abort ["<red>! File #{Pomodoro::Tools.format_path(path)} doesn't exist.</red>", additional_info].compact.join("\n  ")
+          abort ["<red>! File #{RR::Homepath.new(path)} doesn't exist.</red>", additional_info].compact.join("\n  ")
         end
       end
 

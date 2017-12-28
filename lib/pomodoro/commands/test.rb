@@ -30,7 +30,7 @@ class Pomodoro::Commands::Test < Pomodoro::Commands::Command
     end
 
     Dir.chdir(self.config.data_root_path(year)) do
-      puts "<bold>~</bold> Current directory: <green>#{Pomodoro::Tools.format_path(Dir.pwd)}</green>."
+      puts "<bold>~</bold> Current directory: <green>#{RR::Homepath.new(Dir.pwd)}</green>."
       command("cucumber #{@args.join(' ')}") #bundle exec
     end
   end

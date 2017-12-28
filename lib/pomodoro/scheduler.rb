@@ -37,11 +37,11 @@ module Pomodoro
       return nil
     end
 
-    using RR::ColourExts
+    # using RR::ColourExts
     def populate_from_rules(task_list, schedule: nil, apply_rules: [], remove_rules: [])
       self.rules.each do |rule|
         if rule.true?(schedule)
-          puts "~ Invoking rule <green>#{rule.name}</green>.".colourise
+          puts "~ Invoking rule <green>#{rule.name}</green>."#.colourise
           rule.call(task_list)
         end
       end

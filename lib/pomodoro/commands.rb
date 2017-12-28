@@ -21,6 +21,24 @@ module Pomodoro
       end
     end
 
+    module DataExts
+      def prev_week
+        self - 7
+      end
+
+      def next_week
+        self + 7
+      end
+
+      def prev_quarter
+        self.prev_month.prev_month.prev_month
+      end
+
+      def next_quarter
+        self.next_month.next_month.next_month
+      end
+    end
+
     class Command < RR::Command
       include EnvironmentCommunication
 
@@ -45,23 +63,7 @@ module Pomodoro
         when 0
           [period, Date.today]
         when 1
-          today = Date.today
-
-          today.define_singleton_method(:prev_week) do
-            self - 7
-          end
-
-          today.define_singleton_method(:next_week) do
-            self + 7
-          end
-
-          today.define_singleton_method(:prev_quarter) do
-            self.prev_month.prev_month.prev_month
-          end
-
-          today.define_singleton_method(:next_quarter) do
-            self.next_month.next_month.next_month
-          end
+          today = Date.today.extend(DataExts)
 
           direction = (res[0] < 0) ? :prev : :next
           method_name = :"#{direction}_#{period || :day}"
@@ -71,7 +73,7 @@ module Pomodoro
           end
 
           result = res[0].abs.times.reduce(today) do |last_result|
-            last_result.send(method_name)
+            last_result.send(method_name).extend(DataExts)
           end
 
           @args.delete(res[0])

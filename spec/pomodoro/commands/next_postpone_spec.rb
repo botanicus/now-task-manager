@@ -3,6 +3,6 @@ require 'ostruct'
 require 'pomodoro/config'
 require 'pomodoro/commands'
 
-describe Pomodoro::Commands::PostponeNext do
+describe Pomodoro::Commands::Next_Postpone do
   include_examples(:has_help)
 end

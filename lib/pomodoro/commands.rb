@@ -183,14 +183,14 @@ module Pomodoro
     self.command(:postpone, Commands::Postpone)
 
     # Action on tasks (without starting them).
-    require 'pomodoro/commands/fail-next'
-    self.command(:'fail-next', Commands::FailNext)
+    require 'pomodoro/commands/next_fail'
+    self.command(:'next-fail', Commands::Next_Fail)
 
-    require 'pomodoro/commands/postpone-next'
-    self.command(:'postpone-next', Commands::PostponeNext)
+    require 'pomodoro/commands/next_postpone'
+    self.command(:'next-postpone', Commands::Next_Postpone)
 
-    require 'pomodoro/commands/tick-off-next'
-    self.command(:'tick-off-next', Commands::TickOffNext)
+    require 'pomodoro/commands/next_done'
+    self.command(:'next-done', Commands::Next_Done)
 
     # Generate & edit.
     require 'pomodoro/commands/edit'

@@ -1,8 +1,8 @@
-class Pomodoro::Commands::PostponeNext < Pomodoro::Commands::Command
+class Pomodoro::Commands::Next_Postpone < Pomodoro::Commands::Command
   self.description = "<yellow>Postpone</yellow> the next task."
 
   self.help = <<-EOF.gsub(/^\s*/, '')
-    now <magenta>postpone-next</magenta> <bright_black># ...</bright_black>
+    now <magenta>next:postpone</magenta> <bright_black># ...</bright_black>
   EOF
 
   def run

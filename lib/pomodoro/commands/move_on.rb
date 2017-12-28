@@ -12,7 +12,7 @@ class Pomodoro::Commands::MoveOn < Pomodoro::Commands::Command
           print "<bold>Why?</bold> "
           reason = STDIN.readline.chomp
 
-          active_task.move_on!(reason)
+          active_task.finish_for_the_day!(reason)
           puts "<bold>~</bold> You moved on from <green>#{Pomodoro::Tools.unsentence(active_task.body)}</green>."
         end
     else

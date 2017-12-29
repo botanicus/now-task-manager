@@ -165,9 +165,6 @@ module Pomodoro
     require 'pomodoro/commands/active'
     self.command(:active, Commands::Active)
 
-    require 'pomodoro/commands/next'
-    self.command(:next, Commands::Next)
-
     # Action on an active tasks.
     require 'pomodoro/commands/start'
     self.command(:start, Commands::Start)
@@ -181,7 +178,9 @@ module Pomodoro
     require 'pomodoro/commands/postpone'
     self.command(:postpone, Commands::Postpone)
 
-    # Action on tasks (without starting them).
+    require 'pomodoro/commands/next'
+    self.command(:next, Commands::Next)
+
     require 'pomodoro/commands/next_fail'
     self.command(:'next-fail', Commands::Next_Fail)
 

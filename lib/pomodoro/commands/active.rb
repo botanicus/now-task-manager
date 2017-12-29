@@ -1,8 +1,8 @@
 class Pomodoro::Commands::Active < Pomodoro::Commands::Command
   class Formatter
-    attr_reader :name, :pattern
-    def initialize(name, pattern, &block)
-      @name, @pattern, @block = name, pattern, block
+    attr_reader :name, :pattern, :example
+    def initialize(name, pattern, example, &block)
+      @name, @pattern, @example, @block = name, pattern, example, block
     end
 
     def call(time_frame, active_task)
@@ -12,19 +12,19 @@ class Pomodoro::Commands::Active < Pomodoro::Commands::Command
   end
 
   FORMATTERS ||= [
-    Formatter.new(:body, '%B'),
-    Formatter.new(:body_unsentenced, '%b') do |_, task|
+    Formatter.new(:body, '%B', "Finish the review."),
+    Formatter.new(:body_unsentenced, '%b', "finish the review") do |_, task|
       Pomodoro::Tools.unsentence(task.body)
     end,
-    Formatter.new(:start_time, '%s'), # NOTE: no need for end time, since after that, the task is no longer active, right?
-    Formatter.new(:duration, '%d'),
-    Formatter.new(:remaining_duration, '%rd') do |time_frame, task|
+    Formatter.new(:start_time, '%s', '9:20'), # NOTE: no need for end time, since after that, the task is no longer active, right?
+    Formatter.new(:duration, '%d', '0:20'),
+    Formatter.new(:remaining_duration, '%rd', '0:12') do |time_frame, task|
       if task.duration
         result = task.remaining_duration(time_frame)
         result.minutes <= 0 ? 0 : result
       end
     end,
-    Formatter.new(:time_frame, '%tf') do |time_frame, _|
+    Formatter.new(:time_frame, '%tf', "Morning routine") do |time_frame, _|
       time_frame.name
     end
   ]
@@ -34,7 +34,7 @@ class Pomodoro::Commands::Active < Pomodoro::Commands::Command
   self.help = <<-EOF
     <bright_black># #{self.description}</bright_black>
     now <green>active</green>, now <green>active</green> [format string]
-      #{FORMATTERS.map { |formatter| "<red>#{formatter.pattern}</red> #{formatter.name}" }.join("\n" + " " * 6)}
+      #{FORMATTERS.map { |formatter| "<red>#{formatter.pattern}</red> #{formatter.name} <bright_black># For example: #{formatter.example}</bright_black>" }.join("\n" + " " * 6)}
   EOF
 
   def run

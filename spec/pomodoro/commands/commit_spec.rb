@@ -3,6 +3,7 @@ require 'pomodoro/config'
 require 'pomodoro/commands'
 
 describe Pomodoro::Commands::Commit do
+  include_examples(:has_description)
   include_examples(:has_help)
 
   let(:args) { Array.new }
@@ -49,9 +50,19 @@ describe Pomodoro::Commands::Commit do
     end
 
     context "with an active task" do
-      it "prints out the active task" do
+      it "commits the active task" do
         run(subject)
         expect(subject.sequence[1]).to eql(command: "git commit -m Active\\ task.")
+        expect(subject.sequence[2]).to eql(exit: 0)
+      end
+    end
+
+    context "with arguments" do
+      let(:args) { ['-a'] }
+
+      it "passes all the arguments to git" do
+        run(subject)
+        expect(subject.sequence[1]).to eql(command: "git commit -a -m Active\\ task.")
         expect(subject.sequence[2]).to eql(exit: 0)
       end
     end

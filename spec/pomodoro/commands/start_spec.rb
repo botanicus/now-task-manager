@@ -1,10 +1,9 @@
 require 'spec_helper'
-require 'ostruct'
-require 'timecop'
 require 'pomodoro/config'
 require 'pomodoro/commands'
 
 describe Pomodoro::Commands::Start do
+  include_examples(:has_description)
   include_examples(:has_help)
 
   let(:args) { Array.new }

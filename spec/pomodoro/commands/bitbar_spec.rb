@@ -4,9 +4,5 @@ require 'pomodoro/config'
 require 'pomodoro/commands'
 
 describe Pomodoro::Commands::BitBar do
-  describe '.help' do
-    it "does not have it" do
-      expect(described_class.help).to be_nil
-    end
-  end
+  include_examples(:is_out_of_main_help)
 end

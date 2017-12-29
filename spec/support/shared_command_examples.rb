@@ -1,3 +1,26 @@
+RSpec.shared_examples(:is_out_of_main_help) do
+  describe '.description' do
+    it "doesn't have it" do
+      expect(described_class.description).to be(nil)
+    end
+  end
+
+  describe '.help' do
+    it "doesn't have it" do
+      expect(described_class.help).to be(nil)
+    end
+  end
+end
+
+RSpec.shared_examples(:has_description) do
+  describe '.description' do
+    it "has it" do
+      expect(described_class).to respond_to(:description)
+      expect(described_class.description.length).not_to be(0)
+    end
+  end
+end
+
 RSpec.shared_examples(:has_help) do
   describe '.help' do
     it "has it" do

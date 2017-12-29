@@ -1,6 +1,4 @@
 require 'spec_helper'
-require 'ostruct'
-require 'timecop'
 require 'pomodoro/config'
 require 'pomodoro/commands'
 
@@ -16,7 +14,7 @@ describe Pomodoro::Commands::Active do
   include_examples(:missing_config)
   include_examples(:requires_today_task_file)
 
-  context "with a valid config", type: :valid_command do
+  context "with a valid config", :valid_command do
     let(:time_frame_end_time) { h('23:59') }
 
     let(:task) do

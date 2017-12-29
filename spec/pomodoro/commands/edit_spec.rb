@@ -14,7 +14,7 @@ describe Pomodoro::Commands::Edit do
 
   include_examples(:missing_config)
 
-  context "with config" do
+  context "with config", :valid_command do
     let(:config) do
       OpenStruct.new(
         today_path: "spec/data/#{described_class}.#{rand(1000)}.today",
@@ -22,18 +22,7 @@ describe Pomodoro::Commands::Edit do
       )
     end
 
-    before(:each) do
-      File.open(config.today_path, 'w') do |file|
-        file.puts('')
-      end
-    end
-
-    after(:each) do
-      begin
-        File.unlink(config.today_path)
-      rescue Errno::ENOENT
-      end
-    end
+    let(:data) { '' }
 
     describe "no args" do
       context "without config.today_path" do

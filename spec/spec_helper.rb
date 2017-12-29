@@ -1,5 +1,8 @@
 # require 'parslet/rig/rspec'
 
+require 'ostruct'
+require 'timecop'
+
 require 'coveralls'
 Coveralls.wear!
 
@@ -71,7 +74,7 @@ RSpec.configure do |rspec|
     end
   }
 
-  rspec.around(:each, type: :valid_command) do |example|
+  rspec.around(:each, :valid_command) do |example|
     File.open(config.today_path, 'w') do |file|
       file.puts(data)
     end

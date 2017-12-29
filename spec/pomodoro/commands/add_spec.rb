@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'ostruct'
 require 'pomodoro/config'
 require 'pomodoro/commands'
 
@@ -24,6 +23,7 @@ describe Pomodoro::Commands::Add do
     context "with an escaped string" do
       let(:args) { ["Do this and that."] }
 
+      # TODO: Refactor this.
       before(:each) { File.open(config.task_list_path, 'w').close }
       after(:each)  { File.unlink(config.task_list_path) }
 

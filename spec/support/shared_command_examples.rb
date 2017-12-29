@@ -27,3 +27,16 @@ RSpec.shared_examples(:missing_config) do
     end
   end
 end
+
+RSpec.shared_examples(:requires_today_task_file) do
+  context "without today_path" do
+    let(:config) do
+      OpenStruct.new(today_path: 'non-existent.today')
+    end
+
+    it "fails" do
+      run(subject)
+      expect(subject.sequence[0]).to eql(abort: "<red>! File #{config.today_path} doesn't exist.</red>\n  Run the <yellow>g</yellow> command first.")
+    end
+  end
+end

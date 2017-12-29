@@ -1,5 +1,6 @@
 # require 'parslet/rig/rspec'
 
+require 'date'
 require 'ostruct'
 require 'timecop'
 
@@ -81,6 +82,10 @@ RSpec.configure do |rspec|
 
     example.run
 
-    File.unlink(config.today_path)
+    begin
+      File.unlink(config.today_path)
+    rescue Errno::ENOENT
+      warn "~ No #{config.today_path} found."
+    end
   end
 end

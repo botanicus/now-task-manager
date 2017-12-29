@@ -14,31 +14,11 @@ describe Pomodoro::Commands::Postpone do
   end
 
   include_examples(:missing_config)
+  include_examples(:requires_today_task_file)
 
-  context "without today_path" do
-    let(:config) do
-      OpenStruct.new(today_path: 'non-existent.today')
-    end
-
-    it "fails" do
-      run(subject)
-      expect(subject.sequence[0]).to eql(abort: "<red>! File #{config.today_path} doesn't exist.</red>\n  Run the <yellow>g</yellow> command first.")
-    end
-  end
-
-  context "with a valid config" do
+  context "with a valid config", :valid_command do
     let(:config) do
       OpenStruct.new(today_path: "spec/data/#{described_class}.#{rand(1000)}.today")
-    end
-
-    before(:each) do
-      File.open(config.today_path, 'w') do |file|
-        file.puts(data)
-      end
-    end
-
-    after(:each) do
-      File.unlink(config.today_path)
     end
 
     let(:time_frame) do

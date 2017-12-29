@@ -1,7 +1,4 @@
 require 'spec_helper'
-require 'ostruct'
-require 'date'
-require 'timecop'
 require 'pomodoro/config'
 require 'pomodoro/commands'
 
@@ -13,6 +10,9 @@ describe Pomodoro::Commands::Config do
   subject do
     described_class.new(args, config).extend(CLITestHelpers)
   end
+
+  # TODO: refactor to use:
+  # include_examples(:missing_config)
 
   context "without config" do
     let(:config) do

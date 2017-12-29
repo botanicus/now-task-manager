@@ -14,17 +14,7 @@ describe Pomodoro::Commands::Active do
   end
 
   include_examples(:missing_config)
-
-  context "without today_path" do
-    let(:config) do
-      OpenStruct.new(today_path: 'non-existent.today')
-    end
-
-    it "fails" do
-      run(subject)
-      expect(subject.sequence[0]).to eql(abort: "<red>! File #{config.today_path} doesn't exist.</red>\n  Run the <yellow>g</yellow> command first.")
-    end
-  end
+  include_examples(:requires_today_task_file)
 
   context "with a valid config" do
     let(:time_frame_end_time) { h('23:59') }

@@ -1,0 +1,38 @@
+# The API
+
+1. Finish the commands and their specs.
+   If all commands work, we don't have to worry to fuck with the API.
+   i18n
+
+    BitBar, nextdone, nextfail, nextpostpone, plan, review, run, show-schedule/schedule, test
+    config, edit, Generate, report
+    MoveOn: so far not being used
+    GenerateUpcomingEvents, Log
+
+2. Change the commander to support subcommands.
+   Command should do one thing, but we should be able to group them intelligently.
+   There should be help for subcommands available via i. e. `now -h active`.
+   Man pages main + POSSIBLY for subcommands.
+   Update support/zsh.
+
+    now active {<main>,done,postpone,fail,move_on,commit}
+    now next {<main>,start(+run),done,postpone,fail}
+    now edit
+    now g
+    now +
+    now config
+    now report
+    now console
+    now schedule {show,test}
+    now plan
+    now review
+    now test
+
+3. The API: refactoring, API docs and specs.
+
+# The rest
+
+1. Documentation
+   README.md, doc, man (formats, tutorial?), gemspec & yardopts, support/*/README.md.
+
+2. Support/vim

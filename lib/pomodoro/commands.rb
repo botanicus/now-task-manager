@@ -52,8 +52,10 @@ module Pomodoro
         @args, @config = args, config || Pomodoro.config
       end
 
-      def get_period_and_date(default_period)
-        res = @args.grep(/^[-+]\d$/).grep_v(/^[-+]0$/).map(&:to_i)
+      def get_period_and_date(default_period = :day)
+        groups = @args.group_by { |argument| !! argument.match(/^[-+]\d$/) }
+        @args = groups[false] || Array.new
+        res = (groups[true] || Array.new).grep_v(/^[-+]0$/).map(&:to_i)
         period = (@args.first && @args.shift || default_period).to_sym
 
         case res.length
@@ -63,7 +65,7 @@ module Pomodoro
           today = Date.today.extend(DataExts)
 
           direction = (res[0] < 0) ? :prev : :next
-          method_name = :"#{direction}_#{period || :day}"
+          method_name = :"#{direction}_#{period}"
 
           unless today.respond_to?(method_name)
             raise ArgumentError.new("Unknown period: #{period}")

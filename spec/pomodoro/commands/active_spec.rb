@@ -16,7 +16,7 @@ describe Pomodoro::Commands::Active do
   include_examples(:missing_config)
   include_examples(:requires_today_task_file)
 
-  context "with a valid config" do
+  context "with a valid config", type: :valid_command do
     let(:time_frame_end_time) { h('23:59') }
 
     let(:task) do
@@ -33,16 +33,6 @@ describe Pomodoro::Commands::Active do
 
     let(:config) do
       OpenStruct.new(today_path: "spec/data/#{described_class}.#{rand(1000)}.today")
-    end
-
-    before(:each) do
-      File.open(config.today_path, 'w') do |file|
-        file.puts(data)
-      end
-    end
-
-    after(:each) do
-      File.unlink(config.today_path)
     end
 
     context "with no active task" do

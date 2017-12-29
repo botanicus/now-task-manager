@@ -54,8 +54,12 @@ end
 
 require 'support/shared_command_examples'
 
-RSpec.configure do |config|
-  config.include Module.new {
+RSpec.configure do |rspec|
+  # Tag examples with :focus to run only the selected ones.
+  rspec.filter_run_including focus: true
+  rspec.run_all_when_everything_filtered = true
+
+  rspec.include Module.new {
     def h(string)
       Hour.parse(string)
     end
@@ -66,4 +70,14 @@ RSpec.configure do |config|
     rescue ExecutionFinished
     end
   }
+
+  rspec.around(:each, type: :valid_command) do |example|
+    File.open(config.today_path, 'w') do |file|
+      file.puts(data)
+    end
+
+    example.run
+
+    File.unlink(config.today_path)
+  end
 end

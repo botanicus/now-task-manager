@@ -13,7 +13,7 @@ describe Pomodoro::Commands::Review do
   end
 
   include_examples(:missing_config)
-  include_examples(:requires_today_task_file)
+  # include_examples(:requires_today_task_file)
 
   context "with a valid config", :valid_command do
     let(:config) do
@@ -25,6 +25,7 @@ describe Pomodoro::Commands::Review do
     let(:data) { '' }
 
     it '...' do
+      pending
       run(subject)
     end
   end

@@ -65,13 +65,24 @@ module Pomodoro
         @args, @config = args, config || Pomodoro.config
       end
 
-      def get_period_and_date(default_period = :day)
+      def get_date_increment
         groups = @args.group_by { |argument| !! argument.match(/^[-+]\d$/) }
         @args = groups[false] || Array.new
         res = (groups[true] || Array.new).grep_v(/^[-+]0$/).map(&:to_i)
-        period = (@args.first && @args.shift || default_period).to_sym
 
         case res.length
+        when 0 then 0
+        when 1 then res[0]
+        else
+          raise ArgumentError.new("There cannot be more than 1 date indicator, was #{res.inspect}.")
+        end
+      end
+
+      def get_period_and_date(default_period = :day)
+        increment = self.get_date_increment
+        period = (@args.first && @args.shift || default_period).to_sym
+
+        case increment
         when 0
           [period, Date.today]
         when 1

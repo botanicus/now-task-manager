@@ -202,6 +202,9 @@ module Pomodoro
     require 'pomodoro/commands/postpone'
     self.command(:postpone, Commands::Postpone)
 
+    require 'pomodoro/commands/fail'
+    self.command(:fail, Commands::Fail)
+
     require 'pomodoro/commands/next'
     self.command(:next, Commands::Next)
 

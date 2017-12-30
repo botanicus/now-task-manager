@@ -13,25 +13,6 @@
 
    Help & desc.
 
-2. Change the commander to support subcommands.
-   Command should do one thing, but we should be able to group them intelligently.
-   There should be help for subcommands available via i. e. `now -h active`.
-   Man pages main + POSSIBLY for subcommands.
-   Update support/zsh.
-
-    now active {<main>,done,postpone,fail,move_on,commit}
-    now next {<main>,start(+run),done,postpone,fail}
-    now edit
-    now g
-    now +
-    now config
-    now report
-    now console
-    now schedule {show,test}
-    now plan
-    now review
-    now test
-
 3. The API: refactoring, API docs and specs.
 
 # The rest

@@ -45,9 +45,9 @@ describe Pomodoro::Commands::Postpone do
           Timecop.freeze(Time.new(2017, 12, 23, 9)) do
             run(subject)
 
-            expect(subject.sequence[0]).to eql(stdout: "<bold>Why?</bold> ")
-            expect(subject.sequence[1]).to eql(stdout: "<bold>When do you want to review?</bold> Defaults to tomorrow. Format <yellow>%d/%m</yellow> ")
-            expect(subject.sequence[2]).to eql(stdout: "<bold>~</bold> Task <green>active task</green> has been postponed to <yellow>24/12</yellow>.")
+            expect(subject.sequence[0]).to eql(stdout: "#{subject.t(:prompt_why)} ")
+            expect(subject.sequence[1]).to eql(stdout: "#{subject.t(:prompt_when)} ")
+            expect(subject.sequence[2]).to eql(stdout: subject.t(:success, task: 'active task', date: '24/12'))
             expect(subject.sequence[3]).to eql(exit: 0)
 
             expect(File.read(config.today_path)).to eql("Admin (0:00 – 23:59)\n✘ [7:50-9:00] Active task.\n  Postponed: I need XYZ first.\n  Review at: 2017-12-24\n")
@@ -64,9 +64,9 @@ describe Pomodoro::Commands::Postpone do
           Timecop.freeze(h('9:00').to_time) do
             run(subject)
 
-            expect(subject.sequence[0]).to eql(stdout: "<bold>Why?</bold> ")
-            expect(subject.sequence[1]).to eql(stdout: "<bold>When do you want to review?</bold> Defaults to tomorrow. Format <yellow>%d/%m</yellow> ")
-            expect(subject.sequence[2]).to eql(stdout: "<bold>~</bold> Task <green>active task</green> has been postponed to <yellow>31/1</yellow>.")
+            expect(subject.sequence[0]).to eql(stdout: "#{subject.t(:prompt_why)} ")
+            expect(subject.sequence[1]).to eql(stdout: "#{subject.t(:prompt_when)} ")
+            expect(subject.sequence[2]).to eql(stdout: subject.t(:success, task: 'active task', date: '31/1'))
             expect(subject.sequence[3]).to eql(exit: 0)
 
             expect(File.read(config.today_path)).to eql("Admin (0:00 – 23:59)\n✘ [7:50-9:00] Active task.\n  Postponed: I need XYZ first.\n  Review at: 2017-01-31\n")

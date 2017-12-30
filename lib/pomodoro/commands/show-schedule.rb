@@ -1,8 +1,6 @@
 require_relative 'generate'
 
 class Pomodoro::Commands::ShowSchedule < Pomodoro::Commands::Generate
-  self.description = "Print out the <magenta>schedule</magenta>."
-
   self.help = <<-EOF.gsub(/^\s*/, '')
     now show-schedule
     now show-schedule +1
@@ -19,6 +17,6 @@ class Pomodoro::Commands::ShowSchedule < Pomodoro::Commands::Generate
       puts time_frame
     end
   rescue Pomodoro::Config::ConfigError => error
-    abort "<red>#{error.message}</red>"
+    abort error
   end
 end

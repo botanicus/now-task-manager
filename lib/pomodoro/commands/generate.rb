@@ -4,8 +4,6 @@ require 'refined-refinements/homepath'
 
 # TODO: maybe better "now plan tomorrow"?
 class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
-  self.description = "Generate today list for today or tomorrow."
-
   # TODO: now g u_ani +normal_daily_routine -swimming_daily_routine
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <red>g</red> holidays     <bright_black># Generate task list for today.</bright_black>
@@ -174,6 +172,6 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
 
     puts "~ <green>File #{date_path} has been created.</green>"
   rescue Pomodoro::Config::ConfigError => error
-    abort "<red>#{error.message}</red>"
+    abort error
   end
 end

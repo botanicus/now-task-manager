@@ -1,6 +1,4 @@
 class Pomodoro::Commands::Next_Postpone < Pomodoro::Commands::Command
-  self.description = "<yellow>Postpone</yellow> the next task."
-
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>next:postpone</magenta> <bright_black># ...</bright_black>
   EOF
@@ -22,6 +20,6 @@ class Pomodoro::Commands::Next_Postpone < Pomodoro::Commands::Command
       puts "<bold>~</bold> Task <green>#{Pomodoro::Tools.unsentence(next_task.body)}</green> has been postponed."
     end
   rescue Pomodoro::Config::ConfigError => error
-    abort "<red>#{error.message}</red>"
+    abort error
   end
 end

@@ -1,6 +1,4 @@
 class Pomodoro::Commands::Test < Pomodoro::Commands::Command
-  self.description = "Run the acceptance tests for given period."
-
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>test</magenta> [<cyan>year</cyan>|<cyan>quarter</cyan>|<cyan>month</cyan>|<cyan>week</cyan>] <bright_black># Plan the coming time period.</bright_black>
     now test # Defaults to the current year.

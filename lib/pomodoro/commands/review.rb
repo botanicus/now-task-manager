@@ -1,8 +1,6 @@
 require 'pomodoro/router'
 
 class Pomodoro::Commands::Review < Pomodoro::Commands::Command
-  self.description = "Review given time period."
-
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>review</magenta>                                    <bright_black># Journal for today.</bright_black>
     now <magenta>review</magenta> [<cyan>year</cyan>|<cyan>quarter</cyan>|<cyan>month</cyan>|<cyan>week</cyan>|<cyan>day</cyan>] <bright_black>   # Review the current time period.</bright_black>
@@ -13,9 +11,7 @@ class Pomodoro::Commands::Review < Pomodoro::Commands::Command
     period, date = self.get_period_and_date(:day)
     router = Pomodoro::Router.new(self.config.data_root_path, date)
 
-    if date > Date.today
-      abort "Date cannot be past today, unless you're Doctor Who."
-    end
+    abort t(:cannot_be_past_today) if date > Date.today
 
     router = Pomodoro::Router.new(self.config.data_root_path, date)
 
@@ -28,9 +24,9 @@ class Pomodoro::Commands::Review < Pomodoro::Commands::Command
       path = router.send(:"#{period}_review_path")
       command("vim #{path}")
     else
-      raise "Unknown period: #{period}"
+      raise t(:unknown_period, period: period)
     end
   rescue Pomodoro::Config::ConfigError => error
-    abort "<red>#{error.message}</red>"
+    abort error
   end
 end

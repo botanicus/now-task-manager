@@ -1,6 +1,4 @@
 class Pomodoro::Commands::Config < Pomodoro::Commands::Command
-  self.description = "Print out <magenta>configuration</magenta>."
-
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <yellow>config</yellow>
     now <yellow>config</yellow> today_path
@@ -18,7 +16,7 @@ class Pomodoro::Commands::Config < Pomodoro::Commands::Command
       puts self.config.send(@args.first, *convert_arguments)
     end
   rescue Pomodoro::Config::ConfigError => error
-    abort "<red>#{error.message}</red>"
+    abort error
   end
 
   private

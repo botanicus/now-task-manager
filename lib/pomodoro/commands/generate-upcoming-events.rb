@@ -25,6 +25,6 @@ class Pomodoro::Commands::GenerateUpcomingEvents < Pomodoro::Commands::Command
       task_list.save(self.config.task_list_path)
     end
   rescue Pomodoro::Config::ConfigError => error
-    abort "<red>#{error.message}</red>"
+    abort error
   end
 end

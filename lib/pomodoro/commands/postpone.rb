@@ -1,6 +1,4 @@
 class Pomodoro::Commands::Postpone < Pomodoro::Commands::Command
-  self.description = "<yellow>Postpone</yellow> the current task."
-
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>postpone</magenta> <bright_black># Postpone the active task.</bright_black>
   EOF
@@ -27,6 +25,6 @@ class Pomodoro::Commands::Postpone < Pomodoro::Commands::Command
       abort "<red>There is no task in progress.</red>"
     end
   rescue Pomodoro::Config::ConfigError => error
-    abort "<red>#{error.message}</red>"
+    abort error
   end
 end

@@ -1,6 +1,4 @@
 class Pomodoro::Commands::Console < Pomodoro::Commands::Command
-  self.description = "Run Ruby console."
-
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <yellow>console</yellow>, now <yellow>c</yellow> <bright_black># Load the tasks and launch IRB.</bright_black>
   EOF
@@ -26,6 +24,6 @@ class Pomodoro::Commands::Console < Pomodoro::Commands::Command
     # Run ls to see the list of the local variables.
     require 'pry'; binding.pry
   rescue Pomodoro::Config::ConfigError => error
-    abort "<red>#{error.message}</red>"
+    abort error
   end
 end

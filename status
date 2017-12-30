@@ -2,12 +2,19 @@
 
 1. Finish the commands and their specs.
    If all commands work, we don't have to worry to fuck with the API.
-   i18n
 
     BitBar, nextdone, nextfail, nextpostpone, plan, review, run, show-schedule/schedule, test
     config, edit, Generate, report
     MoveOn: so far not being used
     GenerateUpcomingEvents, Log
+
+   Help & desc.
+   i18n using t(:sym)
+
+   rescue Pomodoro::Config::ConfigError => error
+     abort "<red>#{error.message}</red>"
+
+      CHANGE to abort(error)
 
 2. Change the commander to support subcommands.
    Command should do one thing, but we should be able to group them intelligently.

@@ -1,6 +1,4 @@
 class Pomodoro::Commands::Start < Pomodoro::Commands::Command
-  self.description = "<green>Start</green> the next task."
-
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>start</magenta> <bright_black># #{self.description}</bright_black>
     now <magenta>start</magenta> --confirm or -c <bright_black># Display the task and ask whether you want to start it.</bright_black>
@@ -26,6 +24,6 @@ class Pomodoro::Commands::Start < Pomodoro::Commands::Command
   rescue Interrupt
     puts
   rescue Pomodoro::Config::ConfigError => error
-    abort "<red>#{error.message}</red>"
+    abort error
   end
 end

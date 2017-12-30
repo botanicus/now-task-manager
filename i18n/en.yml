@@ -2,6 +2,78 @@ errors:
   config:
     missing_file: The config file %{path} doesn't exist.
     missing_key: "No such key: %{key}."
+
 commands:
+  active:
+    description: Print the active task.
+
+  add:
+    description: Add a task for later.
+
+  bitbar:
+
+  commit:
+    description: Commit the active task.
+
+  config:
+    description: Print out <magenta>configuration</magenta>.
+
+  console:
+    description: Run Ruby console.
+
+  done:
+    description: <green>Complete</green> the active task.
+
+  edit:
+    description: Open one of the files for edit.
+
+  generate-upcoming-events:
+
   generate:
+    description: Generate today list for today or tomorrow.
     already_exists: "<red>Error:</red> File %{path} already exists."
+
+  log:
+
+  move_on:
+    description: Move on from the current task.
+
+  next:
+    description: Display the next task.
+
+  next_done:
+    description: <green>Complete</green> the next task.
+
+  next_fail:
+    description: <red>Fail</red> the next command.
+
+  next_postpone:
+    description: <yellow>Postpone</yellow> the next task.
+
+  plan:
+    description: Plan given time period.
+
+  postpone:
+    description: <yellow>Postpone</yellow> the current task.
+
+  report:
+    description: End of the day <magenta>report</magenta>.
+
+  review:
+    description: Review given time period.
+    cannot_be_past_today: Date cannot be past today, unless you're Doctor Who.
+    unknown_period: "Unknown period: %{period}."
+
+  run:
+    description: <green>Run</green> the next task.
+
+  schedule:
+
+  show-schedule:
+    description: Print out the <magenta>schedule</magenta>.
+
+  start:
+    description: <green>Start</green> the next task.
+
+  test:
+    description: Run the acceptance tests for given period.

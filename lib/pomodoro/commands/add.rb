@@ -1,6 +1,4 @@
 class Pomodoro::Commands::Add < Pomodoro::Commands::Command
-  self.description = "Add a task for later."
-
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <red>+</red> [strings]<bright_black> # #{self.description}</bright_black>
   EOF
@@ -14,6 +12,6 @@ class Pomodoro::Commands::Add < Pomodoro::Commands::Command
 
     task_list.save(self.config.task_list_path)
   rescue Pomodoro::Config::ConfigError => error
-    abort "<red>#{error.message}</red>"
+    abort error
   end
 end

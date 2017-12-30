@@ -1,6 +1,4 @@
 class Pomodoro::Commands::Report < Pomodoro::Commands::Command
-  self.description = "End of the day <magenta>report</magenta>."
-
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>report</magenta> pattern<bright_black># ...</bright_black>
   EOF
@@ -24,6 +22,6 @@ class Pomodoro::Commands::Report < Pomodoro::Commands::Command
     puts "\n<bold>Total time:</bold> #{selected_time_frames.reduce(0) { |sum, time_frame| time_frame.actual_duration + sum }}"
     puts "<bold>Cistyho casu:</bold> #{selected_time_frames.reduce(0) { |sum, time_frame| time_frame.duration_ + sum }}"
   rescue Pomodoro::Config::ConfigError => error
-    abort "<red>#{error.message}</red>"
+    abort error
   end
 end

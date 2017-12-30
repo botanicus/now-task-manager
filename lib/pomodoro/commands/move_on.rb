@@ -1,6 +1,4 @@
 class Pomodoro::Commands::MoveOn < Pomodoro::Commands::Command
-  self.description = "Move on from the current task."
-
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>move_on</magenta> <bright_black># <yellow>Move on</yellow> from the active task. Mark its end time, but don't set it as completed.</bright_black>
   EOF
@@ -19,6 +17,6 @@ class Pomodoro::Commands::MoveOn < Pomodoro::Commands::Command
       abort "<red>There is no task in progress.</red>"
     end
   rescue Pomodoro::Config::ConfigError => error
-    abort "<red>#{error.message}</red>"
+    abort error
   end
 end

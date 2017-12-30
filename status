@@ -10,14 +10,8 @@
     BitBar, nextdone, nextfail, nextpostpone, plan, review, run, show-schedule/schedule, test
     config, edit, Generate, report
     MoveOn: so far not being used
-    GenerateUpcomingEvents, Log
 
    Help & desc.
-
-   rescue Pomodoro::Config::ConfigError => error
-     abort "<red>#{error.message}</red>"
-
-      CHANGE to abort(error)
 
 2. Change the commander to support subcommands.
    Command should do one thing, but we should be able to group them intelligently.

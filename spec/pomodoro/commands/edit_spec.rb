@@ -27,6 +27,7 @@ describe Pomodoro::Commands::Edit do
 
     describe "no args" do
       context "without config.today_path" do
+        # TODO
       end
 
       context "without today_path file" do
@@ -34,6 +35,7 @@ describe Pomodoro::Commands::Edit do
           File.unlink(config.today_path)
 
           run(subject)
+          # FIXME:
           expect(subject.sequence[0]).to eql(abort: "<red>! File #{config.today_path} doesn't exist.</red>\n  Run the <yellow>g</yellow> command first.")
         end
       end

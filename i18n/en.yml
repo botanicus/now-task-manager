@@ -35,7 +35,7 @@ commands:
 
   log:
 
-  move_on:
+  moveon:
     description: Move on from the current task.
 
   next:

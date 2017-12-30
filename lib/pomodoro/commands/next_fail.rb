@@ -1,6 +1,4 @@
 class Pomodoro::Commands::Next_Fail < Pomodoro::Commands::Command
-  self.description = "<red>Fail</red> the next command."
-
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>next:fail</magenta> <bright_black># #{self.description}</bright_black>
   EOF
@@ -20,6 +18,6 @@ class Pomodoro::Commands::Next_Fail < Pomodoro::Commands::Command
       puts "<bold>~</bold> Task <green>#{Pomodoro::Tools.unsentence(next_task.body)}</green> has been failed."
     end
   rescue Pomodoro::Config::ConfigError => error
-    abort "<red>#{error.message}</red>"
+    abort error
   end
 end

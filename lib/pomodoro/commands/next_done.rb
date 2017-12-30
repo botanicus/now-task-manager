@@ -1,6 +1,4 @@
 class Pomodoro::Commands::Next_Done < Pomodoro::Commands::Command
-  self.description = "<green>Complete</green> the next task."
-
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>next:done</magenta> <bright_black># #{self.description}</bright_black>
   EOF
@@ -13,6 +11,6 @@ class Pomodoro::Commands::Next_Done < Pomodoro::Commands::Command
       puts "<bold>~</bold> Task <green>#{Pomodoro::Tools.unsentence(next_task.body)}</green> has been finished."
     end
   rescue Pomodoro::Config::ConfigError => error
-    abort "<red>#{error.message}</red>"
+    abort error
   end
 end

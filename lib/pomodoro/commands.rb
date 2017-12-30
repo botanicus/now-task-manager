@@ -9,6 +9,14 @@ module Pomodoro
     module EnvironmentCommunication
       using RR::ColouredTerminal
 
+      def abort(*args)
+        if args.first.is_a?(Exception)
+          super("<red>#{args.first.message}</red>")
+        else
+          super(*args)
+        end
+      end
+
       def command(command)
         system(command)
       end
@@ -40,11 +48,9 @@ module Pomodoro
       end
 
       def self.description
-        @description
-      end
-
-      def self.description=(description)
-        @description = description
+        command = self.to_s.split('::').last.downcase
+        I18n.t!("commands.#{command}.description")
+      rescue I18n::MissingTranslationData
       end
 
       attr_reader :config
@@ -152,6 +158,14 @@ module Pomodoro
             abort "<red>No more tasks in #{current_time_frame.name}</red>"
           end
         end
+      end
+
+      def command_name
+        self.class.to_s.split('::').last.downcase
+      end
+
+      def t(key, **options)
+        I18n.t!("commands.#{self.command}.#{key}", **options)
       end
     end
   end

@@ -16,6 +16,7 @@ RSpec.shared_examples(:has_description) do
   describe '.description' do
     it "has it" do
       expect(described_class).to respond_to(:description)
+      expect(described_class.description).not_to be_nil
       expect(described_class.description.length).not_to be(0)
     end
   end
@@ -25,6 +26,7 @@ RSpec.shared_examples(:has_help) do
   describe '.help' do
     it "has it" do
       expect(described_class).to respond_to(:help)
+      expect(described_class.help).not_to be_nil
       expect(described_class.help.length).not_to be(0)
     end
   end
@@ -46,7 +48,8 @@ RSpec.shared_examples(:missing_config) do
 
     it "fails" do
       run(subject)
-      expect(subject.sequence[0]).to eql(abort: "<red>#{message}</red>")
+      expect(subject.sequence[0]).to have_key(:abort)
+      expect(subject.sequence[0][:abort]).to be_kind_of(Pomodoro::Config::ConfigFileMissingError)
     end
   end
 end

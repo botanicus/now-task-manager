@@ -1,8 +1,6 @@
 require 'shellwords'
 
 class Pomodoro::Commands::Commit < Pomodoro::Commands::Command
-  self.description = "Commit the active task."
-
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>commit</magenta> <bright_black># #{self.description}</bright_black>
     now commit -a|-v
@@ -23,6 +21,6 @@ class Pomodoro::Commands::Commit < Pomodoro::Commands::Command
       abort "<red>There is no task in progress.</red>"
     end
   rescue Pomodoro::Config::ConfigError => error
-    abort "<red>#{error.message}</red>"
+    abort error
   end
 end

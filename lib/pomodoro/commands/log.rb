@@ -26,6 +26,6 @@ class Pomodoro::Commands::Log < Pomodoro::Commands::Command
       day.save(config.today_path)
     end
   rescue Pomodoro::Config::ConfigError => error
-    abort "<red>#{error.message}</red>"
+    abort error
   end
 end

@@ -29,8 +29,6 @@ class Pomodoro::Commands::Active < Pomodoro::Commands::Command
     end
   ]
 
-  self.description = "Print the active task."
-
   self.help = <<-EOF
     <bright_black># #{self.description}</bright_black>
     now <green>active</green>, now <green>active</green> [format string]
@@ -62,6 +60,6 @@ class Pomodoro::Commands::Active < Pomodoro::Commands::Command
       p active_task
     end
   rescue Pomodoro::Config::ConfigError => error
-    abort "<red>#{error.message}</red>"
+    abort error
   end
 end

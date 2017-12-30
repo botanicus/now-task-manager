@@ -2,8 +2,6 @@ require 'shellwords'
 
 # TODO: Later refactor to be part of start.
 class Pomodoro::Commands::Run < Pomodoro::Commands::Command
-  self.description = "<green>Run</green> the next task."
-
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>run</magenta> <bright_black># ...</bright_black>
   EOF
@@ -31,7 +29,7 @@ class Pomodoro::Commands::Run < Pomodoro::Commands::Command
     Pomodoro::Commands::Done.new(Array.new).run
 
   rescue Pomodoro::Config::ConfigError => error
-    abort "<red>#{error.message}</red>"
+    abort error
   end
 end
 

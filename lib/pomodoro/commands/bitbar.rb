@@ -4,7 +4,7 @@ class Pomodoro::Commands::BitBar < Pomodoro::Commands::Command
     task_list  = parse_task_list(self.config)  if File.exist?(self.config.task_list_path)
     Pomodoro::Commands::BitBarUI.main(today_list, task_list)
   rescue Pomodoro::Config::ConfigError => error
-    abort "<red>#{error.message}</red>"
+    abort error
   end
 end
 

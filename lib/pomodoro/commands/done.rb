@@ -1,6 +1,4 @@
 class Pomodoro::Commands::Done < Pomodoro::Commands::Command
-  self.description = "<green>Complete</green> the active task."
-
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>done</magenta> <bright_black># #{self.description}</bright_black>
   EOF
@@ -16,6 +14,6 @@ class Pomodoro::Commands::Done < Pomodoro::Commands::Command
       abort "<red>There is no task in progress.</red>"
     end
   rescue Pomodoro::Config::ConfigError => error
-    abort "<red>#{error.message}</red>"
+    abort error
   end
 end

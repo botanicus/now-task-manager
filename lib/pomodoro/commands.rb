@@ -228,9 +228,6 @@ module Pomodoro
     require 'pomodoro/commands/add'
     self.command(:+, Commands::Add)
 
-    require 'pomodoro/commands/generate-upcoming-events'
-    self.command(:'generate-upcoming-events', Commands::GenerateUpcomingEvents)
-
     require 'pomodoro/commands/config'
     self.command(:config, Commands::Config)
 

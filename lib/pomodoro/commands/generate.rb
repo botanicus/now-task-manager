@@ -137,11 +137,32 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
     return scheduled_date
   end
 
+  def add_upcoming_events_to_scheduled_list(scheduled_task_list)
+    upcoming_events = self.config.calendar.select do |event_name, date|
+      ((Date.today + 1)..(Date.today + 6)).include?(date)
+    end
+
+    unless upcoming_events.empty?
+      # TODO: create new if no File.exist?(self.config.task_list_path)
+      task_list = parse_task_list(self.config)
+      upcoming_events.each do |event_name, date|
+        puts t(:adding_upcoming, event: event_name, date: date.strftime('%A'))
+        if task_group = task_list[date.strftime('%A')]
+          task_group << event_name
+        else
+          task_list << Pomodoro::Formats::Scheduled::TaskGroup.new(header: date.strftime('%A'), tasks: [
+            Pomodoro::Formats::Scheduled::Task.new(body: event_name)
+          ])
+        end
+      end
+    end
+  end
+
   def run
     @date = Date.today + self.get_date_increment
 
     if self.date_path.exist?
-      abort(I18n.t('commands.generate.already_exists', path: self.date_path))
+      abort t(:already_exists, path: self.date_path)
     end
 
     previous_day_task_list_path = self.config.today_path(@date - 1)
@@ -150,8 +171,10 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
       # TODO: For skipped tasks, add them only if they weren't added by the rules.
       postponed_tasks = previous_day.task_list.each_task_with_time_frame.select { |tf, task| task.postponed? || task.skipped?(tf) }
       unless postponed_tasks.empty?
-        puts t(:migrating_postponed, date: previous_day.date.strftime('%d/%m'))
         scheduled_task_list = parse_task_list(self.config)
+        self.add_upcoming_events_to_scheduled_list(scheduled_task_list)
+
+        puts t(:migrating_postponed, date: previous_day.date.strftime('%d/%m'))
         postponed_tasks.each do |time_frame, task|
           scheduled_date = add_postponed_task_to_scheduled_list(scheduled_task_list, time_frame, task)
           puts '  ' + t(:scheduling, task: Pomodoro::Tools.unsentence(task.body), date: scheduled_date.downcase)

@@ -6,6 +6,13 @@ errors:
 commands:
   active:
     description: Print the active task.
+    examples:
+      body: Finish the review.
+      body_unsentenced: finish the review
+      start_time: 9:20
+      duration: 0:20
+      remaining_duration: 0:12
+      time_frame: Morning routine
 
   add:
     description: Add a task for later.

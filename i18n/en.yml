@@ -37,9 +37,6 @@ commands:
   edit:
     description: Open one of the files for edit.
 
-  generate-upcoming-events:
-    adding: ~ Adding %{event} for %{date}.
-
   generate:
     description: Generate today list for today or tomorrow.
     no_such_schedule: "No such schedule: %{schedule}. Valid are: %{schedules}"
@@ -53,9 +50,8 @@ commands:
     migrating_postponed: "~ <green>Migrating postponed tasks</green> from <yellow>%{date}</yellow>."
     scheduling: ~ Scheduling <green>%{task}</green> for <yellow>%{date}</yellow>.
     no_postponed_tasks: ~ <green>No postponed tasks</green> from <yellow>%{date}</yellow>.
+    adding_upcoming: ~ <green>Adding</green> <bold>%{event}</bold> for <yellow>%{date}</yellow>.
     file_created: ~ <green>File %{path} has been created.</green>
-
-  log:
 
   moveon:
     description: Move on from the current task.

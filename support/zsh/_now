@@ -2,7 +2,7 @@
 
 _now() {
   local -a commands
-  commands=("${(@f)$(~/Dropbox/Projects/Software/pomodoro/tools/zsh_commands_gen)}")
+  commands=("${(@f)$(now describe zsh)}")
 
   # ... OR ...
   # commands=(

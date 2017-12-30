@@ -264,5 +264,8 @@ module Pomodoro
 
     require 'pomodoro/commands/bitbar'
     self.command(:bitbar, Commands::BitBar)
+
+    require 'pomodoro/commands/describe'
+    self.command(:describe, Commands::Describe)
   end
 end

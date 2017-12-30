@@ -8,7 +8,7 @@ class Pomodoro::Commands::ShowSchedule < Pomodoro::Commands::Generate
   EOF
 
   def run
-    @date = self.parse_date
+    @date = Date.today + self.get_date_increment
     options = self.group_args
     scheduler = self.get_scheduler(@date)
     schedule = self.get_schedule(scheduler, **options)

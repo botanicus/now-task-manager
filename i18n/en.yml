@@ -21,46 +21,74 @@ commands:
 
   commit:
     description: Commit the active task.
+    log_command: <bold>~</bold> Running <bright_black>git commit %{commit_message}</bright_black>
 
   config:
     description: Print out <magenta>configuration</magenta>.
+    unknown_option: No option named %{option} is in the config.
 
   console:
     description: Run Ruby console.
 
   done:
     description: <green>Complete</green> the active task.
+    success: <bold>~</bold> Task <green>%{task}</green> has been finished.
 
   edit:
     description: Open one of the files for edit.
 
   generate-upcoming-events:
+    adding: ~ Adding %{event} for %{date}.
 
   generate:
     description: Generate today list for today or tomorrow.
+    no_such_schedule: "No such schedule: %{schedule}. Valid are: %{schedules}"
+    no_schedule: Cannot find any schedule for %{date}
+    log_schedule: "~ Schedule: <magenta>%{schedule}</magenta>."
+    no_data_found: <red>No data were found in the task list.</red>
+    no_such_time_frame: "No such time frame: %{time_frame} in %{time_frames}"
+    adding_task: ~ Adding <green>%{task}</green> to <magenta>%{time_frame}</magenta>.
+    cannot_be_past_today: Scheduled date cannot be today or earlier, was %{date} for task %{task}.
     already_exists: "<red>Error:</red> File %{path} already exists."
+    migrating_postponed: "~ <green>Migrating postponed tasks</green> from <yellow>%{date}</yellow>."
+    scheduling: ~ Scheduling <green>%{task}</green> for <yellow>%{date}</yellow>.
+    no_postponed_tasks: ~ <green>No postponed tasks</green> from <yellow>%{date}</yellow>.
+    file_created: ~ <green>File #{path} has been created.</green>
 
   log:
 
   moveon:
     description: Move on from the current task.
+    prompt_why: <bold>Why?</bold>
+    success: <bold>~</bold> You moved on from <green>%{task}</green>.
 
   next:
     description: Display the next task.
+    task_in_progress: <yellow>There is a task in progress already:</yellow> %{task}
+    upcoming_task: <bold>~</bold> The upcoming task is <green>%{task}</green>.
 
   next_done:
     description: <green>Complete</green> the next task.
+    success: <bold>~</bold> Task <green>%{task}</green> has been finished.
 
   next_fail:
     description: <red>Fail</red> the next command.
+    prompt_why: <bold>Why?</bold>
+    success: <bold>~</bold> Task <green>%{task}</green> has been failed.
 
-  next_postpone:
+  next_postpone: &postpone
     description: <yellow>Postpone</yellow> the next task.
+    prompt_why: <bold>Why?</bold>
+    prompt_when: <bold>When do you want to review?</bold> Defaults to tomorrow.
+    success: <bold>~</bold> Task <green>%{task}</green> has been postponed.
 
   plan:
     description: Plan given time period.
+    not_initialised: <red>Features</red> in %{path} are not initialised.
+    unknown_period: "Unknown period: %{period}"
 
   postpone:
+    <<: *postpone
     description: <yellow>Postpone</yellow> the current task.
 
   report:
@@ -73,6 +101,7 @@ commands:
 
   run:
     description: <green>Run</green> the next task.
+    no_matcher_found: No matcher found for %{task}.
 
   schedule:
 
@@ -81,6 +110,10 @@ commands:
 
   start:
     description: <green>Start</green> the next task.
+    confirm: <bold>Start?</bold>
+    task_in_progress: <yellow>There is a task in progress already:</yellow> %{task}
+    success: <bold>~</bold> Task <green>%{task}</green> has been started.
 
   test:
     description: Run the acceptance tests for given period.
+    pwd: "<bold>~</bold> Current directory: <green>%{dir}</green>."

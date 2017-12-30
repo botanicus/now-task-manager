@@ -3,6 +3,8 @@
 1. Finish the commands and their specs.
    If all commands work, we don't have to worry to fuck with the API.
 
+    Commit, Done, MoveOn, NextFail, Next_Postpone, Next, Postpone: abort "<red>There is no task in progress.</red>" # TODO: raise NoTaskInProgress.
+
     BitBar, nextdone, nextfail, nextpostpone, plan, review, run, show-schedule/schedule, test
     config, edit, Generate, report
     MoveOn: so far not being used

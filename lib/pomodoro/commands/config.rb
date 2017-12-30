@@ -9,11 +9,13 @@ class Pomodoro::Commands::Config < Pomodoro::Commands::Command
     if @args.empty?
       p config
     else
-      unless @config.respond_to?(@args.first)
-        abort "<red>...</red>"
+      method_name = @args.first
+
+      unless @config.respond_to?(method_name)
+        raise Pomodoro::Config::ConfigError.new(t(:unknown_option, option: method_name))
       end
 
-      puts self.config.send(@args.first, *convert_arguments)
+      puts self.config.send(method_name, *convert_arguments)
     end
   rescue Pomodoro::Config::ConfigError => error
     abort error

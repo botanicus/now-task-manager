@@ -38,12 +38,14 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
     if schedule_name = options.delete(:schedule)
       schedule = scheduler.schedules.find { |schedule| schedule.name == schedule_name.to_sym }
       unless schedule
-        raise "No such schedule: #{schedule_name}. Valid are: #{scheduler.schedules.keys.inspect}"
+        raise t(:no_such_schedule,
+          schedule: schedule_name,
+          schedules: scheduler.schedules.keys.inspect)
       end
     else
       schedule = scheduler.schedule_for_date(@date)
       unless schedule
-        raise "Cannot find any schedule for #{@date.strftime('%d/%m')}"
+        raise t(:no_schedule, date: @date.strftime('%d/%m'))
       end
     end
 
@@ -58,13 +60,11 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
     scheduler = self.get_scheduler(@date)
     schedule = self.get_schedule(scheduler, **options)
 
-    puts "~ Schedule: <magenta>#{schedule.name}</magenta>."
+    puts t(:log_schedule, schedule: schedule.name)
 
     day = schedule.call
 
-    if day.empty?
-      abort "<red>No data were found in the task list.</red>"
-    end
+    abort t(:no_data_found) if day.empty?
 
     scheduler.populate_from_rules(day.task_list, **options.merge(schedule: schedule))
 
@@ -92,13 +92,18 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
             )
 
             unless time_frame
-              raise "No such time frame: #{task.time_frame} in #{day.task_list.time_frames.map(&:name).inspect}"
+              raise t(:no_such_time_frame,
+                time_frame: task.time_frame,
+                time_frames: day.task_list.time_frames.map(&:name).inspect)
             end
           end
 
           time_frame ||= day.task_list.time_frames.first
 
-          puts "~ Adding <green>#{Pomodoro::Tools.unsentence(task.body)}</green> to <magenta>#{time_frame.name.downcase}</magenta>."
+          puts t(:adding_task,
+            task: Pomodoro::Tools.unsentence(task.body),
+            time_frame: time_frame.name.downcase)
+
           time_frame.items << Pomodoro::Formats::Today::Task.new(
             status: :not_done, body: task.body, tags: task.tags,
             fixed_start_time: task.start_time)
@@ -113,7 +118,7 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
     scheduled_date = task.metadata['Review at'] || (Date.today + 1).iso8601
 
     if Date.parse(scheduled_date) >= (@date + 1)
-      raise "Scheduled date cannot be today or earlier, was #{scheduled_date} for task #{task}."
+      raise t(:cannot_be_today_or_earlier, date: scheduled_date, task: task)
     end
 
     if Date.parse(scheduled_date) == (@date + 1)
@@ -128,7 +133,8 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
       scheduled_task_list << Pomodoro::Formats::Scheduled::TaskGroup.new(header: scheduled_date)
       scheduled_task_list[formatted_scheduled_date]
     )
-    task_group << Pomodoro::Formats::Scheduled::Task.new(time_frame: time_frame.name, body: task.body, tags: task.tags)
+    task_group << Pomodoro::Formats::Scheduled::Task.new(
+      time_frame: time_frame.name, body: task.body, tags: task.tags)
 
     return scheduled_date
   end
@@ -146,16 +152,16 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
       # TODO: For skipped tasks, add them only if they weren't added by the rules.
       postponed_tasks = previous_day.task_list.each_task_with_time_frame.select { |tf, task| task.postponed? || task.skipped?(tf) }
       unless postponed_tasks.empty?
-        puts "~ <green>Migrating postponed tasks</green> from <yellow>#{previous_day.date.strftime('%d/%m')}</yellow>."
+        puts t(:migrating_postponed, date: previous_day.date.strftime('%d/%m'))
         scheduled_task_list = parse_task_list(self.config)
         postponed_tasks.each do |time_frame, task|
           scheduled_date = add_postponed_task_to_scheduled_list(scheduled_task_list, time_frame, task)
-          puts "  ~ Scheduling <green>#{Pomodoro::Tools.unsentence(task.body)}</green> for <yellow>#{scheduled_date.downcase}</yellow>."
+          puts '  ' + t(:scheduling, task: Pomodoro::Tools.unsentence(task.body), date: scheduled_date.downcase)
         end
         scheduled_task_list.save(self.config.task_list_path)
         puts
       else
-        puts "~ <green>No postponed tasks</green> from <yellow>#{previous_day.date.strftime('%m/%d')}</yellow>."
+        puts t(:no_postponed_tasks, date: previous_day.date.strftime('%m/%d'))
       end
     end
 
@@ -170,7 +176,7 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
     day.save(self.date_path.expand)
     scheduled_task_list.save(self.config.task_list_path)
 
-    puts "~ <green>File #{date_path} has been created.</green>"
+    puts t(:file_created, path: date_path)
   rescue Pomodoro::Config::ConfigError => error
     abort error
   end

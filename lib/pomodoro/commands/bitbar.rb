@@ -1,3 +1,4 @@
+# TODO: Use I18n.
 class Pomodoro::Commands::BitBar < Pomodoro::Commands::Command
   def run
     today_list = parse_today_list(self.config).task_list if File.exist?(self.config.today_path)

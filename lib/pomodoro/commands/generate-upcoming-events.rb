@@ -14,7 +14,7 @@ class Pomodoro::Commands::GenerateUpcomingEvents < Pomodoro::Commands::Command
       # TODO: create new if no File.exist?(self.config.task_list_path)
       task_list = parse_task_list(self.config)
       upcoming_events.each do |event_name, date|
-        puts "~ Adding #{event_name} for #{date.strftime('%A %d/%m')}."
+        puts t(:adding, event: event_name, date: date.strftime('%A %d/%m'))
         if task_group = task_list[date.strftime('%A')]
           task_group << event_name
         else

@@ -14,11 +14,13 @@ class Pomodoro::Commands::Commit < Pomodoro::Commands::Command
     if  with_active_task(self.config) do |active_task|
           commit_message = Shellwords.escape(active_task.body)
           arguments = [*@args, '-m', commit_message].join(' ')
-          puts("<bold>~</bold> Running <bright_black>git commit #{arguments}</bright_black>\n\n")
+          puts(t(:log_command, commit_message: commit_message))
+          puts
+
           command("git commit #{arguments}")
         end
     else
-      abort "<red>There is no task in progress.</red>"
+      abort "<red>There is no task in progress.</red>" # TODO: raise NoTaskInProgress.
     end
   rescue Pomodoro::Config::ConfigError => error
     abort error

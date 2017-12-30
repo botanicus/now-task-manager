@@ -16,7 +16,11 @@ class Pomodoro::Commands::Next_Postpone < Pomodoro::Commands::Command
     print "#{t(:prompt_when)} "
     review_at = $stdin.readline.chomp
     edit_next_task_when_no_task_active(self.config) do |next_task|
-      review_date = review_at.empty? ? next_task.postpone!(reason) : next_task.postpone!(reason, review_at)
+      review_date = if review_at.empty?
+        next_task.postpone!(reason)
+      else
+        next_task.postpone!(reason, Date.strptime(review_at, '%d/%m'))
+      end
       puts t(:success, task: Pomodoro::Tools.unsentence(next_task.body), date: review_date.strftime('%-d/%-m'))
     end
   rescue Pomodoro::Config::ConfigError => error

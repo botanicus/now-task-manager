@@ -29,20 +29,6 @@ module Pomodoro::Formats::Today
       {status: status}
     }
 
-    rule(log_item: simple(:blob)) {
-      hash = blob.to_s.chomp('.').split(/, /).reduce(Hash.new) do |buffer, chunk|
-        key, value = chunk.split(': ')
-        buffer.merge(key => value)
-      end
-
-      begin
-        LogItem.new(hash)
-      rescue ArgumentError => error
-        message = [error.message, "Arguments were: #{data.inspect}"].join("\n")
-        raise ArgumentError.new(message)
-      end
-    }
-
     rule(task: subtree(:data)) {
       char = data.delete(:indent)
       status, _ = Task::STATUS_MAPPING.find { |status, i| i.include?(char) }

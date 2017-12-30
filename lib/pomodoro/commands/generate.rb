@@ -8,6 +8,8 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <red>g</red> holidays     <bright_black># Generate task list for today.</bright_black>
     now <red>g</red> +1 holidays  <bright_black># Generate task list for tomorrow.</bright_black>
+      --dry-run
+      --no-remove
   EOF
 
   def group_args
@@ -24,10 +26,6 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
 
       buffer
     end
-  end
-
-  def parse_date
-    @args.delete('+1') ? Date.today + 1 : Date.today
   end
 
   def date_path
@@ -130,7 +128,7 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
     end
 
     task_group = scheduled_task_list[formatted_scheduled_date] || (
-      scheduled_task_list << Pomodoro::Formats::Scheduled::TaskGroup.new(header: scheduled_date)
+      scheduled_task_list << Pomodoro::Formats::Scheduled::TaskGroup.new(header: formatted_scheduled_date)
       scheduled_task_list[formatted_scheduled_date]
     )
     task_group << Pomodoro::Formats::Scheduled::Task.new(
@@ -140,7 +138,7 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
   end
 
   def run
-    @date = self.parse_date
+    @date = Date.today + self.get_date_increment
 
     if self.date_path.exist?
       abort(I18n.t('commands.generate.already_exists', path: self.date_path))
@@ -158,7 +156,10 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
           scheduled_date = add_postponed_task_to_scheduled_list(scheduled_task_list, time_frame, task)
           puts '  ' + t(:scheduling, task: Pomodoro::Tools.unsentence(task.body), date: scheduled_date.downcase)
         end
-        scheduled_task_list.save(self.config.task_list_path)
+
+        if (@args & %w{--dry-run --no-remove}).empty?
+          scheduled_task_list.save(self.config.task_list_path)
+        end
         puts
       else
         puts t(:no_postponed_tasks, date: previous_day.date.strftime('%m/%d'))
@@ -169,14 +170,21 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
 
     day = self.populate_from_schedule_and_rules(**options)
 
-    command("vim #{self.config.task_list_path}")
+    if (@args & %w{--dry-run --no-remove}).empty?
+      command("vim #{self.config.task_list_path}")
+    end
+
     scheduled_task_list = parse_task_list(self.config)
     self.populate_from_scheduled_task_list(day, scheduled_task_list)
 
-    day.save(self.date_path.expand)
-    scheduled_task_list.save(self.config.task_list_path)
+    if @args.include?('--dry-run')
+      puts "\n\n", day
+    else
+      day.save(self.date_path.expand)
+      scheduled_task_list.save(self.config.task_list_path)
 
-    puts t(:file_created, path: date_path)
+      puts t(:file_created, path: date_path)
+    end
   rescue Pomodoro::Config::ConfigError => error
     abort error
   end

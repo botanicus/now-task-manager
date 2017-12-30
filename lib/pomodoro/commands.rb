@@ -47,10 +47,17 @@ module Pomodoro
         system(command)
       end
 
+      def self.command_name
+        self.to_s.split('::').last.downcase
+      end
+
       def self.description
-        command = self.to_s.split('::').last.downcase
-        I18n.t!("commands.#{command}.description")
+        self.t(:description)
       rescue I18n::MissingTranslationData
+      end
+
+      def self.t(key, **options)
+        I18n.t!("commands.#{self.command_name}.#{key}", **options)
       end
 
       attr_reader :config
@@ -160,12 +167,8 @@ module Pomodoro
         end
       end
 
-      def command_name
-        self.class.to_s.split('::').last.downcase
-      end
-
       def t(key, **options)
-        I18n.t!("commands.#{self.command}.#{key}", **options)
+        I18n.t!("commands.#{self.class.command_name}.#{key}", **options)
       end
     end
   end

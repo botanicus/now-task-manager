@@ -9,17 +9,17 @@ class Pomodoro::Commands::Start < Pomodoro::Commands::Command
 
     unless (@args & ['--confirm', '-c']).empty?
       Pomodoro::Commands::Next.new(Array.new).run
-      print "\n<bold>Start?</bold> " # TODO: Allow edit.
+      print "\n#{t(:confirm)} "
       STDIN.readline
     end
 
     with_active_task(self.config) do |active_task|
-      abort "<red>There is an active task already:</red> #{Pomodoro::Tools.unsentence(active_task.body)}."
+      abort t(:task_in_progress, task: Pomodoro::Tools.unsentence(active_task.body))
     end
 
     edit_next_task_when_no_task_active(self.config) do |next_task|
-      puts "<bold>~</bold> Task <green>#{Pomodoro::Tools.unsentence(next_task.body)}</green> has been started."
       next_task.start!
+      puts t(:success, task: Pomodoro::Tools.unsentence(next_task.body))
     end
   rescue Interrupt
     puts

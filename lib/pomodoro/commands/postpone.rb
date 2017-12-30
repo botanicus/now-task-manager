@@ -7,9 +7,9 @@ class Pomodoro::Commands::Postpone < Pomodoro::Commands::Command
     ensure_today
 
     if  with_active_task(self.config) do |active_task|
-          print "<bold>Why?</bold> "
+          print "#{t(:prompt_why)} "
           reason = $stdin.readline.chomp
-          print "<bold>When do you want to review?</bold> Defaults to tomorrow. Format <yellow>%d/%m</yellow> "
+          print "#{t(:prompt_when)} "
           review_at = $stdin.readline.chomp
 
           if review_at.empty?
@@ -19,10 +19,10 @@ class Pomodoro::Commands::Postpone < Pomodoro::Commands::Command
             review_date = active_task.postpone!(reason, review_date)
           end
 
-          puts "<bold>~</bold> Task <green>#{Pomodoro::Tools.unsentence(active_task.body)}</green> has been postponed to <yellow>#{review_date.strftime('%-d/%-m')}</yellow>."
+          puts t(:success, task: Pomodoro::Tools.unsentence(next_task.body))
         end
     else
-      abort "<red>There is no task in progress.</red>"
+      abort "<red>There is no task in progress.</red>" # FIXME
     end
   rescue Pomodoro::Config::ConfigError => error
     abort error

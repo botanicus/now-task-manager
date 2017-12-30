@@ -13,7 +13,7 @@ class Pomodoro::Commands::Plan < Pomodoro::Commands::Command
     if router.respond_to?(:"#{period}_plan_path")
       path = router.send(:"#{period}_plan_path")
       unless router.features_path.directory?
-        abort "<red>Features</red> in #{RR::Homepath.new(router.features_path.to_s)} are not initialised."
+        abort t(:not_initialised, path: RR::Homepath.new(router.features_path.to_s))
       end
 
       Dir.chdir(router.features_path.to_s) do
@@ -24,7 +24,7 @@ class Pomodoro::Commands::Plan < Pomodoro::Commands::Command
         command("vim #{path}")
       end
     else
-      raise "Unknown period: #{period}"
+      abort t(:unknown_period, period: period)
     end
   rescue Pomodoro::Config::ConfigError => error
     abort error

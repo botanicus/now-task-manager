@@ -1,4 +1,5 @@
 class Pomodoro::Commands::Edit < Pomodoro::Commands::Command
+  # TODO: e config
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <green>edit</green>, now <green>e</green>
       <bright_black>now e</bright_black> Edit the today task file, creating it if it doesn't exist.

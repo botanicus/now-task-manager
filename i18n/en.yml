@@ -53,7 +53,7 @@ commands:
     migrating_postponed: "~ <green>Migrating postponed tasks</green> from <yellow>%{date}</yellow>."
     scheduling: ~ Scheduling <green>%{task}</green> for <yellow>%{date}</yellow>.
     no_postponed_tasks: ~ <green>No postponed tasks</green> from <yellow>%{date}</yellow>.
-    file_created: ~ <green>File #{path} has been created.</green>
+    file_created: ~ <green>File %{path} has been created.</green>
 
   log:
 
@@ -64,7 +64,7 @@ commands:
 
   next:
     description: Display the next task.
-    task_in_progress: <yellow>There is a task in progress already:</yellow> %{task}
+    task_in_progress: <yellow>There is an active task already:</yellow> %{task}.
     upcoming_task: <bold>~</bold> The upcoming task is <green>%{task}</green>.
 
   next_done:
@@ -79,8 +79,8 @@ commands:
   next_postpone: &postpone
     description: <yellow>Postpone</yellow> the next task.
     prompt_why: <bold>Why?</bold>
-    prompt_when: <bold>When do you want to review?</bold> Defaults to tomorrow.
-    success: <bold>~</bold> Task <green>%{task}</green> has been postponed.
+    prompt_when: <bold>When do you want to review?</bold> Defaults to tomorrow. Format <yellow>%d/%m</yellow>
+    success: <bold>~</bold> Task <green>%{task}</green> has been postponed to <yellow>%{date}</yellow>.
 
   plan:
     description: Plan given time period.
@@ -111,7 +111,7 @@ commands:
   start:
     description: <green>Start</green> the next task.
     confirm: <bold>Start?</bold>
-    task_in_progress: <yellow>There is a task in progress already:</yellow> %{task}
+    task_in_progress: <red>There is an active task already:</red> %{task}.
     success: <bold>~</bold> Task <green>%{task}</green> has been started.
 
   test:

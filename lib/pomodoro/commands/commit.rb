@@ -14,8 +14,7 @@ class Pomodoro::Commands::Commit < Pomodoro::Commands::Command
     if  with_active_task(self.config) do |active_task|
           commit_message = Shellwords.escape(active_task.body)
           arguments = [*@args, '-m', commit_message].join(' ')
-          puts(t(:log_command, commit_message: commit_message))
-          puts
+          puts("#{t(:log_command, commit_message: commit_message)}\n\n")
 
           command("git commit #{arguments}")
         end

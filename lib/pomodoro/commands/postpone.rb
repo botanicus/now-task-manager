@@ -19,7 +19,7 @@ class Pomodoro::Commands::Postpone < Pomodoro::Commands::Command
             review_date = active_task.postpone!(reason, review_date)
           end
 
-          puts t(:success, task: Pomodoro::Tools.unsentence(next_task.body))
+          puts t(:success, task: Pomodoro::Tools.unsentence(active_task.body), date: review_date.strftime('%-d/%-m'))
         end
     else
       abort "<red>There is no task in progress.</red>" # FIXME

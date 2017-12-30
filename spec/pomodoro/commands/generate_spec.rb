@@ -24,7 +24,7 @@ describe Pomodoro::Commands::Generate do
       File.unlink(config.today_path)
     end
 
-    it do
+    it '...' do
       run(subject)
 
       expect(subject.sequence[0]).to eql(stdout: "~ Schedule: <magenta>any</magenta>.")

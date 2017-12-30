@@ -82,27 +82,23 @@ module Pomodoro
         increment = self.get_date_increment
         period = (@args.first && @args.shift || default_period).to_sym
 
-        case increment
-        when 0
+        if increment == 0
           [period, Date.today]
-        when 1
+        else
           today = Date.today.extend(DataExts)
 
-          direction = (res[0] < 0) ? :prev : :next
+          direction = (increment < 0) ? :prev : :next
           method_name = :"#{direction}_#{period}"
 
           unless today.respond_to?(method_name)
             raise ArgumentError.new("Unknown period: #{period}")
           end
 
-          result = res[0].abs.times.reduce(today) do |last_result|
+          result = increment.abs.times.reduce(today) do |last_result|
             last_result.send(method_name).extend(DataExts)
           end
 
-          @args.delete(res[0])
           [period, result]
-        else
-          raise ArgumentError.new("There cannot be more than 1 date indicator, was #{res.inspect}.")
         end
       end
 

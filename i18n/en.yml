@@ -37,6 +37,11 @@ commands:
   edit:
     description: Open one of the files for edit.
 
+  fail: &fail
+    description: <red>Fail</red> the current command.
+    prompt_why: <bold>Why?</bold>
+    success: <bold>~</bold> Task <green>%{task}</green> has been failed.
+
   generate:
     description: Generate today list for today or tomorrow.
     no_such_schedule: "No such schedule: %{schedule}. Valid are: %{schedules}"
@@ -67,10 +72,9 @@ commands:
     description: <green>Complete</green> the next task.
     success: <bold>~</bold> Task <green>%{task}</green> has been finished.
 
-  next_fail:
+  next_fail: &fail
+    <<: *fail
     description: <red>Fail</red> the next command.
-    prompt_why: <bold>Why?</bold>
-    success: <bold>~</bold> Task <green>%{task}</green> has been failed.
 
   next_postpone: &postpone
     description: <yellow>Postpone</yellow> the next task.

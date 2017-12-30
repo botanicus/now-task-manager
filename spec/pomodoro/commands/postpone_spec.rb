@@ -1,6 +1,4 @@
 require 'spec_helper'
-require 'ostruct'
-require 'timecop'
 require 'pomodoro/config'
 require 'pomodoro/commands'
 

@@ -51,17 +51,13 @@ module Pomodoro::Formats::Today
       end
 
       task_methods = [:status, :body, :start_time, :end_time, :metadata]
-      unless items.is_a?(Array) && items.all? { |item| item.is_a?(Task) || item.is_a?(LogItem) }
-        raise ArgumentError.new("Items is supposed to be an array of Task or LogItem instances.")
+      unless items.is_a?(Array) && items.all? { |item| item.is_a?(Task) }
+        raise ArgumentError.new("Items is supposed to be an array of Task instances.")
       end
     end
 
     def tasks
       self.items.select { |item| item.is_a?(Task) }
-    end
-
-    def log_items
-      self.items.select { |item| item.is_a?(LogItem) }
     end
 
     # Return overall duration of the time frame.

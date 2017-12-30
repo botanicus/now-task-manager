@@ -21,13 +21,13 @@ describe Pomodoro::Formats::Today::TimeFrame do
     it "fails if tasks is not an array" do
       expect {
         described_class.new(name: 'X', start_time: h('7:50'), items: Hash.new)
-      }.to raise_error(ArgumentError, /Items is supposed to be an array of Task or LogItem instances/)
+      }.to raise_error(ArgumentError, /Items is supposed to be an array of Task instances/)
     end
 
     it "fails if tasks is not an array of task-like objects" do
       expect {
         described_class.new(name: 'X', start_time: h('7:50'), items: [Object.new])
-      }.to raise_error(ArgumentError, /Items is supposed to be an array of Task or LogItem instances/)
+      }.to raise_error(ArgumentError, /Items is supposed to be an array of Task instances/)
     end
 
     it "succeeds when name and start_time is provided" do

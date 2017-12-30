@@ -66,10 +66,6 @@ module Pomodoro::Formats::Today
       @time_frames.map(&:tasks).flatten.each(&block)
     end
 
-    def each_log_item(&block)
-      @time_frames.map(&:log_items).flatten.each(&block)
-    end
-
     def each_task_with_time_frame(&block)
       if block
         @time_frames.each do |time_frame|

@@ -22,11 +22,14 @@ class Pomodoro::Commands::Run < Pomodoro::Commands::Command
 
     Pomodoro::Commands::Start.new(Array.new).run
 
-    with_active_task(self.config) do |active_task|
-      @matcher.call(active_task)
+    begin
+      with_active_task(self.config) do |active_task|
+        @matcher.call(active_task)
+      end
+    rescue Interrupt
+    ensure
+      Pomodoro::Commands::Done.new(Array.new).run
     end
-
-    Pomodoro::Commands::Done.new(Array.new).run
 
   rescue Pomodoro::Config::ConfigError => error
     abort error

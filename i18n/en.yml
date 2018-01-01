@@ -44,6 +44,7 @@ commands:
 
   generate:
     description: Generate today list for today or tomorrow.
+    cannot_be_today_or_earlier: "Cannot be today or earlier, but task %{task} was scheduled for %{date}."
     no_such_schedule: "No such schedule: %{schedule}. Valid are: %{schedules}"
     no_schedule: Cannot find any schedule for %{date}
     log_schedule: "~ Schedule: <magenta>%{schedule}</magenta>."

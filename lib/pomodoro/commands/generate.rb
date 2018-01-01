@@ -115,8 +115,8 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
   def add_postponed_task_to_scheduled_list(scheduled_task_list, time_frame, task)
     scheduled_date = task.metadata['Review at'] || (Date.today + 1).iso8601
 
-    if Date.parse(scheduled_date) >= (@date + 1)
-      raise t(:cannot_be_today_or_earlier, date: scheduled_date, task: task)
+    if Date.parse(scheduled_date) > @date + 1
+      raise t(:cannot_be_today_or_earlier, date: scheduled_date, task: task.body)
     end
 
     if Date.parse(scheduled_date) == (@date + 1)
@@ -159,6 +159,10 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
   end
 
   def run
+    unless File.directory?(self.config.today_path_dir)
+      command "mkdir #{self.config.today_path_dir}"
+    end
+
     @date = Date.today + self.get_date_increment
 
     if self.date_path.exist?

@@ -55,6 +55,14 @@ module Pomodoro
     [
       :task_list_path, :today_path, :schedule_path, :routine_path
     ].each do |key|
+      define_method(:"#{key}_dir") do |time = Time.now|
+        value = self.data.fetch(key.to_s) do
+          raise MissingKeyError.new(key)
+        end
+
+        File.expand_path("#{time.strftime(value)}/..")
+      end
+
       define_method(key) do |time = Time.now|
         value = self.data.fetch(key.to_s) do
           raise MissingKeyError.new(key)

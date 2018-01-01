@@ -42,6 +42,7 @@ module Pomodoro
 
     class Command < RR::Command
       include RR::ColouredTerminal
+      include EnvironmentCommunication
 
       def command(command)
         system(command)

@@ -65,7 +65,7 @@ module Pomodoro
           path
         else
           dir, base = File.split(path)
-          raise "#{self.class}##{key}: Root directory #{RR::Homepath.new(dir)} for file #{base} doesn't exist..)"
+          raise ConfigError.new("#{self.class}##{key}: Root directory #{RR::Homepath.new(dir)} for file #{base} doesn't exist..)")
         end
       end
     end

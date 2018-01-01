@@ -1,9 +1,17 @@
 # TODO: Use I18n.
 class Pomodoro::Commands::BitBar < Pomodoro::Commands::Command
+  def today_list
+    parse_today_list(self.config).task_list
+  rescue Pomodoro::Config::ConfigError
+  end
+
+  def task_list
+    parse_task_list(self.config)
+  rescue Pomodoro::Config::ConfigError
+  end
+
   def run
-    today_list = parse_today_list(self.config).task_list if File.exist?(self.config.today_path)
-    task_list  = parse_task_list(self.config)  if File.exist?(self.config.task_list_path)
-    Pomodoro::Commands::BitBarUI.main(today_list, task_list)
+    Pomodoro::Commands::BitBarUI.main(self.today_list, self.task_list)
   rescue Pomodoro::Config::ConfigError => error
     abort error
   end
@@ -104,7 +112,11 @@ class Pomodoro::Commands::BitBarUI
     else
       colour, icon = self.heading(nil, nil)
       puts icon, '---'
-      puts "Click here to add some tasks. | bash='now edit' color=green"
+      if today_tasks.nil?
+        puts "Click here to create today's list. | bash='now g' color=green"
+      else
+        puts "Click here to add some tasks. | bash='now e' color=green"
+      end
     end
 
     if task_list && task_list.any? { |task_group| ! task_group.tasks.empty? }

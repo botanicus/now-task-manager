@@ -33,6 +33,8 @@
 # Overall total: 14 USD
 #
 # Don't parse it, it'd be updated from the data.
+# ! No, do parse it for the total in our base currency,
+# so we don't have to dig online historic data or cash it elsewhere.
 module Pomodoro::Formats::Review::Plugins::Expenses
   HEADER ||= 'Expense'
 

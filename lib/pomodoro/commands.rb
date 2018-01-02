@@ -261,5 +261,8 @@ module Pomodoro
 
     require 'pomodoro/commands/describe'
     self.command(:describe, Commands::Describe)
+
+    require 'pomodoro/commands/expenses'
+    self.command(:expenses, Commands::Expenses)
   end
 end

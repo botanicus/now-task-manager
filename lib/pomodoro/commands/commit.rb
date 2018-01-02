@@ -12,7 +12,10 @@ class Pomodoro::Commands::Commit < Pomodoro::Commands::Command
     ensure_today
 
     if  with_active_task(self.config) do |active_task|
-          commit_message = Shellwords.escape(active_task.body)
+          tag = active_task.tags.find { |tag| tag.match(/^\d+$/) }
+          body = [active_task.body, tag && " Closes ##{tag}"].compact.join(' ')
+          # TODO: closes vs. mention only? Shall we use commit -v?
+          commit_message = Shellwords.escape(body)
           arguments = [*@args, '-m', commit_message].join(' ')
           puts("#{t(:log_command, commit_message: commit_message)}\n\n")
 

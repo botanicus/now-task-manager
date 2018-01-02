@@ -22,4 +22,10 @@ class Pomodoro::Formats::Review::Sections
 
     @sections << section
   end
+
+  def validate
+    @sections.reject do |section|
+      section.data rescue false
+    end.map(&:header)
+  end
 end

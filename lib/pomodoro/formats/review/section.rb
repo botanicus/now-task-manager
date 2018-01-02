@@ -17,7 +17,7 @@ class Pomodoro::Formats::Review::Section
   end
 
   def method_name
-    @header.downcase.to_sym
+    @header.downcase.tr(' ', '_').to_sym
   end
 
   def plugin

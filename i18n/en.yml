@@ -113,6 +113,7 @@ commands:
     description: <green>Start</green> the next task.
     confirm: <bold>Start?</bold>
     task_in_progress: <red>There is an active task already:</red> %{task}.
+    done: <bold>~</bold> Task <green>%{task}</green> has been finished.
     success: <bold>~</bold> Task <green>%{task}</green> has been started.
 
   test:

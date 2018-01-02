@@ -17,9 +17,23 @@ class Pomodoro::Commands::Start < Pomodoro::Commands::Command
       abort t(:task_in_progress, task: Pomodoro::Tools.unsentence(active_task.body))
     end
 
-    edit_next_task_when_no_task_active(self.config) do |next_task|
+    edit_next_task_when_no_task_active(self.config) do |next_task, tf|
       next_task.start!
-      puts t(:success, task: Pomodoro::Tools.unsentence(next_task.body))
+
+      # TODO: split, currently it doesn't save after the save, only after done.
+      if next_task.duration
+        until next_task.remaining_duration(tf) == Hour.new(0)
+          command("clear") # TODO: use ncurses.
+          puts "<green>#{next_task.body}</green>"
+          puts "<bold>~</bold> <yellow>Remaining:</yellow> <green>#{next_task.remaining_duration(tf)}</green>."
+          sleep 10
+        end
+        command("clear")
+        next_task.complete!
+        puts t(:done, task: Pomodoro::Tools.unsentence(next_task.body))
+      else
+        puts t(:success, task: Pomodoro::Tools.unsentence(next_task.body))
+      end
     end
   rescue Interrupt
     puts

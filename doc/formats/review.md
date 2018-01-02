@@ -8,41 +8,16 @@ The general syntax is:
 data
 ```
 
-# Supported headers
+# Available plugins
 
-## Expenses
+The data become parseable when the header matches certain string.
 
-```markdown
-# Expenses
+For example when the header is `Expenses`, the {Pomodoro::Formats::Review::Plugins::Expenses} plugin will parse its contents.
 
-PLN 14 Lunch at Parniczek.
-USD 8.99 Domain extension.
-```
+Currently available plugins:
 
-## Accounts.
-
-```markdown
-# Accounts
-
-FIO USD: 751.25
-FIO CZK: 40000
-```
-
-## Medications
-
-```markdown
-# Medications
-
-- 1 vitamin B
-- 1 omeprazol
-- 1 aspirin (for the headache).
-```
-
-# Consumption
-
-```markdown
-# Consumption
-
-1.9 Tequila 35% 1.5 shots.
-2.3 Glass of wine.
-```
+- {Pomodoro::Formats::Review::Plugins::Expenses}
+- {Pomodoro::Formats::Review::Plugins::Accounts}
+- {Pomodoro::Formats::Review::Plugins::MedicalData}
+- {Pomodoro::Formats::Review::Plugins::Medications}
+- {Pomodoro::Formats::Review::Plugins::Consumption}

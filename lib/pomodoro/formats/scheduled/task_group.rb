@@ -59,9 +59,14 @@ module Pomodoro::Formats::Scheduled
 
     # labels = ['Tomorrow', date.strftime('%A'), date.strftime('%-d/%m'), date.strftime('%-d/%m/%Y')]
     def scheduled_date
+      return Date.today if @header == 'Today' # Change tomorrow to Today if you're generating it in the morning.
       return Date.today + 1 if @header == 'Tomorrow'
-      return Date.parse(@header)
-    rescue ArgumentError
+      ['%A %d/%m', '%d/%m', '%A'].each do |format|
+        begin
+          return Date.strptime(@header, format)
+        rescue ArgumentError
+        end
+      end
     end
 
     def tomorrow?

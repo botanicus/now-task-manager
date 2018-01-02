@@ -167,7 +167,7 @@ module Pomodoro
           end
 
           if next_task = current_time_frame.first_unstarted_task
-            block.call(next_task)
+            block.call(next_task, current_time_frame)
             day.save(config.today_path)
           else
             abort "<red>No more tasks in #{current_time_frame.name}</red>"

@@ -71,7 +71,7 @@ class Pomodoro::Commands::BitBarUI
         if task.duration
           puts "#{task.remaining_duration(current_time_frame)} #{task.body.chomp} | color=blue"
         else
-          puts "#{task.body.chomp} | color=blue"
+          puts "#{task.body.chomp} Started #{Hour.now - task.start_time} ago. | color=blue"
         end
         puts "-- Finish   | bash='now done'     color=black"
         puts "-- Postpone | bash='now postpone' color=black"

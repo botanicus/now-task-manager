@@ -20,7 +20,7 @@ class Pomodoro::Commands::Run < Pomodoro::Commands::Command
       end
     end
 
-    Pomodoro::Commands::Start.new(Array.new).run
+    Pomodoro::Commands::Start.new(['--no-wait']).run
 
     begin
       with_active_task(self.config) do |active_task|

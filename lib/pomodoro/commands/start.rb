@@ -23,7 +23,7 @@ class Pomodoro::Commands::Start < Pomodoro::Commands::Command
       # TODO: split, currently it doesn't save after the save, only after done.
       # TODO: ring bell.
       # TODO: is it supported in bitbar?
-      if next_task.duration
+      if next_task.duration && ! @args.include?('--no-wait')
         until next_task.remaining_duration(tf) == Hour.new(0)
           command("clear") # TODO: use ncurses.
           puts "<green>#{next_task.body}</green>"

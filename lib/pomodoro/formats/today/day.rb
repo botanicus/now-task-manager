@@ -1,5 +1,6 @@
 require 'date'
 require 'pomodoro/formats/today'
+require 'pomodoro/formats/review'
 require 'pomodoro/config'
 
 module Pomodoro::Formats::Today
@@ -33,6 +34,14 @@ module Pomodoro::Formats::Today
       else
         TaskList.new(*@nodes[1..-1])
       end
+    end
+
+    # TODO: And now it doesn't belong to today anymore.
+    def review
+      path = self.path || Pomodoro.config.today_path # FIXME: This is just for now, it doesn't work since it just takes today path.
+      review_path = path.sub('.today', '_review.md')
+      Pomodoro::Formats::Review.parse(File.new(review_path, encoding: 'utf-8'))
+    rescue Errno::ENOENT
     end
 
     def empty?

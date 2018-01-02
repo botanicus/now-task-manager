@@ -5,15 +5,15 @@ module Pomodoro::Formats::Review
   # @api private
   class Parser < Parslet::Parser
     rule(:header) {
-      str('# ') >> (str("\n").absent? >> any).repeat(1).as(:header) >> str("\n")
+      str('# ') >> (str("\n").absent? >> any).repeat(1).as(:str) >> str("\n")
     }
 
-    rule(:data) {
-      (header.absent? >> any).repeat.as(:data)
+    rule(:raw_data) {
+      (header.absent? >> any).repeat.as(:str)
     }
 
     rule(:section) {
-      header >> data
+      header.as(:header) >> raw_data.as(:raw_data)
     }
 
     rule(:sections) {

@@ -1,9 +1,27 @@
+# @example
 # ```markdown
 # # Expenses
 #
 # PLN 14 + 2 Lunch at Parniczek. #lunch
 # [FIO VISA] USD 10.78 Domain extension.
 #   It was supposed to be 8.99, but I got charged 10.78.
+# ```
+# @example
+# ```ruby
+#   [#<Pomodoro::Formats::Review::Plugins::Expenses::Expense:0x00007fb229222f08
+#     @amount=14.0,
+#     @currency=:PLN,
+#     @description="Lunch at Parniczek. #lunch",
+#     @notes=[],
+#     @payment_method="cash",
+#     @tip=2.0>,
+#    #<Pomodoro::Formats::Review::Plugins::Expenses::Expense:0x00007fb22921bfa0
+#     @amount=10.78,
+#     @currency=:USD,
+#     @description="Domain extension.",
+#     @notes=[],
+#     @payment_method="FIO VISA",
+#     @tip=0>]>
 # ```
 module Pomodoro::Formats::Review::Plugins::Expenses
   HEADER ||= 'Expense'

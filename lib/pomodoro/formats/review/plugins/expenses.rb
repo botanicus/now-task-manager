@@ -23,6 +23,16 @@
 #     @payment_method="FIO VISA",
 #     @tip=0>]>
 # ```
+
+# TODO:
+# Add totals:
+# PLN 10 lunch
+# USD 9 domain
+# Total USD: 9
+# Total PLN: 10
+# Overall total: 14 USD
+#
+# Don't parse it, it'd be updated from the data.
 module Pomodoro::Formats::Review::Plugins::Expenses
   HEADER ||= 'Expense'
 

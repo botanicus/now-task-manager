@@ -7,6 +7,7 @@ class Pomodoro::Commands::Console < Pomodoro::Commands::Command
     require 'pomodoro/formats/today/archive'
 
     if File.exist?(self.config.today_path)
+      # This way we don't get the path.
       today = Pomodoro::Formats::Today.parse(File.read(self.config.today_path, encoding: 'utf-8'))
     end
 

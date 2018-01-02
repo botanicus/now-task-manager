@@ -5,6 +5,7 @@ module Pomodoro::Formats::Today
       if task.start_time || task.end_time
         output << "[#{self.format_duration(task.start_time, task.end_time)}]"
       end
+      output << "[#{task.fixed_start_time}]" if task.fixed_start_time
       output << "[#{task.duration.minutes}]" if task.duration
       output << task.body
       output << task.tags.map { |tag| "##{tag}"}.join(' ') unless task.tags.empty?
@@ -22,7 +23,7 @@ module Pomodoro::Formats::Today
       elsif start_time
         "#{start_time}-????"
       elsif end_time
-        raise 'nonsense'
+        raise 'nonsense' # FIXME: now next-done should in fact note the time.
       else # nil
       end
     end

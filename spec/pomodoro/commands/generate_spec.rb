@@ -17,7 +17,7 @@ describe Pomodoro::Commands::Generate do
 
   context "with valid config" do
     let(:config) do
-      Pomodoro::Config.new('spec/data/now-task-manager.yml')
+      Pomodoro::Config.new('spec/data/now-task-manager2.yml')
     end
 
     after do

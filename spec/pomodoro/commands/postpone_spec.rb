@@ -61,7 +61,7 @@ describe Pomodoro::Commands::Postpone do
           $stdin.write("I need XYZ first.\n31/1\n")
           $stdin.rewind
 
-          Timecop.freeze(h('9:00').to_time) do
+          Timecop.freeze(Time.new(2017, 12, 30, 9)) do
             run(subject)
 
             expect(subject.sequence[0]).to eql(stdout: "#{subject.t(:prompt_why)} ")

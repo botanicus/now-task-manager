@@ -264,5 +264,8 @@ module Pomodoro
 
     require 'pomodoro/commands/expenses'
     self.command(:expenses, Commands::Expenses)
+
+    require 'pomodoro/commands/consumption'
+    self.command(:consumption, Commands::Consumption)
   end
 end

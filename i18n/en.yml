@@ -119,3 +119,12 @@ commands:
   test:
     description: Run the acceptance tests for given period.
     pwd: "<bold>~</bold> Current directory: <green>%{dir}</green>."
+
+  expenses:
+    description: Sum.
+
+  balances:
+    description: Sum.
+
+  consumption:
+    description: Sum.

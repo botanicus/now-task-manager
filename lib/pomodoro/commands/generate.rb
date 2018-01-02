@@ -89,11 +89,12 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
               day.task_list.time_frames, task.time_frame
             )
 
-            unless time_frame
-              raise t(:no_such_time_frame,
-                time_frame: task.time_frame,
-                time_frames: day.task_list.time_frames.map(&:name).inspect)
-            end
+            # This is weird for skipped tasks.
+            # unless time_frame
+            #   raise t(:no_such_time_frame,
+            #     time_frame: task.time_frame,
+            #     time_frames: day.task_list.time_frames.map(&:name).inspect)
+            # end
           end
 
           time_frame ||= day.task_list.time_frames.first
@@ -173,12 +174,13 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
     if File.exist?(previous_day_task_list_path)
       previous_day = Pomodoro::Formats::Today.parse(File.new(previous_day_task_list_path, encoding: 'utf-8'))
       # TODO: For skipped tasks, add them only if they weren't added by the rules.
+      # WHY ask about voseo was added?
       postponed_tasks = previous_day.task_list.each_task_with_time_frame.select { |tf, task| task.postponed? || task.skipped?(tf) }
       unless postponed_tasks.empty?
         scheduled_task_list = parse_task_list(self.config)
         self.add_upcoming_events_to_scheduled_list(scheduled_task_list)
 
-        puts t(:migrating_postponed, date: previous_day.date.strftime('%d/%m'))
+        puts t(:migrating_postponed, date: previous_day.date.strftime('%-d/%-m'))
         postponed_tasks.each do |time_frame, task|
           scheduled_date = add_postponed_task_to_scheduled_list(scheduled_task_list, time_frame, task)
           puts '  ' + t(:scheduling, task: Pomodoro::Tools.unsentence(task.body), date: scheduled_date.downcase)

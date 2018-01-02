@@ -11,15 +11,23 @@ module Pomodoro::Formats::Review::Plugins::Medications
   def self.parse(string)
     tree = Parser.new.parse(string)
     nodes = Transformer.new.apply(tree)
-    Expenses.new(nodes.empty? ? Array.new : nodes)
+    nodes.empty? ? Array.new : nodes
   end
 
   class Parser < Parslet::Parser
-    # TODO
+    rule(:node) {
+      str('- ') >> (str("\n").absent? >> any).repeat.as(:str) >> str("\n")
+    }
+
+    rule(:nodes) {
+      node.repeat
+    }
+
+    root(:nodes)
   end
 
   class Transformer < Parslet::Transform
-    # TODO
+    rule(str: simple(:slice)) { slice.to_s.strip }
   end
 end
 

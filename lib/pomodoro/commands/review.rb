@@ -17,7 +17,21 @@ class Pomodoro::Commands::Review < Pomodoro::Commands::Command
 
     # TODO: refactor this.
     if period.nil? || period == :day
-      exec("vim #{self.config.today_path(date).sub(/\.today$/, '_review.md')}")
+      # TODO: more templates.
+      path = self.config.today_path(date).sub(/\.today$/, '_review.md')
+      unless File.exist?(path)
+        # TODO: add balances if it's Saturday.
+        File.open(path, 'w') do |file|
+          file.puts <<-EOF.gsub(/^ +/, '')
+            # Expenses
+            # Activities
+            # Consumption
+            # Medications
+            # Medical data
+          EOF
+        end
+      end
+      exec("vim #{path}")
     end
 
     if router.respond_to?(:"#{period}_review_path")

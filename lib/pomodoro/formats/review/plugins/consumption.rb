@@ -5,6 +5,13 @@
 # 2.3 Glass of wine.
 # ```
 
+# TODO:
+# Add totals:
+# 1.9 Tequila 35% 1.5 shots.
+# 2.3 Glass of wine.
+# Total: 4.2
+#
+# Don't parse it, it'd be updated from the data.
 module Pomodoro::Formats::Review::Plugins::Consumption
   HEADER ||= 'Consumption'
 

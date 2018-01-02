@@ -4,6 +4,15 @@
 # FIO USD: 751.25
 # FIO CZK: 40000
 # ```
+# TODO:
+# Add totals:
+# FIO USD: 751.25
+# FIO CZK: 40000
+# Total USD: 751.25
+# Total CZK: 40000
+# Overall total: xxx USD
+#
+# Don't parse it, it'd be updated from the data.
 module Pomodoro::Formats::Review::Plugins::Accounts
   HEADER ||= 'Account balances'
 

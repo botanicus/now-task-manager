@@ -1,13 +1,9 @@
 # ```markdown
 # # Expenses
 #
-# PLN 14 Lunch at Parniczek.
-# USD 8.99 Domain extension.
-#
-# OR
-#
-# Lunch 10 PLN
-#   Description.
+# PLN 14 + 2 Lunch at Parniczek. #lunch
+# [FIO VISA] USD 10.78 Domain extension.
+#   It was supposed to be 8.99, but I got charged 10.78.
 # ```
 module Pomodoro::Formats::Review::Plugins::Expenses
   HEADER ||= 'Expense'
@@ -19,18 +15,35 @@ module Pomodoro::Formats::Review::Plugins::Expenses
   end
 
   class Parser < Parslet::Parser
+    rule(:payment_method) {
+      str('[') >> (str(']').absent? >> any).repeat.as(:str) >> str(']')
+    }
+
     rule(:currency) { match['A-Z'].repeat(3).as(:str) }
 
     rule(:amount) {
       (match['\d'].repeat(1) >> (str('.') >> match['\d'].repeat(2, 2)).maybe).as(:float)
     }
 
+    rule(:tip) {
+      str(' + ') >> amount
+    }
+
     rule(:description) {
       (str("\n").absent? >> any).repeat(1).as(:str) >> str("\n")
     }
 
+    rule(:note_line) {
+      str('  ') >> (str("\n").absent? >> any).repeat(1).as(:str) >> str("\n")
+    }
+
     rule(:expense) {
-      currency.as(:currency) >> str(' ').repeat >> amount.as(:amount) >> description.as(:description)
+      (payment_method.as(:payment_method) >> str(' ')).maybe >>
+      currency.as(:currency) >> str(' ').repeat >>
+      amount.as(:amount) >>
+      tip.maybe.as(:tip) >>
+      description.as(:description) >>
+      note_line.repeat.as(:notes)
     }
 
     rule(:expenses) { expense.as(:expense).repeat }
@@ -39,9 +52,14 @@ module Pomodoro::Formats::Review::Plugins::Expenses
   end
 
   class Expense
-    attr_reader :amount, :currency, :description, :note
-    def initialize(amount:, currency:, description:, note: nil)
-      @amount, @currency, @description, @note = amount, currency, description, note
+    attr_reader :amount, :tip, :currency, :description, :payment_method, :notes
+    def initialize(amount:, tip: 0, currency:, description:, payment_method: 'cash', notes: Array.new)
+      @amount, @tip, @currency = amount, tip, currency
+      @description, @payment_method, @notes = description, payment_method, notes
+    end
+
+    def total
+      self.amount + self.tip
     end
   end
 
@@ -52,7 +70,9 @@ module Pomodoro::Formats::Review::Plugins::Expenses
     end
 
     def totals
-      @expenses.group_by
+      @expenses.group_by(&:currency).reduce(Hash.new) do |buffer, (currency, expenses)|
+        buffer.merge(currency => expenses.sum(&:total))
+      end
     end
 
     require 'forwardable'
@@ -67,9 +87,14 @@ module Pomodoro::Formats::Review::Plugins::Expenses
       amount_string.to_f
     end
 
-    rule(currency: simple(:currency)) { currency.to_sym }
+    rule(tip: simple(:tip)) { tip || 0 } # [1]
+
+    rule(currency: simple(:currency)) { currency.to_sym } # [1]
+    # [1] It doesn't match all the keys in the hash, therefore it never matches.
 
     rule(expense: subtree(:data)) do
+      data[:currency] = data[:currency].to_sym # [1]
+      data.delete(:tip) if data[:tip].nil? # [1]
       Expense.new(**data)
     end
 

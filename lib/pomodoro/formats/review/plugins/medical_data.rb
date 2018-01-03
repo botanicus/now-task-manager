@@ -2,6 +2,7 @@
 # # Medical data
 #
 # Weight: 69.9 kg
+# Sun exposure: 2 hours, result: OK.
 #
 # Today I felt ...
 # ```

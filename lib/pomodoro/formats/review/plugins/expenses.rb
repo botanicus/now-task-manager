@@ -1,3 +1,5 @@
+require 'forwardable'
+
 # @example
 # ```markdown
 # # Expenses
@@ -55,8 +57,8 @@ module Pomodoro::Formats::Review::Plugins::Expenses
       (match['\d'].repeat(1) >> (str('.') >> match['\d'].repeat(2, 2)).maybe).as(:float)
     }
 
-    rule(:tip) {
-      str(' + ') >> amount
+    rule(:amount_and_tip) {
+      amount.as(:amount) >> (str(' + ') >> amount).maybe.as(:tip)
     }
 
     rule(:description) {
@@ -70,8 +72,7 @@ module Pomodoro::Formats::Review::Plugins::Expenses
     rule(:expense) {
       (payment_method.as(:payment_method) >> str(' ')).maybe >>
       currency.as(:currency) >> str(' ').repeat >>
-      amount.as(:amount) >>
-      tip.maybe.as(:tip) >>
+      amount_and_tip >>
       description.as(:description) >>
       note_line.repeat.as(:notes)
     }
@@ -94,6 +95,10 @@ module Pomodoro::Formats::Review::Plugins::Expenses
   end
 
   class Expenses
+    extend Forwardable
+
+    def_delegators :expenses, :length, :[]
+
     attr_reader :expenses
     def initialize(expenses)
       @expenses = expenses
@@ -104,10 +109,6 @@ module Pomodoro::Formats::Review::Plugins::Expenses
         buffer.merge(currency => expenses.sum(&:total))
       end
     end
-
-    require 'forwardable'
-    extend Forwardable
-    def_delegators :expenses, :length, :[]
   end
 
   class Transformer < Parslet::Transform

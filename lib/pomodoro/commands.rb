@@ -133,10 +133,14 @@ module Pomodoro
         end
 
         day
+      rescue Errno::ENOENT
+        raise Pomodoro::Config::ConfigError.new
       end
 
       def parse_task_list(config)
         Pomodoro::Formats::Scheduled.parse(File.new(config.task_list_path, encoding: 'utf-8'))
+      rescue Errno::ENOENT
+        raise Pomodoro::Config::ConfigError.new
       end
 
       def time_frame(config = self.config, &block)

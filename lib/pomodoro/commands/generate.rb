@@ -133,7 +133,8 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
       scheduled_task_list[formatted_scheduled_date]
     )
     task_group << Pomodoro::Formats::Scheduled::Task.new(
-      time_frame: time_frame.name, body: task.body, tags: task.tags)
+      time_frame: time_frame.name, body: task.body,
+      start_time: task.fixed_start_time, tags: task.tags)
 
     return scheduled_date
   end
@@ -144,14 +145,14 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
     end
 
     unless upcoming_events.empty?
-      # TODO: create new if no File.exist?(self.config.task_list_path)
-      task_list = parse_task_list(self.config)
       upcoming_events.each do |event_name, date|
         puts t(:adding_upcoming, event: event_name, date: date.strftime('%A'))
-        if task_group = task_list[date.strftime('%A')]
+        if task_group = scheduled_task_list[date.strftime('%A')]
+          # TODO: prepend, not append.
           task_group << Pomodoro::Formats::Scheduled::Task.new(body: event_name)
         else
-          task_list << Pomodoro::Formats::Scheduled::TaskGroup.new(header: date.strftime('%A'), tasks: [
+          # TODO: prepend, not append.
+          scheduled_task_list << Pomodoro::Formats::Scheduled::TaskGroup.new(header: date.strftime('%A'), tasks: [
             Pomodoro::Formats::Scheduled::Task.new(body: event_name)
           ])
         end
@@ -174,7 +175,7 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
     if File.exist?(previous_day_task_list_path)
       previous_day = Pomodoro::Formats::Today.parse(File.new(previous_day_task_list_path, encoding: 'utf-8'))
       # TODO: For skipped tasks, add them only if they weren't added by the rules.
-      # WHY ask about voseo was added?
+      # https://github.com/botanicus/now-task-manager/issues/91
       postponed_tasks = previous_day.task_list.each_task_with_time_frame.select { |tf, task| task.postponed? || task.skipped?(tf) }
       unless postponed_tasks.empty?
         scheduled_task_list = parse_task_list(self.config)

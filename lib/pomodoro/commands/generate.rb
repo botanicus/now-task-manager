@@ -149,7 +149,7 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
       upcoming_events.each do |event_name, date|
         puts t(:adding_upcoming, event: event_name, date: date.strftime('%A'))
         if task_group = task_list[date.strftime('%A')]
-          task_group << event_name
+          task_group << Pomodoro::Formats::Scheduled::Task.new(body: event_name)
         else
           task_list << Pomodoro::Formats::Scheduled::TaskGroup.new(header: date.strftime('%A'), tasks: [
             Pomodoro::Formats::Scheduled::Task.new(body: event_name)

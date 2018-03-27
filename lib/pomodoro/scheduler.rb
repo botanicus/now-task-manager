@@ -6,6 +6,7 @@ require 'pomodoro/schedule/dsl'
 module Pomodoro
   class Scheduler
     using RR::DateExts
+    using RR::ColourExts
 
     def self.load(paths, today = Date.today)
       dir = File.expand_path("#{paths.first}/..") # HACK This way we don't have to merge multiple contexts or reset its path.
@@ -37,11 +38,10 @@ module Pomodoro
       return nil
     end
 
-    # using RR::ColourExts
     def populate_from_rules(task_list, schedule: nil, apply_rules: [], remove_rules: [])
       self.rules.each do |rule|
         if rule.true?(schedule)
-          puts "~ Invoking rule <green>#{rule.name}</green>."#.colourise
+          puts "~ Invoking rule <green>#{rule.name}</green>.".colourise
           rule.call(task_list)
         end
       end

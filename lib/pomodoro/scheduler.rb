@@ -45,6 +45,11 @@ module Pomodoro
           rule.call(task_list)
         end
       end
+
+      # Add #gen tag to all the generated tasks.
+      task_list.each_task do |task|
+        task.tags << :gen
+      end
     end
   end
 end

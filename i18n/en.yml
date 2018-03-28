@@ -57,6 +57,7 @@ commands:
     scheduling: ~ Scheduling <green>%{task}</green> for <yellow>%{date}</yellow>.
     no_postponed_tasks: ~ <green>No postponed tasks</green> from <yellow>%{date}</yellow>.
     adding_upcoming: ~ <green>Adding</green> <bold>%{event}</bold> for <yellow>%{date}</yellow>.
+    upcoming_event_exists: ~ Upcoming event <bold>%{event}</bold> has been already scheduled for <yellow>%{date}</yellow>.
     file_created: ~ <green>File %{path} has been created.</green>
 
   moveon:

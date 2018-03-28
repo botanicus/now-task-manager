@@ -114,6 +114,8 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
   end
 
   def add_postponed_task_to_scheduled_list(scheduled_task_list, time_frame, task)
+    return if task.tags.include?(:gen)
+
     scheduled_date = task.metadata['Review at'] || (Date.today + 1).iso8601
 
     if Date.parse(scheduled_date) > @date + 1
@@ -146,6 +148,11 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
 
     unless upcoming_events.empty?
       upcoming_events.each do |event_name, date|
+        if (task_group = scheduled_task_list[date.strftime('%A')]) && task_group.tasks.any? { |task| task.body == event_name }
+          puts t(:upcoming_event_exists, event: event_name, date: date.strftime('%A'))
+          next
+        end
+
         puts t(:adding_upcoming, event: event_name, date: date.strftime('%A'))
         if task_group = scheduled_task_list[date.strftime('%A')]
           # TODO: prepend, not append.
@@ -183,8 +190,9 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
 
         puts t(:migrating_postponed, date: previous_day.date.strftime('%-d/%-m'))
         postponed_tasks.each do |time_frame, task|
-          scheduled_date = add_postponed_task_to_scheduled_list(scheduled_task_list, time_frame, task)
-          puts '  ' + t(:scheduling, task: Pomodoro::Tools.unsentence(task.body), date: scheduled_date.downcase)
+          if scheduled_date = add_postponed_task_to_scheduled_list(scheduled_task_list, time_frame, task)
+            puts '  ' + t(:scheduling, task: Pomodoro::Tools.unsentence(task.body), date: scheduled_date.downcase)
+          end
         end
 
         if (@args & %w{--dry-run --no-remove}).empty?

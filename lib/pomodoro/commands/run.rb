@@ -68,4 +68,13 @@ class NamedCommandDSL
     system("zsh -c '#{command}'") # TODO: use shell words
   rescue Interrupt
   end
+
+  # TODO: Copied from dsl.rb, use a mixin. AND un-hard-code the path below.
+  def config
+    @config ||= OpenStruct.new(YAML.load_file(self.config_path))
+  end
+
+  def config_path
+    File.expand_path("/Users/botanicus/Dropbox/Data/Data/Pomodoro/Schedules/config.yml")
+  end
 end

@@ -1,4 +1,5 @@
 require 'date'
+require 'ostruct'
 require 'pomodoro/formats/today'
 
 module Pomodoro
@@ -56,6 +57,14 @@ module Pomodoro
 
       def rule(name, condition, &block)
         @rules << Rule.new(name, condition, &block)
+      end
+
+      def config
+        @config ||= OpenStruct.new(YAML.load_file(self.config_path))
+      end
+
+      def config_path
+        File.expand_path("#{@schedule_dir}/config.yml")
       end
 
       def h(hour)

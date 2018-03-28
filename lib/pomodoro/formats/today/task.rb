@@ -30,7 +30,7 @@ module Pomodoro::Formats::Today
     include DynamicAdditions
 
     attr_reader :status, :body, :start_time, :end_time, :fixed_start_time, :tags, :lines, :metadata
-    attr_accessor :duration
+    attr_accessor :duration, :fixed_start_time
     def initialize(status:, body:, start_time: nil, end_time: nil, fixed_start_time: nil, duration: nil, tags: [], lines: [])
       @status, @body, @tags, @duration, @lines = status, body, tags, duration, lines
       @start_time, @end_time, @fixed_start_time = start_time, end_time, fixed_start_time

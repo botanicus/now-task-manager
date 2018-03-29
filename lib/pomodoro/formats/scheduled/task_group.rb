@@ -57,20 +57,45 @@ module Pomodoro::Formats::Scheduled
       end
     end
 
+    # TODO: Next Monday
+    # NOTE: For parsing we don't use %-d etc, only %d.
+    DATE_FORMATS = {
+      '%d/%m'    => :next_month,    # 1/1
+      '%d/%m/%Y' => nil,            # 1/1/2018
+      '%A %d/%m' => :next_week,     # Monday 1/1  Note: Higher specifity has to come first.
+      '%A'       => :next_week      # Monday
+    }
+
     # labels = ['Tomorrow', date.strftime('%A'), date.strftime('%-d/%m'), date.strftime('%-d/%m/%Y')]
     def scheduled_date
       return Date.today if @header == 'Today' # Change tomorrow to Today if you're generating it in the morning.
       return Date.today + 1 if @header == 'Tomorrow'
-      ['%A %d/%m', '%d/%m', '%A'].each do |format|
-        begin
-          return Date.strptime(@header, format)
-        rescue ArgumentError
-        end
-      end
+      parse_date_in_the_future(@header)
     end
 
     def tomorrow?
       self.scheduled_date == Date.today + 1
+    end
+
+    private
+
+    # TODO: We need base_date, Date.today wouldn't cut it if we run "now g +3".
+    def parse_date_in_the_future(header)
+      DATE_FORMATS.each do |format, adjustment_method|
+        begin
+          date = Date.strptime(header, format)
+          date.define_singleton_method(:next_week) { self + 7 } # TODO: DataExts, extract it from commands.rb.
+          return ensure_in_the_future(date, adjustment_method)
+        rescue ArgumentError
+        end
+      end
+
+      return nil
+    end
+
+    def ensure_in_the_future(date, adjustment_method)
+      return date if adjustment_method.nil? || Date.today <= date
+      date.send(adjustment_method)
     end
   end
 end

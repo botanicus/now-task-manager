@@ -155,10 +155,8 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
 
         puts t(:adding_upcoming, event: event_name, date: date.strftime('%A'))
         if task_group = scheduled_task_list[date.strftime('%A')]
-          # TODO: prepend, not append.
           task_group << Pomodoro::Formats::Scheduled::Task.new(body: event_name)
         else
-          # TODO: prepend, not append.
           scheduled_task_list << Pomodoro::Formats::Scheduled::TaskGroup.new(header: date.strftime('%A'), tasks: [
             Pomodoro::Formats::Scheduled::Task.new(body: event_name)
           ])
@@ -181,8 +179,6 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
     previous_day_task_list_path = self.config.today_path(@date - 1)
     if File.exist?(previous_day_task_list_path)
       previous_day = Pomodoro::Formats::Today.parse(File.new(previous_day_task_list_path, encoding: 'utf-8'))
-      # TODO: For skipped tasks, add them only if they weren't added by the rules.
-      # https://github.com/botanicus/now-task-manager/issues/91
       postponed_tasks = previous_day.task_list.each_task_with_time_frame.select { |tf, task| task.postponed? || task.skipped?(tf) }
       unless postponed_tasks.empty?
         scheduled_task_list = parse_task_list(self.config)

@@ -55,6 +55,21 @@ module Pomodoro::Formats::Scheduled
       end
 
       @data << task_group
+      self.sort!
+    end
+
+    def scheduled_task_groups
+      @data.group_by { |tg| tg.scheduled_date.nil? }[false] || Array.new
+    end
+
+    def non_scheduled_task_groups
+      @data.group_by { |tg| tg.scheduled_date.nil? }[true] || Array.new
+    end
+
+    def sort!
+      @data = self.scheduled_task_groups.sort_by(&:scheduled_date) +
+              self.non_scheduled_task_groups
+
       self
     end
 

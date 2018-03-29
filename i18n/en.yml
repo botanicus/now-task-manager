@@ -34,6 +34,10 @@ commands:
     description: <green>Complete</green> the active task.
     success: <bold>~</bold> Task <green>%{task}</green> has been finished.
 
+  reset:
+    description: <green>Reset</green> the active task.
+    success: <bold>~</bold> Task <green>%{task}</green> has been reset.
+
   edit:
     description: Open one of the files for edit.
 

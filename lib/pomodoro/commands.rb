@@ -201,6 +201,9 @@ module Pomodoro
     require 'pomodoro/commands/done'
     self.command(:done, Commands::Done)
 
+    require 'pomodoro/commands/reset'
+    self.command(:reset, Commands::Reset)
+
     require 'pomodoro/commands/move_on'
     self.command(:move_on, Commands::MoveOn)
 

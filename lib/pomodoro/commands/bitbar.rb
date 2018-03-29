@@ -22,8 +22,7 @@ class Pomodoro::Commands::BitBarUI
     if active_task && active_task.duration
       remaining_duration = active_task.remaining_duration(current_time_frame)
       # TODO: base it on %.
-      x = {red: (0..5), green: (5..20)}.find { |key, range| range.include?(remaining_duration.minutes) }
-      colour = x[0] || 'grey'
+      colour = {red: (0..5), green: (5..20), grey: (20..(1 / 0.0))}.find { |key, range| range.include?(remaining_duration.minutes) }[0]
       puts "#{current_time_frame.name} [#{remaining_duration}] | color=#{colour}"
     elsif current_time_frame
       self.heading_work_in_progress(current_time_frame)

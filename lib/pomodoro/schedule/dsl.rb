@@ -41,6 +41,10 @@ module Pomodoro
         today.define_singleton_method(:weekend?) do # TODO: Put elsewhere.
           self.saturday? || self.sunday?
         end
+
+        today.define_singleton_method(:weekday?) do # TODO: Put elsewhere.
+          ! self.weekend?
+        end
       end
 
       alias_method :_require, :require

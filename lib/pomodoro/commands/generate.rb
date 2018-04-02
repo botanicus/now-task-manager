@@ -75,6 +75,7 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
 
       time_frame.name.upcase == shortcut.upcase || # [Admin] [Morning ritual]
       time_frame.name.upcase.split(' ').map { |word| word[0] }.join == shortcut.upcase || # [MR]
+      time_frame.name.upcase.split(' ').map { |word| word[0] }.sub(/I+$/, '').join == shortcut.upcase || # [WS] maps to Work session I/II/III.
       abbrevs.include?(shortcut.upcase)            # [ADM]  [MOR]
     end
   end
@@ -116,6 +117,8 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
   def add_postponed_task_to_scheduled_list(scheduled_task_list, time_frame, task)
     return if task.tags.include?(:gen)
 
+    # FIXME: Date.today + 1 is wrong if you're running just "now g" without +1,
+    # in the morning.
     scheduled_date = task.metadata['Review at'] || (Date.today + 1).iso8601
 
     if Date.parse(scheduled_date) > @date + 1
@@ -123,17 +126,21 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
     end
 
     if Date.parse(scheduled_date) == (@date + 1)
-      formatted_scheduled_date = 'Tomorrow' # FIXME: What about if it is today?
+      # FIXME: What about if it is today (now g without +1)?
+      formatted_scheduled_date = 'Tomorrow'
     elsif Date.parse(scheduled_date) < (@date + 7)
       formatted_scheduled_date = Date.parse(scheduled_date).strftime('%A')
     else
-      formatted_scheduled_date = Date.parse(scheduled_date).strftime('%-d/%-m')
+      # TODO: Possibly "Next Monday" etc. and change to "Monday" when the time comes.
+      formatted_scheduled_date = Date.parse(scheduled_date).strftime('%A %-d/%-m')
     end
 
-    task_group = scheduled_task_list[formatted_scheduled_date] || (
+    task_group = scheduled_task_list.find { |task_group| task_group.scheduled_date == Date.parse(scheduled_date) }
+    task_group ||= (
       scheduled_task_list << Pomodoro::Formats::Scheduled::TaskGroup.new(header: formatted_scheduled_date)
       scheduled_task_list[formatted_scheduled_date]
     )
+
     task_group << Pomodoro::Formats::Scheduled::Task.new(
       time_frame: time_frame.name, body: task.body,
       start_time: task.fixed_start_time, tags: task.tags)

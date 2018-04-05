@@ -75,7 +75,7 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
 
       time_frame.name.upcase == shortcut.upcase || # [Admin] [Morning ritual]
       time_frame.name.upcase.split(' ').map { |word| word[0] }.join == shortcut.upcase || # [MR]
-      time_frame.name.upcase.split(' ').map { |word| word[0] }.sub(/I+$/, '').join == shortcut.upcase || # [WS] maps to Work session I/II/III.
+      time_frame.name.upcase.split(' ').map { |word| word[0] }.join.sub(/I+$/, '') == shortcut.upcase || # [WS] maps to Work session I/II/III.
       abbrevs.include?(shortcut.upcase)            # [ADM]  [MOR]
     end
   end

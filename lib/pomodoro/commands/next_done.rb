@@ -1,6 +1,7 @@
+# 1/5/2018: specs complete, help complete.
 class Pomodoro::Commands::Next_Done < Pomodoro::Commands::Command
   self.help = <<-EOF.gsub(/^\s*/, '')
-    now <magenta>next:done</magenta> <bright_black># #{self.description}</bright_black>
+    now <magenta>next-done</magenta> <bright_black># #{self.description}</bright_black>
   EOF
 
   def run

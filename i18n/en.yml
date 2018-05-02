@@ -7,6 +7,8 @@ commands:
   # Shared by every command.
   generic:
     no_task_in_progress: <red>There is no task in progress.</red>
+    no_more_tasks_in_time_frame: <red>No more tasks in %{time_frame}.</red>
+    task_in_progress: <red>There is an active task already:</red> %{task}.
 
   active:
     description: Print the active task.
@@ -75,7 +77,6 @@ commands:
 
   next:
     description: Display the next task.
-    task_in_progress: <yellow>There is an active task already:</yellow> %{task}.
     upcoming_task: <bold>~</bold> The upcoming task is <green>%{task}</green>.
 
   next_done:
@@ -121,7 +122,6 @@ commands:
   start:
     description: <green>Start</green> the next task.
     confirm: <bold>Start?</bold>
-    task_in_progress: <red>There is an active task already:</red> %{task}.
     done: <bold>~</bold> Task <green>%{task}</green> has been finished.
     success: <bold>~</bold> Task <green>%{task}</green> has been started.
 

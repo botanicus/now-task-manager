@@ -1,13 +1,13 @@
 class Pomodoro::Commands::Next_Postpone < Pomodoro::Commands::Command
   self.help = <<-EOF.gsub(/^\s*/, '')
-    now <magenta>next:postpone</magenta> <bright_black># ...</bright_black>
+    now <magenta>next-postpone</magenta> <bright_black># ...</bright_black>
   EOF
 
   def run
     # Before we start asking, so we cannot wait for the exception.
     today_path = RR::Homepath.new(self.config.today_path)
 
-    unless today_path.exist? # FIXME
+    unless today_path.exist? # FIXME: raise an exception and catch it from Commander#run.
       abort "<red>! File #{today_path} doesn't exist</red>"
     end
 

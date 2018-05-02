@@ -15,7 +15,7 @@ class Pomodoro::Commands::Next < Pomodoro::Commands::Command
       if next_task = current_time_frame.first_unstarted_task
         puts t(:upcoming_task, task: Pomodoro::Tools.unsentence(next_task.body))
       else
-        abort "<red>No more tasks in #{current_time_frame.name}.</red>"
+        abort t(:no_more_tasks_in_time_frame, time_frame: current_time_frame.name)
       end
     end
   end

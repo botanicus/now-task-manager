@@ -167,14 +167,14 @@ module Pomodoro
       def edit_next_task_when_no_task_active(config, &block)
         time_frame(config) do |day, current_time_frame|
           if active_task = day.task_list.active_task
-            abort "<red>There is an active task already:</red> #{active_task.body}"
+            abort t(:task_in_progress, task: active_task.body)
           end
 
           if next_task = current_time_frame.first_unstarted_task
             block.call(next_task, current_time_frame)
             day.save(config.today_path)
           else
-            abort "<red>No more tasks in #{current_time_frame.name}</red>"
+            abort t(:no_more_tasks_in_time_frame, time_frame: current_time_frame.name)
           end
         end
       end

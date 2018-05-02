@@ -1,6 +1,7 @@
 require 'shellwords'
 
 # TODO: Later refactor to be part of start.
+# https://github.com/botanicus/now-task-manager/issues/120
 class Pomodoro::Commands::Run < Pomodoro::Commands::Command
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>run</magenta> <bright_black># ...</bright_black>

@@ -6,17 +6,15 @@ describe Pomodoro::Commands::Add do
   include_examples(:has_description)
   include_examples(:has_help)
 
+  let(:args) { Array.new }
+
   subject do
-    described_class.new(Array.new, config).extend(CLITestHelpers)
+    described_class.new(args, config).extend(CLITestHelpers)
   end
 
   include_examples(:missing_config)
 
   context "with a config" do
-    subject do
-      described_class.new(args, config).extend(CLITestHelpers)
-    end
-
     let(:config) do
       OpenStruct.new(task_list_path: 'spec/data/tasks_for_add.todo')
     end

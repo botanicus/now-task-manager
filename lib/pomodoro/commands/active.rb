@@ -1,8 +1,9 @@
+# 1/5/2018: specs complete, help complete.
 class Pomodoro::Commands::Active < Pomodoro::Commands::Command
   class Formatter
-    attr_reader :name, :pattern, :example
+    attr_reader :name, :pattern
     def initialize(name, pattern, &block)
-      @name, @pattern, @example, @block = name, pattern, example, block
+      @name, @pattern, @block = name, pattern, block
     end
 
     def example
@@ -20,7 +21,7 @@ class Pomodoro::Commands::Active < Pomodoro::Commands::Command
     Formatter.new(:body_unsentenced, '%b') do |_, task|
       Pomodoro::Tools.unsentence(task.body)
     end,
-    Formatter.new(:start_time, '%s'), # NOTE: no need for end time, since after that, the task is no longer active, right?
+    Formatter.new(:start_time, '%s'),
     Formatter.new(:duration, '%d'),
     Formatter.new(:remaining_duration, '%rd') do |time_frame, task|
       if task.duration

@@ -28,7 +28,7 @@ commands:
     unknown_option: No option named %{option} is in the config.
 
   console:
-    description: Run Ruby console.
+    description: Load the tasks and launch the Ruby console.
 
   done:
     description: <green>Complete</green> the active task.

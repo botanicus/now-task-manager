@@ -2,6 +2,9 @@ source 'https://rubygems.org/'
 
 gemspec
 
+# Optional dependency of the config command.
+gem 'coderay'
+
 gem 'pry'
 
 gem 'yard'

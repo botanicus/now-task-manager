@@ -44,8 +44,9 @@ describe Pomodoro::Commands::Config do
     context "with no arguments" do
       it "prints out the whole config" do
         run(subject)
-        expect(subject.sequence[0][:p]).to be_kind_of(Pomodoro::Config)
-        expect(subject.sequence[1]).to eql(exit: 0)
+        expect(subject.sequence[0][:stdout]).to eql("<bold>Path:</bold> <bright_black>#{config.path}</bright_black>\n\n")
+        expect(subject.sequence[1][:stdout]).to match(/data_root_path/)
+        expect(subject.sequence[2]).to eql(exit: 0)
       end
     end
 

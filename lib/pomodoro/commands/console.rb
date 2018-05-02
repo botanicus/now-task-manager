@@ -1,6 +1,9 @@
+# 1/5/2018: specs complete, help complete.
 class Pomodoro::Commands::Console < Pomodoro::Commands::Command
   self.help = <<-EOF.gsub(/^\s*/, '')
-    now <yellow>console</yellow>, now <yellow>c</yellow> <bright_black># Load the tasks and launch IRB.</bright_black>
+    now <yellow>console</yellow> <bright_black># #{self.description}</bright_black>
+    Available variables (use <bold>ls</bold> to display them):
+    active_task  archive  config current_time_frame  tasks  today
   EOF
 
   def run
@@ -15,7 +18,8 @@ class Pomodoro::Commands::Console < Pomodoro::Commands::Command
       tasks = parse_task_list(self.config)
     end
 
-    archive = Pomodoro::Formats::Today::Archive.new(Date.new(2017, 12, 3), Date.today)
+    beginning_of_the_month = Date.new(Date.today.year, Date.today.month, 1)
+    archive = Pomodoro::Formats::Today::Archive.new(beginning_of_the_month, Date.today)
 
     config
 

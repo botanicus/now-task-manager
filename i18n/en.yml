@@ -9,6 +9,7 @@ commands:
     no_task_in_progress: <red>There is no task in progress.</red>
     no_more_tasks_in_time_frame: <red>No more tasks in %{time_frame}.</red>
     task_in_progress: <red>There is an active task already:</red> %{task}.
+    no_active_time_frame: <red>There is no active time frame.</red>
 
   active:
     description: Print the active task.
@@ -83,7 +84,7 @@ commands:
     description: <green>Complete</green> the next task.
     success: <bold>~</bold> Task <green>%{task}</green> has been finished.
 
-  next_fail: &fail
+  next_fail:
     <<: *fail
     description: <red>Fail</red> the next command.
 

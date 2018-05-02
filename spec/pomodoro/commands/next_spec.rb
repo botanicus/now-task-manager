@@ -56,7 +56,7 @@ describe Pomodoro::Commands::Next do
         it "warns about the task in progress and prints out the upcoming one" do
           run(subject)
           expect(subject.sequence[0]).to eql(warn: "#{subject.t(:task_in_progress, task: 'active task')}\n\n")
-          expect(subject.sequence[1]).to eql(abort: "<red>No more tasks in Admin.</red>")
+          expect(subject.sequence[1]).to eql(abort: subject.t(:no_more_tasks_in_time_frame, time_frame: 'Admin'))
         end
       end
 
@@ -90,7 +90,7 @@ describe Pomodoro::Commands::Next do
 
         it "aborts saying there are no more tasks" do
           run(subject)
-          expect(subject.sequence[0]).to eql(abort: "<red>No more tasks in Admin.</red>")
+          expect(subject.sequence[0]).to eql(abort: subject.t(:no_more_tasks_in_time_frame, time_frame: 'Admin'))
         end
       end
     end

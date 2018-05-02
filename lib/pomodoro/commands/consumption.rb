@@ -16,7 +16,5 @@ class Pomodoro::Commands::Consumption < Pomodoro::Commands::Command
 
     total = archive.days.reduce(0) { |sum, day| sum + day.review.consumption.data.sum }
     puts "\n<green>Overall</green> #{total.round(2)}"
-  rescue Pomodoro::Config::ConfigError => error
-    abort error
   end
 end

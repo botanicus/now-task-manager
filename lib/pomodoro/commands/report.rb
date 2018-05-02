@@ -21,7 +21,5 @@ class Pomodoro::Commands::Report < Pomodoro::Commands::Command
 
     puts "\n<bold>Total time:</bold> #{selected_time_frames.reduce(0) { |sum, time_frame| time_frame.actual_duration + sum }}"
     puts "<bold>Cistyho casu:</bold> #{selected_time_frames.reduce(0) { |sum, time_frame| time_frame.duration_ + sum }}"
-  rescue Pomodoro::Config::ConfigError => error
-    abort error
   end
 end

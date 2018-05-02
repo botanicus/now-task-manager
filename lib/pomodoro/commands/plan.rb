@@ -26,7 +26,5 @@ class Pomodoro::Commands::Plan < Pomodoro::Commands::Command
     else
       abort t(:unknown_period, period: period)
     end
-  rescue Pomodoro::Config::ConfigError => error
-    abort error
   end
 end

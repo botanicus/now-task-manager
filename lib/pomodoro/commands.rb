@@ -188,8 +188,16 @@ module Pomodoro
   end
 
   class Commander < RR::Commander
+    include Pomodoro::Commands::EnvironmentCommunication
+
     def help_template
       super('Now task manager')
+    end
+
+    def run(*args)
+      super(*args)
+    rescue Pomodoro::Config::ConfigError => error # TODO: Add NoTaskInProgress and more.
+      abort error
     end
 
     # Formatters.

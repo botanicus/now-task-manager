@@ -12,8 +12,6 @@ class Pomodoro::Commands::BitBar < Pomodoro::Commands::Command
 
   def run
     Pomodoro::Commands::BitBarUI.main(self.today_list, self.task_list)
-  rescue Pomodoro::Config::ConfigError => error
-    abort error
   end
 end
 

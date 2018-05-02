@@ -39,7 +39,5 @@ class Pomodoro::Commands::Start < Pomodoro::Commands::Command
     end
   rescue Interrupt
     puts
-  rescue Pomodoro::Config::ConfigError => error
-    abort error
   end
 end

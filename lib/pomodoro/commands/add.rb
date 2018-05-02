@@ -12,7 +12,5 @@ class Pomodoro::Commands::Add < Pomodoro::Commands::Command
     task_list['Later'] << task
 
     task_list.save(self.config.task_list_path)
-  rescue Pomodoro::Config::ConfigError => error
-    abort error
   end
 end

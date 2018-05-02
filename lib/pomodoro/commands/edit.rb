@@ -24,7 +24,5 @@ class Pomodoro::Commands::Edit < Pomodoro::Commands::Command
     else
       abort(self.class.help)
     end
-  rescue Pomodoro::Config::ConfigError => error
-    abort error # TODO: Do we want to redefine abort to format exceptions?
   end
 end

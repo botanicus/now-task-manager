@@ -66,7 +66,5 @@ class Pomodoro::Commands::Active < Pomodoro::Commands::Command
     else
       p active_task
     end
-  rescue Pomodoro::Config::ConfigError => error
-    abort error
   end
 end

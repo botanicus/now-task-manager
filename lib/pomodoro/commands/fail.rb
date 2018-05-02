@@ -15,7 +15,7 @@ class Pomodoro::Commands::Fail < Pomodoro::Commands::Command
           puts t(:success, task: Pomodoro::Tools.unsentence(active_task.body))
         end
     else
-      abort "<red>There is no task in progress.</red>"
+      abort t(:no_task_in_progress)
     end
   rescue Pomodoro::Config::ConfigError => error
     abort error

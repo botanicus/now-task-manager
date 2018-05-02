@@ -181,6 +181,8 @@ module Pomodoro
 
       def t(key, **options)
         I18n.t!("commands.#{self.class.command_name}.#{key}", **options)
+      rescue I18n::MissingTranslationData
+        I18n.t!("commands.generic.#{key}", **options)
       end
     end
   end

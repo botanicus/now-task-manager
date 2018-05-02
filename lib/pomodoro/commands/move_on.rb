@@ -1,3 +1,4 @@
+# Status: unsure whether we want it https://github.com/botanicus/now-task-manager/issues/121
 class Pomodoro::Commands::MoveOn < Pomodoro::Commands::Command
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>move_on</magenta> <bright_black># <yellow>Move on</yellow> from the active task. Mark its end time, but don't set it as completed.</bright_black>

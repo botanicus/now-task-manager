@@ -147,7 +147,7 @@ module Pomodoro
         day = parse_today_list(config)
 
         unless current_time_frame = day.task_list.current_time_frame
-          abort "<red>There is no active time frame.</red>"
+          abort t(:no_active_time_frame)
         end
 
         block.call(day, current_time_frame)

@@ -69,7 +69,7 @@ describe Pomodoro::Commands::Next do
           Timecop.freeze(h('10:00').to_time) do
             run(subject)
             expect(subject.sequence[0]).to eql(warn: "#{subject.t(:task_in_progress, task: 'active task')}\n\n")
-            expect(subject.sequence[1]).to eql(abort: "<red>There is no active time frame.</red>")
+            expect(subject.sequence[1]).to eql(abort: subject.t(:no_active_time_frame))
           end
         end
       end
@@ -105,7 +105,7 @@ describe Pomodoro::Commands::Next do
       it "aborts saying there are no more tasks" do
         Timecop.freeze(h('10:00').to_time) do
           run(subject)
-          expect(subject.sequence[0]).to eql(abort: "<red>There is no active time frame.</red>")
+          expect(subject.sequence[0]).to eql(abort: subject.t(:no_active_time_frame))
         end
       end
     end

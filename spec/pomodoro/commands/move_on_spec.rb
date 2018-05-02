@@ -1,3 +1,5 @@
+# Status: unsure whether we want it https://github.com/botanicus/now-task-manager/issues/121
+
 require 'spec_helper'
 require 'ostruct'
 require 'pomodoro/config'

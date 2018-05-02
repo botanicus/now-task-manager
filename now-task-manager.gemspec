@@ -1,6 +1,11 @@
 #!/usr/bin/env gem build
 
-require 'refined-refinements/colours'
+begin
+  require 'refined-refinements/colours'
+rescue LoadError
+  warn "~ Post install message will not be shown to the end user."
+  warn "  Install refined-refinements if you want to change it."
+end
 
 Gem::Specification.new do |s|
   s.name        = 'now-task-manager'

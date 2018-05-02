@@ -69,6 +69,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  coderay
   coveralls
   github-markup
   now-task-manager!

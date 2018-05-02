@@ -1,3 +1,4 @@
+# 1/5/2018: specs complete, help complete.
 class Pomodoro::Commands::Add < Pomodoro::Commands::Command
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <red>+</red> [strings]<bright_black> # #{self.description}</bright_black>

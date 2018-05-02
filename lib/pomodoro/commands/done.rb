@@ -1,3 +1,4 @@
+# 1/5/2018: specs complete, help complete.
 class Pomodoro::Commands::Done < Pomodoro::Commands::Command
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>done</magenta> <bright_black># #{self.description}</bright_black>
@@ -11,7 +12,7 @@ class Pomodoro::Commands::Done < Pomodoro::Commands::Command
           puts t(:success, task: Pomodoro::Tools.unsentence(active_task.body))
         end
     else
-      abort "<red>There is no task in progress.</red>" # FIXME.
+      abort "<red>There is no task in progress.</red>"
     end
   rescue Pomodoro::Config::ConfigError => error
     abort error

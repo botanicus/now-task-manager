@@ -66,5 +66,17 @@ describe Pomodoro::Commands::Commit do
         expect(subject.sequence[2]).to eql(exit: 0)
       end
     end
+
+    context "with an issue number tagged" do
+      let(:task) do
+        '[7:50-???] [20] Active task. #94'
+      end
+
+      it "passes all the arguments to git" do
+        run(subject)
+        expect(subject.sequence[1]).to eql(command: "git commit -m Active\\ task.\\ Closes\\ \\#94")
+        expect(subject.sequence[2]).to eql(exit: 0)
+      end
+    end
   end
 end

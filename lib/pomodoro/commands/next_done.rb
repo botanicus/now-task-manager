@@ -10,7 +10,5 @@ class Pomodoro::Commands::Next_Done < Pomodoro::Commands::Command
       next_task.complete!
       puts t(:success, task: Pomodoro::Tools.unsentence(next_task.body))
     end
-  rescue Pomodoro::Config::ConfigError => error
-    abort error
   end
 end

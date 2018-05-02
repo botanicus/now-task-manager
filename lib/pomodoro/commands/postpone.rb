@@ -25,7 +25,5 @@ class Pomodoro::Commands::Postpone < Pomodoro::Commands::Command
     else
       abort t(:no_task_in_progress)
     end
-  rescue Pomodoro::Config::ConfigError => error
-    abort error
   end
 end

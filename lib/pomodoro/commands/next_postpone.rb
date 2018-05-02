@@ -23,7 +23,5 @@ class Pomodoro::Commands::Next_Postpone < Pomodoro::Commands::Command
       end
       puts t(:success, task: Pomodoro::Tools.unsentence(next_task.body), date: review_date.strftime('%-d/%-m'))
     end
-  rescue Pomodoro::Config::ConfigError => error
-    abort error
   end
 end

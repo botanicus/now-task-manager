@@ -226,7 +226,5 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
 
       puts t(:file_created, path: date_path)
     end
-  rescue Pomodoro::Config::ConfigError => error
-    abort error
   end
 end

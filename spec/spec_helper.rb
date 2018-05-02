@@ -71,6 +71,8 @@ RSpec.configure do |rspec|
     def run(command)
       command.run
       command.sequence << {exit: 0}
+    rescue Pomodoro::Config::ConfigError => error
+      command.sequence << {abort: error}
     rescue ExecutionFinished
     end
   }

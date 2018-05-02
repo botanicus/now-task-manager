@@ -30,9 +30,6 @@ class Pomodoro::Commands::Run < Pomodoro::Commands::Command
     ensure
       Pomodoro::Commands::Done.new(Array.new).run
     end
-
-  rescue Pomodoro::Config::ConfigError => error
-    abort error
   end
 end
 

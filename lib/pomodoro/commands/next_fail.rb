@@ -17,7 +17,5 @@ class Pomodoro::Commands::Next_Fail < Pomodoro::Commands::Command
       next_task.fail!(reason)
       puts t(:success, task: Pomodoro::Tools.unsentence(next_task.body))
     end
-  rescue Pomodoro::Config::ConfigError => error
-    abort error
   end
 end

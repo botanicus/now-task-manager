@@ -29,8 +29,6 @@ class Pomodoro::Commands::Config < Pomodoro::Commands::Command
       value = self.config.send(method_name, *convert_arguments)
       highlight_or_puts(JSON.pretty_generate(value))
     end
-  rescue Pomodoro::Config::ConfigError => error
-    abort error
   end
 
   private

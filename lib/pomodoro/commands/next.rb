@@ -18,7 +18,5 @@ class Pomodoro::Commands::Next < Pomodoro::Commands::Command
         abort "<red>No more tasks in #{current_time_frame.name}.</red>"
       end
     end
-  rescue Pomodoro::Config::ConfigError => error
-    abort error
   end
 end

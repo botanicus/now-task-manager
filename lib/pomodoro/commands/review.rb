@@ -40,7 +40,5 @@ class Pomodoro::Commands::Review < Pomodoro::Commands::Command
     else
       raise t(:unknown_period, period: period)
     end
-  rescue Pomodoro::Config::ConfigError => error
-    abort error
   end
 end

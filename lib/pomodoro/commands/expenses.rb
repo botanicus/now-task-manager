@@ -53,7 +53,5 @@ class Pomodoro::Commands::Expenses < Pomodoro::Commands::Command
     overall_totals = overall_totals.map { |key, value| "<yellow>#{key}</yellow> #{value}" }.join(', ')
     puts "\n<green>Overall</green> #{overall_totals} = <blue.bold>EUR</blue.bold> #{overall_total.round(2)}"
     puts "<green>Daily average</green> <blue.bold>EUR</blue.bold> #{(overall_total / archive.days.length).round(2)}"
-  rescue Pomodoro::Config::ConfigError => error
-    abort error
   end
 end

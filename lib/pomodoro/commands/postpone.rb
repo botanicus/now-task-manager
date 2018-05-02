@@ -1,3 +1,4 @@
+# 1/5/2018: specs complete, help complete.
 class Pomodoro::Commands::Postpone < Pomodoro::Commands::Command
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>postpone</magenta> <bright_black># Postpone the active task.</bright_black>
@@ -22,7 +23,7 @@ class Pomodoro::Commands::Postpone < Pomodoro::Commands::Command
           puts t(:success, task: Pomodoro::Tools.unsentence(active_task.body), date: review_date.strftime('%-d/%-m'))
         end
     else
-      abort "<red>There is no task in progress.</red>" # FIXME
+      abort t(:no_task_in_progress)
     end
   rescue Pomodoro::Config::ConfigError => error
     abort error

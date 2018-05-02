@@ -4,6 +4,9 @@ errors:
     missing_key: "No such key: %{key}."
 
 commands:
+  generic:
+    no_task_in_progress: <red>There is no task in progress.</red>
+
   active:
     description: Print the active task.
     examples:

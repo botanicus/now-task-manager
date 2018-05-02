@@ -26,7 +26,7 @@ class Pomodoro::Commands::Commit < Pomodoro::Commands::Command
           command("git commit #{arguments}")
         end
     else
-      abort "<red>There is no task in progress.</red>" # TODO: raise NoTaskInProgress.
+      abort t(:no_task_in_progress) # TODO: raise NoTaskInProgress.
     end
   rescue Pomodoro::Config::ConfigError => error
     abort error

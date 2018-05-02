@@ -7,7 +7,7 @@
 
    Refactoring:
     helpers
-    Commit, Done, MoveOn, NextFail, Next_Postpone, Next, Postpone: abort "<red>There is no task in progress.</red>" # TODO: raise NoTaskInProgress.
+    Commit, Done, MoveOn, NextFail, Next_Postpone, Next, Postpone: abort t(:no_task_in_progress) # TODO: raise NoTaskInProgress.
 
     BitBar, nextdone, nextfail, nextpostpone, plan, review, run, show-schedule/schedule, test
     config, edit, Generate, report

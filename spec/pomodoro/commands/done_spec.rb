@@ -54,7 +54,7 @@ describe Pomodoro::Commands::Done do
 
       it "aborts saying there is no task in progress" do
         run(subject)
-        expect(subject.sequence[0]).to eql(abort: "<red>There is no task in progress.</red>")
+        expect(subject.sequence[0]).to eql(abort: subject.t(:no_task_in_progress))
       end
     end
   end

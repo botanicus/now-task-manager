@@ -1,3 +1,5 @@
+# TODO: Rethink plan & test (do we really want to use features)?
+# https://github.com/botanicus/now-task-manager/issues/122
 class Pomodoro::Commands::Test < Pomodoro::Commands::Command
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>test</magenta> [<cyan>year</cyan>|<cyan>quarter</cyan>|<cyan>month</cyan>|<cyan>week</cyan>] <bright_black># Plan the coming time period.</bright_black>

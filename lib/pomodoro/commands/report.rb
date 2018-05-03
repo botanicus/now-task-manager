@@ -1,3 +1,4 @@
+# https://github.com/botanicus/now-task-manager/issues/123
 class Pomodoro::Commands::Report < Pomodoro::Commands::Command
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>report</magenta> pattern<bright_black># ...</bright_black>

@@ -57,7 +57,7 @@ end
 RSpec.shared_examples(:requires_today_task_file) do
   context "without today_path" do
     let(:config) do
-      OpenStruct.new(today_path: 'non-existent.today')
+      OpenStruct.new(data_root_path: 'root', today_path: 'non-existent.today')
     end
 
     it "fails" do

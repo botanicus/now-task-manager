@@ -1,3 +1,5 @@
+# TODO: Rethink plan & test (do we really want to use features)?
+# https://github.com/botanicus/now-task-manager/issues/122
 require 'pomodoro/router'
 
 class Pomodoro::Commands::Plan < Pomodoro::Commands::Command

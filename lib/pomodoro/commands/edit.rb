@@ -4,6 +4,8 @@ class Pomodoro::Commands::Edit < Pomodoro::Commands::Command
     now <green>e</green> <yellow>2</yellow>                 <bright_black># Edit both the today task file and tasks (in a split screen).</bright_black>
     now <green>e</green> <yellow>tasks</yellow> (or just <yellow>t</yellow>) <bright_black># Open the task file.</bright_black>
     now <green>e</green> <yellow>+1</yellow>                <bright_black># Edit the tomorrow task file.</bright_black>
+    now <green>e</green> <yellow>schedules</yellow> (or just <yellow>s</yellow>) <bright_black># Open the task file.</bright_black>
+    now <green>e</green> <yellow>config</yellow> (or just <yellow>c</yellow>) <bright_black># Open the task file.</bright_black>
   EOF
 
   def run
@@ -21,6 +23,8 @@ class Pomodoro::Commands::Edit < Pomodoro::Commands::Command
       self.ensure_task_list; command("vim #{self.config.task_list_path}")
     when 'config', 'c'
       command("vim #{self.config.path}") # TODO: spec
+    when 'schedules', 's' # TODO: spec
+      command("atom #{File.dirname(self.config.schedule_path)}")
     else
       abort(self.class.help)
     end

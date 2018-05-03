@@ -16,6 +16,7 @@ end
 
 class Pomodoro::Commands::ShowSchedule < Pomodoro::Commands::Generate
   self.help = <<-EOF.gsub(/^\s*/, '')
+    #{self.description}
     now show-schedule
     now show-schedule +1
     now show-schedule holidays
@@ -29,7 +30,7 @@ class Pomodoro::Commands::ShowSchedule < Pomodoro::Commands::Generate
       wday  = Date::DAYNAMES.index(day_name)
       @date = Date.today.extend(DateTimeMixin).next_wday(wday)
       options = Hash.new
-    elsif @args[0].match(/^\+\d+$/)
+    elsif @args.first.nil? || @args[0].match(/^\+\d+$/)
       # now show-schedule +1
       @date = Date.today + self.get_date_increment
       options = Hash.new

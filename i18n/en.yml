@@ -117,7 +117,7 @@ commands:
 
   schedule:
 
-  show-schedule:
+  showschedule:
     description: Print out the <magenta>schedule</magenta>.
 
   start:

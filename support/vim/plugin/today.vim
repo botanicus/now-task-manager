@@ -1,5 +1,10 @@
 " TODO: Using vim-ruby we can use the library.
 
+" Reload file on change (once the editor takes focus).
+" Check after 4s of inactivity in normal mode.
+set autoread
+au CursorHold * checktime
+
 function! EditScheduledList()
   let scheduled_list_path = systemlist('now config task_list_path')[0]
   execute 'edit' scheduled_list_path

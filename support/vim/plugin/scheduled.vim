@@ -1,5 +1,7 @@
 " Reload file on change (once the editor takes focus).
+" Check after 4s of inactivity in normal mode.
 set autoread
+au CursorHold * checktime
 
 function! EditTodaysList()
   let today_list_path = systemlist('now config today_path')[0]

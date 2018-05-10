@@ -25,7 +25,7 @@ function! EditYesterdaysList()
   execute 'edit' today_list_path
 endfunction
 
-command Scheduled call EditScheduledList()
+command! Scheduled call EditScheduledList()
 command! Tomorrow call EditTomorrowsList()
 command! Yesterday call EditYesterdaysList()
 

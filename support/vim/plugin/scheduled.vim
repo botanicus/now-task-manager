@@ -23,6 +23,6 @@ function! EditYesterdaysList()
   execute 'edit' today_list_path
 endfunction
 
-command Today call EditTodaysList()
+command! Today call EditTodaysList()
 command! Tomorrow call EditTomorrowsList()
 command! Yesterday call EditYesterdaysList()

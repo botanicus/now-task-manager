@@ -3,3 +3,4 @@
 yardoc
 coverage
 *.gem
+support/vim/doc/tags

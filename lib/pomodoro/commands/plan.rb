@@ -23,7 +23,7 @@ class Pomodoro::Commands::Plan < Pomodoro::Commands::Command
           command("mkdir -p #{File.dirname(path)}")
         end
 
-        command("vim #{path}")
+        command("nvim #{path}")
       end
     else
       abort t(:unknown_period, period: period)

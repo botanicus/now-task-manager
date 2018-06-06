@@ -11,18 +11,18 @@ class Pomodoro::Commands::Edit < Pomodoro::Commands::Command
   def run
     case @args.first
     when nil
-      self.ensure_today; command("vim #{self.config.today_path}")
+      self.ensure_today; command("nvim #{self.config.today_path}")
     when '2'
       # This could also be tomorrow + tasks, not just today + tasks.
       self.ensure_today; self.ensure_task_list
-      command("vim -O2 #{self.config.today_path} #{self.config.task_list_path}")
+      command("nvim -O2 #{self.config.today_path} #{self.config.task_list_path}")
     when '+1'
       tomorrow = Date.today + 1; self.ensure_today(tomorrow)
-      command("vim #{self.config.today_path(tomorrow)}")
+      command("nvim #{self.config.today_path(tomorrow)}")
     when 'tasks', 't'
-      self.ensure_task_list; command("vim #{self.config.task_list_path}")
+      self.ensure_task_list; command("nvim #{self.config.task_list_path}")
     when 'config', 'c'
-      command("vim #{self.config.path}") # TODO: spec
+      command("nvim #{self.config.path}") # TODO: spec
     when 'schedules', 's' # TODO: spec
       command("atom #{File.dirname(self.config.schedule_path)}")
     else

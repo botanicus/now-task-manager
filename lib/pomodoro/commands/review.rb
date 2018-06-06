@@ -33,10 +33,10 @@ class Pomodoro::Commands::Review < Pomodoro::Commands::Command
         end
       end
 
-      command("vim #{path}")
+      command("nvim #{path}")
     elsif router.respond_to?(:"#{period}_review_path")
       path = router.send(:"#{period}_review_path")
-      command("vim #{path}")
+      command("nvim #{path}")
     else
       raise t(:unknown_period, period: period)
     end

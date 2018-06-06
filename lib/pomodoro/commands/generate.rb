@@ -212,7 +212,7 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
     day = self.populate_from_schedule_and_rules(**options)
 
     if (@args & %w{--dry-run --no-remove}).empty?
-      command("vim #{self.config.task_list_path}")
+      command("nvim #{self.config.task_list_path}")
     end
 
     scheduled_task_list = parse_task_list(self.config)

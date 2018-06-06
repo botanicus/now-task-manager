@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   s.files       = Dir.glob('{bin,lib,doc,man,i18n,support}/**/*.{rb,md}') + ['README.md', '.yardopts']
   s.executables = Dir['bin/*'].map(&File.method(:basename))
 
+  s.add_runtime_dependency('commonjs_modules', ['~> 0.0'])
   s.add_runtime_dependency('parslet', ['~> 1.8'])
   s.add_runtime_dependency('term-ansicolor', ['~> 1.4'])
   s.add_runtime_dependency('refined-refinements', ['~> 0.0.2.1'])

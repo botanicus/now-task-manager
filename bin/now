@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+require 'import'
 require 'pomodoro/commands'
 
 commander = Pomodoro::Commander.new

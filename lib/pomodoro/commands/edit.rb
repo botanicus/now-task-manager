@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Pomodoro::Commands::Edit < Pomodoro::Commands::Command
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <green>e</green>                   <bright_black># Edit the today task file.</bright_black>

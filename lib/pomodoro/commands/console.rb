@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # 1/5/2018: specs complete, help complete.
 class Pomodoro::Commands::Console < Pomodoro::Commands::Command
   self.help = <<-EOF.gsub(/^\s*/, '')

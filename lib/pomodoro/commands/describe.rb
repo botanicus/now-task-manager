@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This is much faster, we could create a standalone script for it, but the main
 # issue is how to get the path to en.yml. Currently the performance is not an issue,
 # but leaving it for now.

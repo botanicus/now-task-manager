@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Pomodoro
   module Tools
     def self.unsentence(possible_sentense)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'pomodoro/formats/today'
 
 module Pomodoro::Formats::Today

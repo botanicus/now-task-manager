@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 time_frame(/morning routine/i) do |time_frame|
   time_frame.create_task('Headspace.')
 end

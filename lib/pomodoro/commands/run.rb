@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'shellwords'
 
 # TODO: Later refactor to be part of start.

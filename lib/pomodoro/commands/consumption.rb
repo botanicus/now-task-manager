@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'pomodoro/formats/today/archive'
 
 class Pomodoro::Commands::Consumption < Pomodoro::Commands::Command

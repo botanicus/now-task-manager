@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'pomodoro/formats/scheduled'
 
 module Pomodoro::Formats::Scheduled

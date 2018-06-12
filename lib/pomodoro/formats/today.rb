@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'parslet'
 # require 'parslet/convenience' # parse_with_debug
 

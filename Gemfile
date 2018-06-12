@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org/'
 
 gemspec
@@ -5,14 +7,22 @@ gemspec
 # Optional dependency of the config command.
 gem 'coderay'
 
-gem 'pry'
+group(:development) do
+  gem 'pry'
+  gem 'rubocop'
 
-gem 'yard'
-gem 'yard-rspec'
-gem 'redcarpet'
-gem 'github-markup'
-gem 'ronn'
+  gem 'github-markup'
+  gem 'redcarpet'
+  gem 'ronn'
+  gem 'yard'
+  gem 'yard-rspec'
+end
 
-gem 'rspec'
-gem 'coveralls'
-gem 'timecop'
+group(:test) do
+  gem 'rspec'
+  gem 'timecop'
+end
+
+group(:travis) do
+  gem 'coveralls'
+end

@@ -2,6 +2,8 @@ require 'abbrev'
 require 'pomodoro/scheduler'
 require 'refined-refinements/homepath'
 
+ScheduledTask, ScheduledTaskGroup = import('pomodoro/formats/scheduled').grab(:Task, :TaskGroup)
+
 # TODO: maybe better "now plan tomorrow"?
 class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
   # TODO: now g u_ani +normal_daily_routine -swimming_daily_routine
@@ -137,11 +139,11 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
 
     task_group = scheduled_task_list.find { |task_group| task_group.scheduled_date == Date.parse(scheduled_date) }
     task_group ||= (
-      scheduled_task_list << Pomodoro::Formats::Scheduled::TaskGroup.new(header: formatted_scheduled_date)
+      scheduled_task_list << ScheduledTaskGroup.new(header: formatted_scheduled_date)
       scheduled_task_list[formatted_scheduled_date]
     )
 
-    task_group << Pomodoro::Formats::Scheduled::Task.new(
+    task_group << ScheduledTask.new(
       time_frame: time_frame.name, body: task.body,
       start_time: task.fixed_start_time, tags: task.tags)
 
@@ -162,10 +164,10 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
 
         puts t(:adding_upcoming, event: event_name, date: date.strftime('%A'))
         if task_group = scheduled_task_list[date.strftime('%A')]
-          task_group << Pomodoro::Formats::Scheduled::Task.new(body: event_name)
+          task_group << ScheduledTask.new(body: event_name)
         else
-          scheduled_task_list << Pomodoro::Formats::Scheduled::TaskGroup.new(header: date.strftime('%A'), tasks: [
-            Pomodoro::Formats::Scheduled::Task.new(body: event_name)
+          scheduled_task_list << ScheduledTaskGroup.new(header: date.strftime('%A'), tasks: [
+            ScheduledTask.new(body: event_name)
           ])
         end
       end

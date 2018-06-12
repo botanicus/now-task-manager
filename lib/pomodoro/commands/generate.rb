@@ -16,7 +16,7 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
 
   def group_args
     template = {apply_rules: Array.new, remove_rules: Array.new}
-    @args.reduce(template) do |buffer, argument|
+    @args.each_with_object(template) do |argument, buffer|
       case argument
       when /^\+/
         buffer[:apply_rules] << argument[1..-1]
@@ -25,8 +25,6 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
       else
         buffer[:schedule] = argument
       end
-
-      buffer
     end
   end
 
@@ -39,14 +37,12 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
       schedule = scheduler.schedules.find { |schedule| schedule.name == schedule_name.to_sym }
       unless schedule
         raise t(:no_such_schedule,
-          schedule: schedule_name,
-          schedules: scheduler.schedules.keys.inspect)
+                schedule: schedule_name,
+                schedules: scheduler.schedules.keys.inspect)
       end
     else
       schedule = scheduler.schedule_for_date(@date)
-      unless schedule
-        raise t(:no_schedule, date: @date.strftime('%d/%m'))
-      end
+      raise t(:no_schedule, date: @date.strftime('%d/%m')) unless schedule
     end
 
     schedule
@@ -75,44 +71,43 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
     time_frames.find do |time_frame|
       abbrevs = Abbrev.abbrev([time_frame.name.upcase.delete(' ')])
 
-      time_frame.name.upcase == shortcut.upcase || # [Admin] [Morning ritual]
-      time_frame.name.upcase.split(' ').map { |word| word[0] }.join == shortcut.upcase || # [MR]
-      time_frame.name.upcase.split(' ').map { |word| word[0] }.join.sub(/I+$/, '') == shortcut.upcase || # [WS] maps to Work session I/II/III.
-      abbrevs.include?(shortcut.upcase)            # [ADM]  [MOR]
+      time_frame.name.casecmp(shortcut).zero? || # [Admin] [Morning ritual]
+        time_frame.name.upcase.split(' ').map { |word| word[0] }.join == shortcut.upcase || # [MR]
+        time_frame.name.upcase.split(' ').map { |word| word[0] }.join.sub(/I+$/, '') == shortcut.upcase || # [WS] maps to Work session I/II/III.
+        abbrevs.include?(shortcut.upcase) # [ADM]  [MOR]
     end
   end
 
   def populate_from_scheduled_task_list(day, scheduled_task_list)
     scheduled_task_list.each do |task_group|
-      if task_group.scheduled_date == @date
-        task_group.tasks.each do |task|
+      next unless task_group.scheduled_date == @date
+      task_group.tasks.each do |task|
+        if task.time_frame
+          time_frame = self.match_time_frame_shortcut_with_time_frame(
+            day.task_list.time_frames, task.time_frame
+          )
 
-          if task.time_frame
-            time_frame = self.match_time_frame_shortcut_with_time_frame(
-              day.task_list.time_frames, task.time_frame
-            )
-
-            # This is weird for skipped tasks.
-            # unless time_frame
-            #   raise t(:no_such_time_frame,
-            #     time_frame: task.time_frame,
-            #     time_frames: day.task_list.time_frames.map(&:name).inspect)
-            # end
-          end
-
-          time_frame ||= day.task_list.time_frames.first
-
-          puts t(:adding_task,
-            task: Pomodoro::Tools.unsentence(task.body),
-            time_frame: time_frame.name.downcase)
-
-          time_frame.items << Pomodoro::Formats::Today::Task.new(
-            status: :not_done, body: task.body, tags: task.tags,
-            fixed_start_time: task.start_time)
+          # This is weird for skipped tasks.
+          # unless time_frame
+          #   raise t(:no_such_time_frame,
+          #     time_frame: task.time_frame,
+          #     time_frames: day.task_list.time_frames.map(&:name).inspect)
+          # end
         end
 
-        scheduled_task_list.delete(task_group)
+        time_frame ||= day.task_list.time_frames.first
+
+        puts t(:adding_task,
+               task: Pomodoro::Tools.unsentence(task.body),
+               time_frame: time_frame.name.downcase)
+
+        time_frame.items << Pomodoro::Formats::Today::Task.new(
+          status: :not_done, body: task.body, tags: task.tags,
+          fixed_start_time: task.start_time
+        )
       end
+
+      scheduled_task_list.delete(task_group)
     end
   end
 
@@ -138,21 +133,22 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
     end
 
     task_group = scheduled_task_list.find { |task_group| task_group.scheduled_date == Date.parse(scheduled_date) }
-    task_group ||= (
+    task_group ||= begin
       scheduled_task_list << Pomodoro::Formats::Scheduled::TaskGroup.new(header: formatted_scheduled_date)
       scheduled_task_list[formatted_scheduled_date]
-    )
+    end
 
     task_group << Pomodoro::Formats::Scheduled::Task.new(
       time_frame: time_frame.name, body: task.body,
-      start_time: task.fixed_start_time, tags: task.tags)
+      start_time: task.fixed_start_time, tags: task.tags
+    )
 
-    return scheduled_date
+    scheduled_date
   end
 
   def add_upcoming_events_to_scheduled_list(scheduled_task_list)
     upcoming_events = self.config.calendar.select do |event_name, date|
-      ((Date.today + 1)..(Date.today + 6)).include?(date)
+      ((Date.today + 1)..(Date.today + 6)).cover?(date)
     end
 
     unless upcoming_events.empty?
@@ -181,15 +177,15 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
 
     @date = Date.today + self.get_date_increment
 
-    if self.date_path.exist?
-      abort t(:already_exists, path: self.date_path)
-    end
+    abort t(:already_exists, path: self.date_path) if self.date_path.exist?
 
     previous_day_task_list_path = self.config.today_path(@date - 1)
     if File.exist?(previous_day_task_list_path)
       previous_day = Pomodoro::Formats::Today.parse(File.new(previous_day_task_list_path, encoding: 'utf-8'))
       postponed_tasks = previous_day.task_list.each_task_with_time_frame.select { |tf, task| task.postponed? || task.skipped?(tf) }
-      unless postponed_tasks.empty?
+      if postponed_tasks.empty?
+        puts t(:no_postponed_tasks, date: previous_day.date.strftime('%m/%d'))
+      else
         scheduled_task_list = parse_task_list(self.config)
         self.add_upcoming_events_to_scheduled_list(scheduled_task_list)
 
@@ -200,12 +196,10 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
           end
         end
 
-        if (@args & %w{--dry-run --no-remove}).empty?
+        if (@args & %w[--dry-run --no-remove]).empty?
           scheduled_task_list.save(self.config.task_list_path)
         end
         puts
-      else
-        puts t(:no_postponed_tasks, date: previous_day.date.strftime('%m/%d'))
       end
     end
 
@@ -213,7 +207,7 @@ class Pomodoro::Commands::Generate < Pomodoro::Commands::Command
 
     day = self.populate_from_schedule_and_rules(**options)
 
-    if (@args & %w{--dry-run --no-remove}).empty?
+    if (@args & %w[--dry-run --no-remove]).empty?
       command("nvim #{self.config.task_list_path}")
     end
 

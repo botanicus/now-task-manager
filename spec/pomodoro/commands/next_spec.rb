@@ -53,7 +53,7 @@ describe Pomodoro::Commands::Next do
       end
 
       context "and no next task" do
-        let(:coming_task) { }
+        let(:coming_task) {}
 
         it "warns about the task in progress and prints out the upcoming one" do
           run(subject)
@@ -78,7 +78,7 @@ describe Pomodoro::Commands::Next do
     end
 
     context "and no active task" do
-      let(:active_task) { }
+      let(:active_task) {}
 
       context "and a next task" do
         it "prints out the upcoming one" do
@@ -88,7 +88,7 @@ describe Pomodoro::Commands::Next do
       end
 
       context "and no next task" do
-        let(:coming_task) { }
+        let(:coming_task) {}
 
         it "aborts saying there are no more tasks" do
           run(subject)
@@ -98,7 +98,7 @@ describe Pomodoro::Commands::Next do
     end
 
     context "and no active time frame" do
-      let(:active_task) { }
+      let(:active_task) {}
 
       let(:time_frame) do
         "Admin (9:00 – 9:59)"

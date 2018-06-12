@@ -28,13 +28,13 @@ module Pomodoro::Formats::Today
     end
 
     def in_progress?
-      (! @start_time.nil? && @end_time.nil?) && @status == :not_done
+      (!@start_time.nil? && @end_time.nil?) && @status == :not_done
     end
 
-    alias_method :started?, :in_progress?
+    alias started? in_progress?
 
     def completed?
-      @status == :done && ! self.metadata['Reason']
+      @status == :done && !self.metadata['Reason']
     end
 
     def progress_made_but_not_finished?
@@ -70,7 +70,7 @@ module Pomodoro::Formats::Today
 
     def postpone!(reason, next_review_date = Date.today + 1)
       unless next_review_date.is_a?(Date)
-        raise ArgumentError.new("Date expected, got #{next_review_date} (#{next_review_date.class}).")
+        raise ArgumentError, "Date expected, got #{next_review_date} (#{next_review_date.class})."
       end
 
       @end_time = Hour.now if @start_time

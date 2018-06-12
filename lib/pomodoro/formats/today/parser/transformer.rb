@@ -10,30 +10,30 @@ module Pomodoro::Formats::Today
       finished: ['✓', '✔', '☑'],
       failed:   ['✕', '☓', '✖', '✗', '✘', '☒'],
       wip:      ['☐', '⛶', '⚬']
-    }
+    }.freeze
 
     rule(str: simple(:slice)) { slice.to_s.strip }
 
     rule(tag: simple(:slice)) { slice.to_sym }
 
-    rule(hour: simple(:hour_string)) {
+    rule(hour: simple(:hour_string)) do
       Hour.parse(hour_string.to_s)
-    }
+    end
 
     # This might to get matched(?)
-    rule(duration: simple(:duration)) {
+    rule(duration: simple(:duration)) do
       {duration: Hour.new(0, Integer(duration))}
-    }
+    end
 
     # This doesn't get matched because there are multiple keys in the hash.
-    rule(indent: simple(:char)) {
-      status, _ = Task::STATUS_MAPPING.find { |status, i| i.include?(char) }
+    rule(indent: simple(:char)) do
+      status, = Task::STATUS_MAPPING.find { |status, i| i.include?(char) }
       {status: status}
-    }
+    end
 
-    rule(task: subtree(:data)) {
+    rule(task: subtree(:data)) do
       char = data.delete(:indent)
-      status, _ = Task::STATUS_MAPPING.find { |status, i| i.include?(char) }
+      status, = Task::STATUS_MAPPING.find { |status, i| i.include?(char) }
       data[:status] = status
 
       if duration = data.delete(:duration)
@@ -44,17 +44,15 @@ module Pomodoro::Formats::Today
         Task.new(**data)
       rescue ArgumentError => error
         message = [error.message, "Arguments were: #{data.inspect}"].join("\n")
-        raise ArgumentError.new(message)
+        raise ArgumentError, message
       end
-    }
+    end
 
-    rule(time_frame: subtree(:data)) {
-      begin
+    rule(time_frame: subtree(:data)) do
         TimeFrame.new(**data)
-      rescue ArgumentError => error
+    rescue ArgumentError => error
         message = [error.message, "Arguments were: #{data.inspect}"].join("\n")
-        raise ArgumentError.new(message)
-      end
-    }
+        raise ArgumentError, message
+    end
   end
 end

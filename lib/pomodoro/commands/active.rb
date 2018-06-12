@@ -34,14 +34,14 @@ class Pomodoro::Commands::Active < Pomodoro::Commands::Command
     Formatter.new(:time_frame, '%tf') do |time_frame, _|
       time_frame.name
     end
-  ]
+  ].freeze
 
   self.help = <<-EOF
     <bright_black># #{self.description}</bright_black>
     now <green>active</green>, now <green>active</green> [format string]
       #{FORMATTERS.map { |formatter|
         "<red>#{formatter.pattern}</red> #{formatter.name} <bright_black># For example: #{formatter.example}</bright_black>"
-      }.join("\n" + " " * 6)}
+      }.join("\n" + ' ' * 6)}
   EOF
 
   def run
@@ -56,12 +56,11 @@ class Pomodoro::Commands::Active < Pomodoro::Commands::Command
     time_frame = today_list.time_frames.find { |time_frame| time_frame.items.include?(active_task) }
 
     if format_string = @args.shift
-      res = FORMATTERS.reduce(format_string.dup) do |format_string, formatter|
-        if format_string.match(formatter.pattern)
+      res = FORMATTERS.each_with_object(format_string.dup) do |formatter, format_string|
+        if format_string.match?(formatter.pattern)
           value = formatter.call(time_frame, active_task)
           format_string.gsub!(formatter.pattern, value.to_s)
         end
-        format_string
       end
 
       puts res unless res == ''

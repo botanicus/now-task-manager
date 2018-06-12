@@ -24,21 +24,21 @@ module Pomodoro::Formats::Review::Plugins::Consumption
   end
 
   class Parser < Parslet::Parser
-    rule(:float) {
+    rule(:float) do
       match['\d'].repeat(1) >> (str('.') >> match['\d'].repeat(1, 1)).maybe
-    }
+    end
 
-    rule(:description) {
+    rule(:description) do
       (str("\n").absent? >> any).repeat.as(:str) >> str("\n")
-    }
+    end
 
-    rule(:node) {
+    rule(:node) do
       str('- ') >> float.as(:float).as(:units) >> description.as(:description)
-    }
+    end
 
-    rule(:nodes) {
+    rule(:nodes) do
       node.as(:item).repeat
-    }
+    end
 
     root(:nodes)
   end

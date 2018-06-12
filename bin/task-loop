@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 # This is WIP.
 
@@ -28,7 +29,7 @@ def set_schedules(today_list_path)
     debug "<bold>~</bold> Scheduling <green>#{scheduled_task.body}</green> for <yellow>#{scheduled_task.fixed_start_time}</yellow>."
     scheduler.at(scheduled_task.fixed_start_time.to_s) do
       puts "<bold>~</bold> [<cyan>#{Hour.now}</cyan>] Task <green>#{scheduled_task.body}</green> is due."
-      system(%Q{osascript -e 'display notification "#{scheduled_task.body} is due." with title "Now task manager" sound name "Morse"'})
+      system(%(osascript -e 'display notification "#{scheduled_task.body} is due." with title "Now task manager" sound name "Morse"'))
     end
   end
 
@@ -42,10 +43,10 @@ def set_schedules(today_list_path)
         debug "<bold>~</bold> Scheduling <green>#{time_frame.name}</green> <magenta>start</magenta> notification for <yellow>#{start_time}</yellow>."
         scheduler.at(start_time.to_s) do
           puts "<bold>~</bold> [<cyan>#{Hour.now}</cyan>] Time frame <green>#{time_frame.name}</green> has started."
-          system(%Q{osascript -e 'display notification "#{time_frame.name} has started." with title "#{time_frame.header}" sound name "Morse"'})
+          system(%(osascript -e 'display notification "#{time_frame.name} has started." with title "#{time_frame.header}" sound name "Morse"'))
         end
       end
-    rescue => error
+    rescue StandardError => error
       warn "<bold>~</bold> #{error.class} occured on #{time_frame.name}"
     end
 
@@ -55,10 +56,10 @@ def set_schedules(today_list_path)
         debug "<bold>~</bold> Scheduling <blue.bold>#{time_frame.name}</blue.bold> <magenta>end</magenta> notification for <yellow>#{end_time}</yellow>."
         scheduler.at(end_time.to_s) do
           puts "<bold>~</bold> [<cyan>#{Hour.now}</cyan>] Time frame <blue.bold>#{time_frame.name}</blue.bold> has ended."
-          system(%Q{osascript -e 'display notification "#{time_frame.name} has ended." with title "Now task manager" sound name "Pop"'})
+          system(%(osascript -e 'display notification "#{time_frame.name} has ended." with title "Now task manager" sound name "Pop"'))
         end
       end
-    rescue => error
+    rescue StandardError => error
       warn "<bold>~</bold> <red>#{error.class}</red> occured on <red>#{time_frame.name}</red>."
     end
   end
@@ -71,10 +72,8 @@ today_list_path = RR::Homepath.new(Pomodoro::Config.new.today_path)
 puts "<bold>~</bold> Watching <bright_black>#{today_list_path}</bright_black>."
 set_schedules(today_list_path.expand)
 Filewatcher.new([today_list_path.expand]).watch do |filename, event|
-  begin
     puts "\n~ File has changed.\n\n"
     $scheduler = set_schedules(today_list_path.expand) # We have to keep the variable, otherwise the scheduler gets lost.
-  rescue Parslet::ParseFailed => error
+rescue Parslet::ParseFailed => error
     warn "<bold>~</bold> <red>Parsing has failed.</red>"
-  end
 end

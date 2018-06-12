@@ -16,9 +16,7 @@ class Pomodoro::Commands::Console < Pomodoro::Commands::Command
       today = Pomodoro::Formats::Today.parse(File.read(self.config.today_path, encoding: 'utf-8'))
     end
 
-    if File.exist?(self.config.task_list_path)
-      tasks = parse_task_list(self.config)
-    end
+    tasks = parse_task_list(self.config) if File.exist?(self.config.task_list_path)
 
     beginning_of_the_month = Date.new(Date.today.year, Date.today.month, 1)
     archive = Pomodoro::Formats::Today::Archive.new(beginning_of_the_month, Date.today)

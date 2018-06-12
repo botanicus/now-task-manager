@@ -10,7 +10,8 @@ describe Pomodoro::Formats::Today::TaskList do
 
   let(:time_frame) do
     Pomodoro::Formats::Today::TimeFrame.new(
-      name: 'Morning routine', start_time: h('7:50'), items: [task])
+      name: 'Morning routine', start_time: h('7:50'), items: [task]
+    )
   end
 
   describe '.new' do
@@ -20,12 +21,14 @@ describe Pomodoro::Formats::Today::TaskList do
 
     it "fails if non-array is provided" do
       expect { described_class.new(Hash.new) }.to raise_error(
-        ArgumentError, /Time frames is supposed to be an array of TimeFrame-like instances/)
+        ArgumentError, /Time frames is supposed to be an array of TimeFrame-like instances/
+      )
     end
 
     it "fails if an array of objects that don't behave like time frames is provided" do
       expect { described_class.new(Object.new) }.to raise_error(
-        ArgumentError, /Time frames is supposed to be an array of TimeFrame-like instances/)
+        ArgumentError, /Time frames is supposed to be an array of TimeFrame-like instances/
+      )
     end
 
     it "instantiate with a list of time frames" do
@@ -69,9 +72,12 @@ describe Pomodoro::Formats::Today::TaskList do
       subject do
         described_class.new(
           Pomodoro::Formats::Today::TimeFrame.new(
-            name: 'Morning routine', start_time: h('7:50'), end_time: h('9:20')),
+            name: 'Morning routine', start_time: h('7:50'), end_time: h('9:20')
+          ),
           Pomodoro::Formats::Today::TimeFrame.new(
-            name: 'Work', start_time: h('9:20'), end_time: h('17:20')))
+            name: 'Work', start_time: h('9:20'), end_time: h('17:20')
+          )
+        )
       end
 
       it "returns the overall duration" do
@@ -88,11 +94,15 @@ describe Pomodoro::Formats::Today::TaskList do
         subject do
           described_class.new(
             Pomodoro::Formats::Today::TimeFrame.new(
-              name: 'Morning routine', start_time: h('7:50')),
+              name: 'Morning routine', start_time: h('7:50')
+            ),
             Pomodoro::Formats::Today::TimeFrame.new(
-              name: 'Work', start_time: h('9:20'), end_time: h('17:20')),
+              name: 'Work', start_time: h('9:20'), end_time: h('17:20')
+            ),
             Pomodoro::Formats::Today::TimeFrame.new(
-              name: 'Evening reflection', end_time: h('21:00')))
+              name: 'Evening reflection', end_time: h('21:00')
+            )
+          )
         end
 
         it "returns the overall duration" do
@@ -107,9 +117,12 @@ describe Pomodoro::Formats::Today::TaskList do
         subject do
           described_class.new(
             Pomodoro::Formats::Today::TimeFrame.new(
-              name: 'Morning routine', end_time: h('9:20')),
+              name: 'Morning routine', end_time: h('9:20')
+            ),
             Pomodoro::Formats::Today::TimeFrame.new(
-              name: 'Work', end_time: h('17:20')))
+              name: 'Work', end_time: h('17:20')
+            )
+          )
         end
 
         it "returns the overall duration" do
@@ -122,14 +135,18 @@ describe Pomodoro::Formats::Today::TaskList do
         subject do
           described_class.new(
             Pomodoro::Formats::Today::TimeFrame.new(
-              name: 'Morning routine'),
+              name: 'Morning routine'
+            ),
             Pomodoro::Formats::Today::TimeFrame.new(
-              name: 'Work', end_time: h('17:20')))
+              name: 'Work', end_time: h('17:20')
+            )
+          )
         end
 
         it "fails with a DataInconsistencyError" do
           expect { subject.duration }.to raise_error(
-            Pomodoro::Formats::Today::DataInconsistencyError)
+            Pomodoro::Formats::Today::DataInconsistencyError
+          )
         end
       end
     end
@@ -151,7 +168,9 @@ describe Pomodoro::Formats::Today::TaskList do
       subject do
         described_class.new(
           Pomodoro::Formats::Today::TimeFrame.new(
-            name: 'Morning routine', start_time: h('7:50')))
+            name: 'Morning routine', start_time: h('7:50')
+          )
+        )
       end
 
       it do
@@ -171,9 +190,12 @@ describe Pomodoro::Formats::Today::TaskList do
       subject do
         described_class.new(
           Pomodoro::Formats::Today::TimeFrame.new(
-            name: 'Morning routine', start_time: h('7:50')),
+            name: 'Morning routine', start_time: h('7:50')
+          ),
           Pomodoro::Formats::Today::TimeFrame.new(
-            name: 'Work', start_time: h('9:20'), end_time: h('17:20')))
+            name: 'Work', start_time: h('9:20'), end_time: h('17:20')
+          )
+        )
       end
 
       it do
@@ -199,11 +221,15 @@ describe Pomodoro::Formats::Today::TaskList do
       subject do
         described_class.new(
           Pomodoro::Formats::Today::TimeFrame.new(
-            name: 'Morning routine', start_time: h('7:50')),
+            name: 'Morning routine', start_time: h('7:50')
+          ),
           Pomodoro::Formats::Today::TimeFrame.new(
-            name: 'Work', start_time: h('9:20'), end_time: h('17:20')),
+            name: 'Work', start_time: h('9:20'), end_time: h('17:20')
+          ),
           Pomodoro::Formats::Today::TimeFrame.new(
-            name: 'Evening reflection', end_time: h('21:00')))
+            name: 'Evening reflection', end_time: h('21:00')
+          )
+        )
       end
 
       it do
@@ -237,14 +263,17 @@ describe Pomodoro::Formats::Today::TaskList do
       subject do
         described_class.new(
           Pomodoro::Formats::Today::TimeFrame.new(
-            name: 'Morning routine', end_time: h('9:20')),
+            name: 'Morning routine', end_time: h('9:20')
+          ),
           Pomodoro::Formats::Today::TimeFrame.new(
             name: 'Work', end_time: h('17:20'), items: [
               Pomodoro::Formats::Today::Task.new(status: :done, body: "Task 1."),
               Pomodoro::Formats::Today::Task.new(status: :failed, body: "Task 1.", start_time: h('15:00'), end_time: h('15:25')),
               Pomodoro::Formats::Today::Task.new(status: :not_done, body: "Task 2.", start_time: h('15:30')),
-              Pomodoro::Formats::Today::Task.new(status: :not_done, body: "Task 3."),
-            ]))
+              Pomodoro::Formats::Today::Task.new(status: :not_done, body: "Task 3.")
+            ]
+          )
+        )
       end
 
       it "returns the first (and hopefuly only) started task" do
@@ -256,14 +285,17 @@ describe Pomodoro::Formats::Today::TaskList do
       subject do
         described_class.new(
           Pomodoro::Formats::Today::TimeFrame.new(
-            name: 'Morning routine', end_time: h('9:20')),
+            name: 'Morning routine', end_time: h('9:20')
+          ),
           Pomodoro::Formats::Today::TimeFrame.new(
             name: 'Work', end_time: h('17:20'), items: [
               Pomodoro::Formats::Today::Task.new(status: :done, body: "Task 1."),
               Pomodoro::Formats::Today::Task.new(status: :failed, body: "Task 1.", start_time: h('15:00'), end_time: h('15:25')),
               Pomodoro::Formats::Today::Task.new(status: :done, body: "Task 2."),
-              Pomodoro::Formats::Today::Task.new(status: :done, body: "Task 3."),
-            ]))
+              Pomodoro::Formats::Today::Task.new(status: :done, body: "Task 3.")
+            ]
+          )
+        )
       end
 
       it "returns nil" do
@@ -276,11 +308,15 @@ describe Pomodoro::Formats::Today::TaskList do
     subject do
       described_class.new(
         Pomodoro::Formats::Today::TimeFrame.new(
-          name: 'Morning routine', start_time: h('7:50')),
+          name: 'Morning routine', start_time: h('7:50')
+        ),
         Pomodoro::Formats::Today::TimeFrame.new(
-          name: 'Work', start_time: h('9:20'), end_time: h('17:20')),
+          name: 'Work', start_time: h('9:20'), end_time: h('17:20')
+        ),
         Pomodoro::Formats::Today::TimeFrame.new(
-          name: 'Evening reflection', end_time: h('21:00')))
+          name: 'Evening reflection', end_time: h('21:00')
+        )
+      )
     end
 
     it "returns the active time frame" do

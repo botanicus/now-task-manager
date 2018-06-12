@@ -69,7 +69,7 @@ module Pomodoro
       end
 
       def get_date_increment
-        groups = @args.group_by { |argument| !! argument.match(/^[-+]\d$/) }
+        groups = @args.group_by { |argument| !!argument.match(/^[-+]\d$/) }
         @args = groups[false] || Array.new
         res = (groups[true] || Array.new).grep_v(/^[-+]0$/).map(&:to_i)
 
@@ -77,7 +77,7 @@ module Pomodoro
         when 0 then 0
         when 1 then res[0]
         else
-          raise ArgumentError.new("There cannot be more than 1 date indicator, was #{res.inspect}.")
+          raise ArgumentError, "There cannot be more than 1 date indicator, was #{res.inspect}."
         end
       end
 
@@ -94,7 +94,7 @@ module Pomodoro
           method_name = :"#{direction}_#{period}"
 
           unless today.respond_to?(method_name)
-            raise ArgumentError.new("Unknown period: #{period}")
+            raise ArgumentError, "Unknown period: #{period}"
           end
 
           result = increment.abs.times.reduce(today) do |last_result|
@@ -112,16 +112,14 @@ module Pomodoro
       end
 
       def ensure_today(*args)
-        unless self.config.today_path
-          raise Pomodoro::Config::ConfigError.new('today_path')
-        end
+        raise Pomodoro::Config::ConfigError, 'today_path' unless self.config.today_path
 
         self.must_exist(self.config.today_path(*args), "Run the <yellow>g</yellow> command first.")
       end
 
       def ensure_task_list
         unless self.config.task_list_path
-          raise Pomodoro::Config::ConfigError.new('task_list_path')
+          raise Pomodoro::Config::ConfigError, 'task_list_path'
         end
 
         self.must_exist(self.config.task_list_path)
@@ -136,13 +134,13 @@ module Pomodoro
 
         day
       rescue Errno::ENOENT
-        raise Pomodoro::Config::ConfigError.new
+        raise Pomodoro::Config::ConfigError
       end
 
       def parse_task_list(config)
         Pomodoro::Formats::Scheduled.parse(File.new(config.task_list_path, encoding: 'utf-8'))
       rescue Errno::ENOENT
-        raise Pomodoro::Config::ConfigError.new
+        raise Pomodoro::Config::ConfigError
       end
 
       def time_frame(config = self.config, &block)

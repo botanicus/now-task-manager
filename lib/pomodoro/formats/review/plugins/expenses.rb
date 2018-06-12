@@ -49,35 +49,35 @@ module Pomodoro::Formats::Review::Plugins::Expenses
   end
 
   class Parser < Parslet::Parser
-    rule(:payment_method) {
+    rule(:payment_method) do
       str('[') >> (str(']').absent? >> any).repeat.as(:str) >> str(']')
-    }
+    end
 
     rule(:currency) { match['A-Z'].repeat(3).as(:str) }
 
-    rule(:amount) {
+    rule(:amount) do
       (match['\d'].repeat(1) >> (str('.') >> match['\d'].repeat(2, 2)).maybe).as(:float)
-    }
+    end
 
-    rule(:amount_and_tip) {
+    rule(:amount_and_tip) do
       amount.as(:amount) >> (str(' + ') >> amount).maybe.as(:tip)
-    }
+    end
 
-    rule(:description) {
+    rule(:description) do
       (str("\n").absent? >> any).repeat(1).as(:str) >> str("\n")
-    }
+    end
 
-    rule(:note_line) {
+    rule(:note_line) do
       str('  ') >> (str("\n").absent? >> any).repeat(1).as(:str) >> str("\n")
-    }
+    end
 
-    rule(:expense) {
+    rule(:expense) do
       (payment_method.as(:payment_method) >> str(' ')).maybe >>
-      currency.as(:currency) >> str(' ').repeat >>
-      amount_and_tip >>
-      description.as(:description) >>
-      note_line.repeat.as(:notes)
-    }
+        currency.as(:currency) >> str(' ').repeat >>
+        amount_and_tip >>
+        description.as(:description) >>
+        note_line.repeat.as(:notes)
+    end
 
     rule(:expenses) { expense.as(:expense).repeat }
 

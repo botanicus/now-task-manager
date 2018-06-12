@@ -40,12 +40,10 @@ class Pomodoro::Commands::Expenses < Pomodoro::Commands::Command
       puts "<green>#{day.date.strftime('%a %-d/%-m')}</green> #{totals} = <blue.bold>EUR</blue.bold> #{total.round(2)}"
     end
 
-    overall_totals = archive.days.reduce(Hash.new { |hash, key| hash[key] = 0 }) do |sums, day|
+    overall_totals = archive.days.each_with_object(Hash.new { |hash, key| hash[key] = 0 }) do |day, sums|
       day.review.expenses.data.totals.each do |key, value|
         sums[key] += value
       end
-
-      sums
     end
 
     overall_total = archive.days.reduce(0) do |sum, day|

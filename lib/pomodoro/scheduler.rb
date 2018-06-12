@@ -11,7 +11,7 @@ module Pomodoro
     using RR::ColourExts
 
     def self.load(paths, today = Date.today)
-      dir = File.expand_path("#{paths.first}/..") # HACK This way we don't have to merge multiple contexts or reset its path.
+      dir = File.expand_path("#{paths.first}/..") # HACK: This way we don't have to merge multiple contexts or reset its path.
       context = Pomodoro::Schedule::DSL.new(dir, today)
       paths.each do |path|
         context.instance_eval(File.read(path), path)
@@ -37,7 +37,7 @@ module Pomodoro
         return schedule if schedule.true?
       end
 
-      return nil
+      nil
     end
 
     def populate_from_rules(task_list, schedule: nil, apply_rules: [], remove_rules: [])

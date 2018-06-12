@@ -126,7 +126,7 @@ describe Pomodoro::Formats::Today::Parser do
   describe 'rule :time_frame_with_tasks' do
     it "parses simple tasks" do
       tree = subject.time_frame_with_tasks.parse("Test\n- A\n- B\n")
-      expect(tree).to eql({
+      expect(tree).to eql(
         time_frame: {
           name: {str: "Test"},
           items: [
@@ -134,12 +134,12 @@ describe Pomodoro::Formats::Today::Parser do
             {task: {indent: {str: "-"}, body: {str: "B"}, tags: [], lines: []}}
           ]
         }
-      })
+      )
     end
 
     it "parses tasks with metadata" do
       tree = subject.time_frame_with_tasks.parse("Test\n- A\n  Pekny kozy.\n- B\n")
-      expect(tree).to eql({
+      expect(tree).to eql(
         time_frame: {
           name: {str: "Test"},
           items: [
@@ -147,7 +147,7 @@ describe Pomodoro::Formats::Today::Parser do
             {task: {indent: {str: "-"}, body: {str: "B"}, tags: [], lines: []}}
           ]
         }
-      })
+      )
     end
   end
 end

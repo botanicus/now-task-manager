@@ -13,7 +13,8 @@ describe Pomodoro::Commands::ShowSchedule do
   let(:config) do
     OpenStruct.new(
       schedule_path: 'spec/data/schedules.rb',
-      routine_path:  'spec/data/base.rb')
+      routine_path:  'spec/data/base.rb'
+    )
   end
 
   subject do

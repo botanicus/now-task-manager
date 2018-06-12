@@ -14,7 +14,7 @@ module Pomodoro::Formats::Today
 
        Every time frame has to have a start_time and an end_time: if not explicitly,
        then the info has to be present on the previous/next time frame.
-     EOF
+      EOF
     end
   end
 
@@ -49,12 +49,12 @@ module Pomodoro::Formats::Today
       # end
 
       unless [@start_time, @end_time].compact.all? { |time| time.is_a?(Hour) }
-        raise ArgumentError.new("Start time and end time has to be an Hour instance.")
+        raise ArgumentError, "Start time and end time has to be an Hour instance."
       end
 
       task_methods = [:status, :body, :start_time, :end_time, :metadata]
       unless items.is_a?(Array) && items.all? { |item| item.is_a?(Task) }
-        raise ArgumentError.new("Items is supposed to be an array of Task instances.")
+        raise ArgumentError, "Items is supposed to be an array of Task instances."
       end
     end
 
@@ -106,7 +106,7 @@ module Pomodoro::Formats::Today
     #   # TODO
     def active?(current_time = Hour.now, prev_time_frame_end_time = nil, next_time_frame_start_time = nil)
       unless current_time.is_a?(Hour)
-        raise ArgumentError.new("Current time has to be an Hour instance, was #{current_time.class}.")
+        raise ArgumentError, "Current time has to be an Hour instance, was #{current_time.class}."
       end
 
       start_time = @start_time || (prev_time_frame_end_time || Hour.parse('0:00'))
@@ -119,7 +119,7 @@ module Pomodoro::Formats::Today
 
     def ended?(current_time = Hour.now, next_time_frame_start_time = nil)
       unless current_time.is_a?(Hour)
-        raise ArgumentError.new("Current time has to be an Hour instance, was #{current_time.class}.")
+        raise ArgumentError, "Current time has to be an Hour instance, was #{current_time.class}."
       end
 
       end_time = @end_time || (next_time_frame_start_time || Hour.parse('23:59'))
@@ -167,23 +167,19 @@ module Pomodoro::Formats::Today
     end
 
     def first_unstarted_task
-      self.tasks.find do |task|
-        task.unstarted?
-      end
+      self.tasks.find(&:unstarted?)
     end
 
     def active_task
-      self.tasks.find do |task|
-        task.in_progress?
-      end
+      self.tasks.find(&:in_progress?)
     end
 
     def header
       if @start_time && @end_time
         [@name, "(#{@start_time} – #{@end_time})"].compact.join(' ')
-      elsif @start_time && ! @end_time
+      elsif @start_time && !@end_time
         [@name, "(from #{@start_time})"].compact.join(' ')
-      elsif ! @start_time && @end_time
+      elsif !@start_time && @end_time
         [@name, "(until #{@end_time})"].compact.join(' ')
       end
     end
@@ -194,11 +190,11 @@ module Pomodoro::Formats::Today
       missing_values = values.select { |_, value| value.nil? }
 
       unless missing_values.empty?
-        raise TimeFrameInsufficientTimeInfoError.new(missing_values)
+        raise TimeFrameInsufficientTimeInfoError, missing_values
       end
 
       if start_time && end_time && start_time > end_time
-        raise ArgumentError.new("Start time cannot be bigger than end time.")
+        raise ArgumentError, "Start time cannot be bigger than end time."
       end
     end
   end

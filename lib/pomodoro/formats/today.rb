@@ -38,8 +38,8 @@ module Pomodoro
         tree   = Parser.new.parse(string)
         nodes  = Transformer.new.apply(tree)
         Day.new(path: path, nodes: nodes)
-      rescue => error
-        raise error.class.new("Error in #{path}: #{error.message}\n\n#{error.backtrace.join("\n- ")}")
+      rescue StandardError => error
+        raise , "Error in #{path}: #{error.message}\n\n#{error.backtrace.join("\n- ")}"
       end
     end
   end

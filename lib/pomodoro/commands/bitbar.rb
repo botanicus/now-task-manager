@@ -19,7 +19,7 @@ end
 
 class Pomodoro::Commands::BitBarUI
   def self.heading(current_time_frame, active_task)
-    if active_task && active_task.duration
+    if active_task&.duration
       remaining_duration = active_task.remaining_duration(current_time_frame)
       # TODO: base it on %.
       colour = {red: (0..5), green: (5..20), grey: (20..(1 / 0.0))}.find { |key, range| range.include?(remaining_duration.minutes) }[0]
@@ -62,7 +62,7 @@ class Pomodoro::Commands::BitBarUI
     puts "#{current_time_frame.remaining_duration}h remaining"
 
     current_time_frame.tasks.each do |task|
-      if task.fixed_start_time && ! task.ended? && ! task.started?
+      if task.fixed_start_time && !task.ended? && !task.started?
         puts "#{task.fixed_start_time} #{task.body.chomp} | color=red"
       end
 
@@ -76,7 +76,7 @@ class Pomodoro::Commands::BitBarUI
         puts "-- Postpone | bash='now postpone' color=black"
         puts "-- Move on  | bash='now move_on'  color=black"
         $ACTIVE_TASK_PRESENT = true
-      elsif current_time_frame.first_unstarted_task == task && ! $ACTIVE_TASK_PRESENT
+      elsif current_time_frame.first_unstarted_task == task && !$ACTIVE_TASK_PRESENT
         puts "#{task.body.chomp} | color=blue"
         puts "-- Start | bash='now start' color=black"
       else
@@ -118,26 +118,25 @@ class Pomodoro::Commands::BitBarUI
       end
     end
 
-    if task_list && task_list.any? { |task_group| ! task_group.tasks.empty? }
+    if task_list&.any? { |task_group| !task_group.tasks.empty? }
       puts '---', "Scheduled tasks"
       task_list.each do |task_group|
-        unless task_group.tasks.empty?
-          colour = if task_group.scheduled_date == (Date.today + 1)
-            'green'
-          elsif task_group.scheduled_date.nil? && task_group.header != 'Later'
-            'blue' # Context.
-          elsif ((Date.today + 1)..(Date.today + 4)).include?(task_group.scheduled_date)
-            'black'
+        next if task_group.tasks.empty?
+        colour = if task_group.scheduled_date == (Date.today + 1)
+          'green'
+        elsif task_group.scheduled_date.nil? && task_group.header != 'Later'
+          'blue' # Context.
+        elsif ((Date.today + 1)..(Date.today + 4)).cover?(task_group.scheduled_date)
+          'black'
+        else
+          'gray'
+        end
+        puts "-- #{task_group.header} | color=#{colour}"
+        task_group.tasks.each do |task|
+          if task.start_time
+            puts "---- #{task.start_time} #{task.body} | color=red"
           else
-            'gray'
-          end
-          puts "-- #{task_group.header} | color=#{colour}"
-          task_group.tasks.each do |task|
-            if task.start_time
-              puts "---- #{task.start_time} #{task.body} | color=red"
-            else
-              puts "---- #{task.body} | color=black"
-            end
+            puts "---- #{task.body} | color=black"
           end
         end
       end

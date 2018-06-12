@@ -10,12 +10,12 @@ module Pomodoro::Formats::Today
       output << "[#{task.fixed_start_time}]" if task.fixed_start_time
       output << "[#{task.duration.minutes}]" if task.duration
       output << task.body
-      output << task.tags.map { |tag| "##{tag}"}.join(' ') unless task.tags.empty?
+      output << task.tags.map { |tag| "##{tag}" }.join(' ') unless task.tags.empty?
       main_line = output.join(' ') + "\n"
       if task.lines.empty?
         main_line
       else
-        main_line + task.lines.map { |line| "  #{line}"}.join("\n") + "\n"
+        main_line + task.lines.map { |line| "  #{line}" }.join("\n") + "\n"
       end
     end
 
@@ -26,7 +26,6 @@ module Pomodoro::Formats::Today
         "#{start_time}-????"
       elsif end_time
         raise 'nonsense' # FIXME: now next-done should in fact note the time.
-      else # nil
       end
     end
   end

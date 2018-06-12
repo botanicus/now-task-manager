@@ -9,7 +9,7 @@ class Pomodoro::Commands::Postpone < Pomodoro::Commands::Command
   def run
     ensure_today
 
-    if  with_active_task(self.config) do |active_task|
+    if with_active_task(self.config) do |active_task|
           print "#{t(:prompt_why)} "
           reason = $stdin.readline.chomp
           print "#{t(:prompt_when)} "
@@ -23,7 +23,7 @@ class Pomodoro::Commands::Postpone < Pomodoro::Commands::Command
           end
 
           puts t(:success, task: Pomodoro::Tools.unsentence(active_task.body), date: review_date.strftime('%-d/%-m'))
-        end
+       end
     else
       abort t(:no_task_in_progress)
     end

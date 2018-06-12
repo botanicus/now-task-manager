@@ -45,11 +45,11 @@ module Pomodoro
         end
 
         today.define_singleton_method(:weekday?) do # TODO: Put elsewhere.
-          ! self.weekend?
+          !self.weekend?
         end
       end
 
-      alias_method :_require, :require
+      alias _require require
       def require(schedule)
         path = File.expand_path("#{@schedule_dir}/#{schedule}.rb")
         self.instance_eval(File.read(path), path)
@@ -86,13 +86,13 @@ module Pomodoro
       end
 
       def last_work_day_of_a_month
-        if last_day_of_a_month.saturday?
-          last_work_day_of_a_month = last_day_of_a_month.prev_day
+        last_work_day_of_a_month = if last_day_of_a_month.saturday?
+          last_day_of_a_month.prev_day
         elsif last_day_of_a_month.sunday?
-          last_work_day_of_a_month = last_day_of_a_month.prev_day.prev_day
+          last_day_of_a_month.prev_day.prev_day
         else
-          last_work_day_of_a_month = last_day_of_a_month
-        end
+          last_day_of_a_month
+                                   end
       end
     end
   end

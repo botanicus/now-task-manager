@@ -8,10 +8,10 @@ class Pomodoro::Commands::Reset < Pomodoro::Commands::Command
   def run
     ensure_today
 
-    if  with_active_task(self.config) do |active_task|
+    if with_active_task(self.config) do |active_task|
           active_task.reset!
           puts t(:success, task: Pomodoro::Tools.unsentence(active_task.body))
-        end
+       end
     else
       abort t(:no_task_in_progress)
     end

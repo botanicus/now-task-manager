@@ -25,7 +25,7 @@ class Pomodoro::Commands::Config < Pomodoro::Commands::Command
       method_name = @args.first
 
       unless @config.respond_to?(method_name)
-        raise Pomodoro::Config::ConfigError.new(t(:unknown_option, option: method_name))
+        raise Pomodoro::Config::ConfigError, t(:unknown_option, option: method_name)
       end
 
       value = self.config.send(method_name, *convert_arguments)
@@ -36,7 +36,7 @@ class Pomodoro::Commands::Config < Pomodoro::Commands::Command
   private
   def convert_arguments
     @args[1..-1].map do |argument|
-      argument.match(/^\d{4}-\d{2}-\d{2}$/) ? Date.parse(argument) : argument
+      /^\d{4}-\d{2}-\d{2}$/.match?(argument) ? Date.parse(argument) : argument
     end
   end
 end

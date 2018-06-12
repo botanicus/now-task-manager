@@ -25,7 +25,8 @@ describe Pomodoro::Formats::Scheduled::Task do
 
     it "fails if tags are not symbols" do
       expect { described_class.new(body: "Task 1.", tags: [Object.new]) }.to raise_error(
-        ArgumentError, /Tags are supposed to be an array of symbols./)
+        ArgumentError, /Tags are supposed to be an array of symbols./
+      )
     end
 
     it "accepts tags that are symbols" do

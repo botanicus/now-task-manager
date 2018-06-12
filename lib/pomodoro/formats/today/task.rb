@@ -24,7 +24,7 @@ module Pomodoro::Formats::Today
       done: ['✔', '✓', '☑'],
       failed:   ['✘', '✗', '✕', '☓', '✖', '☒'],
       # wip:      ['☐', '⛶', '⚬']
-    }
+    }.freeze
 
     STATUS_LIST ||= STATUS_MAPPING.keys
 
@@ -40,11 +40,10 @@ module Pomodoro::Formats::Today
     end
 
     def metadata
-      @metadata ||= @lines.reduce(Hash.new) do |hash, line|
+      @metadata ||= @lines.each_with_object(Hash.new) do |line, hash|
         if match = line.match(/^(.+): +(.+)$/)
-          hash.merge!(match[1] => match[2])
+          hash[match[1]] = match[2]
         end
-        hash
       end
     end
 
@@ -68,7 +67,7 @@ module Pomodoro::Formats::Today
     private
     def validate_nil_or_instance_of(expected_class, instance, var_name)
       instance && (instance.is_a?(expected_class) ||
-        raise(ArgumentError.new("#{var_name} has to be an instance of #{expected_class}.")))
+        raise ArgumentError, "#{var_name} has to be an instance of #{expected_class}.")
     end
 
     def validate_data_integrity
@@ -77,15 +76,15 @@ module Pomodoro::Formats::Today
       validate_nil_or_instance_of(Hour, @fixed_start_time, :fixed_start_time)
 
       if @start_time.nil? && @end_time
-        raise ArgumentError.new("Setting end_time without start_time is invalid.")
+        raise ArgumentError, "Setting end_time without start_time is invalid."
       end
 
       if @start_time && @end_time && @start_time >= @end_time
-        raise ArgumentError.new("start_time has to be smaller than end_time.")
+        raise ArgumentError, "start_time has to be smaller than end_time."
       end
 
-      if @duration && ! @duration.is_a?(Hour)
-        raise ArgumentError.new("Duration has to be an Hour instance.")
+      if @duration && !@duration.is_a?(Hour)
+        raise ArgumentError, "Duration has to be an Hour instance."
       end
 
       # if @duration && @duration <= Hour.new(0, 5) || @duration >= Hour.new(1, 30)
@@ -93,17 +92,17 @@ module Pomodoro::Formats::Today
       # end
 
       unless STATUS_LIST.include?(@status)
-        raise ArgumentError.new("Status has to be one of #{STATUS_MAPPING.keys.inspect}.")
+        raise ArgumentError, "Status has to be one of #{STATUS_MAPPING.keys.inspect}."
       end
 
       # Unstarted or in progress.
       if @status == :not_done && @end_time
-        raise ArgumentError.new("A task with status :not_done cannot have an end_time!")
+        raise ArgumentError, "A task with status :not_done cannot have an end_time!"
       end
 
-      if [:done, :failed].include?(@status) && ! (
-        (@start_time && @end_time) || (! @start_time && ! @end_time))
-        raise ArgumentError.new("Task has ended. It can either have start_time and end_time or neither, not only one of them.")
+      if [:done, :failed].include?(@status) && !(
+        (@start_time && @end_time) || (!@start_time && !@end_time))
+        raise ArgumentError, "Task has ended. It can either have start_time and end_time or neither, not only one of them."
       end
     end
   end

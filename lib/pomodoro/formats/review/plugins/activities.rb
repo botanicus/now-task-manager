@@ -15,13 +15,13 @@ module Pomodoro::Formats::Review::Plugins::Activities
   end
 
   class Parser < Parslet::Parser
-    rule(:node) {
+    rule(:node) do
       str('- ') >> (str("\n").absent? >> any).repeat.as(:str) >> str("\n")
-    }
+    end
 
-    rule(:nodes) {
+    rule(:nodes) do
       node.repeat
-    }
+    end
 
     root(:nodes)
   end

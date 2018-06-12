@@ -33,8 +33,8 @@ module Pomodoro::Formats::Today
       @time_frames = time_frames
 
       time_frame_methods = [:method_name]
-      unless time_frames.is_a?(Array) && time_frames.all? { |item| time_frame_methods.all? { |method| item.respond_to?(method) }}
-        raise ArgumentError.new("Time frames is supposed to be an array of TimeFrame-like instances, was #{@time_frames.inspect}.")
+      unless time_frames.is_a?(Array) && time_frames.all? { |item| time_frame_methods.all? { |method| item.respond_to?(method) } }
+        raise ArgumentError, "Time frames is supposed to be an array of TimeFrame-like instances, was #{@time_frames.inspect}."
       end
 
       time_frames.each do |time_frame|
@@ -123,7 +123,7 @@ module Pomodoro::Formats::Today
     # @since 0.2
     def to_s
       self.time_frames.reduce(nil) do |buffer, time_frame|
-        buffer ? "#{buffer}\n#{time_frame.to_s}" : "#{time_frame.to_s}"
+        buffer ? "#{buffer}\n#{time_frame}" : time_frame.to_s
       end
     end
 
@@ -143,8 +143,8 @@ module Pomodoro::Formats::Today
     # @since 0.2
     def current_time_frame(current_time = Hour.now)
       result = self.with_prev_and_next.find do |prev_time_frame, time_frame, next_time_frame|
-        prev_time_frame_end_time = prev_time_frame && prev_time_frame.end_time
-        next_time_frame_start_time = next_time_frame && next_time_frame.start_time
+        prev_time_frame_end_time = prev_time_frame&.end_time
+        next_time_frame_start_time = next_time_frame&.start_time
         time_frame.active?(current_time, prev_time_frame_end_time, next_time_frame_start_time)
       end
 

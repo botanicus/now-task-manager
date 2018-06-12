@@ -34,7 +34,8 @@ describe Pomodoro::Commands::Review do
       let(:config) do
         OpenStruct.new(
           today_path: "spec/data/#{described_class}.#{rand(1000)}.today",
-          data_root_path: 'root')
+          data_root_path: 'root'
+        )
       end
 
       let(:data) { '' }

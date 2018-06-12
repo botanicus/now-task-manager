@@ -7,7 +7,8 @@ describe Pomodoro::Formats::Today::TimeFrame do
   describe '.new' do
     it "requires the name keyword argument" do
       expect { described_class.new }.to raise_error(
-        ArgumentError, /missing keyword: name/)
+        ArgumentError, /missing keyword: name/
+      )
     end
 
     it "fails if start time or end time is not an Hour instance" do
@@ -50,7 +51,7 @@ describe Pomodoro::Formats::Today::TimeFrame do
     context "with both start_time and end_time" do
       subject do
         described_class.new(name: 'Morning routine',
-          start_time: h('7:50'), end_time: h('9:20'))
+                            start_time: h('7:50'), end_time: h('9:20'))
       end
 
       it "returns the difference of start_time and end_time" do
@@ -96,13 +97,16 @@ describe Pomodoro::Formats::Today::TimeFrame do
 
       it "raises an error unless the prev_time_frame_end_time and next_time_frame_end_time are both provided" do
         expect { subject.duration }.to raise_error(
-          Pomodoro::Formats::Today::TimeFrameInsufficientTimeInfoError)
+          Pomodoro::Formats::Today::TimeFrameInsufficientTimeInfoError
+        )
 
         expect { subject.duration(nil, h('9:20')) }.to raise_error(
-          Pomodoro::Formats::Today::TimeFrameInsufficientTimeInfoError)
+          Pomodoro::Formats::Today::TimeFrameInsufficientTimeInfoError
+        )
 
         expect { subject.duration(h('9:20'), nil) }.to raise_error(
-          Pomodoro::Formats::Today::TimeFrameInsufficientTimeInfoError)
+          Pomodoro::Formats::Today::TimeFrameInsufficientTimeInfoError
+        )
       end
 
       it "returns the duration if the prev_time_frame_end_time is provided" do
@@ -116,13 +120,15 @@ describe Pomodoro::Formats::Today::TimeFrame do
         incorrect_start_time = h('10:50')
         next_time_frame_end_time = h('9:20')
         expect { subject.duration(incorrect_start_time, next_time_frame_end_time) }.to raise_error(
-          ArgumentError, /Start time cannot be bigger than end time/)
+          ArgumentError, /Start time cannot be bigger than end time/
+        )
       end
 
       it "raises an error if the start_time is equal to the end_time" do
         pending "Not sure"
         expect { subject.duration(h('10:50'), h('10:50')) }.to raise_error(
-          ArgumentError, /Start time cannot be bigger than end time/)
+          ArgumentError, /Start time cannot be bigger than end time/
+        )
       end
     end
   end
@@ -131,7 +137,7 @@ describe Pomodoro::Formats::Today::TimeFrame do
     context "with both start_time and end_time" do
       subject do
         described_class.new(name: 'Morning routine',
-          start_time: h('7:50'), end_time: h('9:20'))
+                            start_time: h('7:50'), end_time: h('9:20'))
       end
 
       it "returns a boolean if the current time frame is not active" do
@@ -180,18 +186,22 @@ describe Pomodoro::Formats::Today::TimeFrame do
         pending "Not sure"
 
         expect { subject.active? }.to raise_error(
-          Pomodoro::Formats::Today::TimeFrameInsufficientTimeInfoError)
+          Pomodoro::Formats::Today::TimeFrameInsufficientTimeInfoError
+        )
 
         expect { subject.active?(Hour.now, nil, h('9:20')) }.to raise_error(
-          Pomodoro::Formats::Today::TimeFrameInsufficientTimeInfoError)
+          Pomodoro::Formats::Today::TimeFrameInsufficientTimeInfoError
+        )
 
         expect { subject.active?(Hour.now, h('9:20'), nil) }.to raise_error(
-          Pomodoro::Formats::Today::TimeFrameInsufficientTimeInfoError)
+          Pomodoro::Formats::Today::TimeFrameInsufficientTimeInfoError
+        )
       end
 
       it "fails if the first argument is not an Hour instance" do
         expect { subject.active?(Time.now) }.to raise_error(
-          ArgumentError, /Current time has to be an Hour instance, was Time/)
+          ArgumentError, /Current time has to be an Hour instance, was Time/
+        )
       end
 
       it "returns a boolean if the the arguments are correct" do
@@ -203,13 +213,15 @@ describe Pomodoro::Formats::Today::TimeFrame do
         incorrect_start_time = h('10:50')
         next_time_frame_end_time = h('9:20')
         expect { subject.active?(Hour.now, incorrect_start_time, next_time_frame_end_time) }.to raise_error(
-          ArgumentError, /Start time cannot be bigger than end time/)
+          ArgumentError, /Start time cannot be bigger than end time/
+        )
       end
 
       it "raises an error if the start_time is equal to the end_time" do
         pending "Not sure"
         expect { subject.active?(Hour.now, h('10:50'), h('10:50')) }.to raise_error(
-          ArgumentError, /Start time cannot be bigger than end time/)
+          ArgumentError, /Start time cannot be bigger than end time/
+        )
       end
     end
   end

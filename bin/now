@@ -1,10 +1,11 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 require 'import'
 require 'pomodoro/commands'
 
 commander = Pomodoro::Commander.new
-command_name = ARGV.first && ARGV.first.to_sym
+command_name = ARGV.first&.to_sym
 
 if commander.commands.include?(command_name)
   commander.run(command_name, ARGV[1..-1] || Array.new)

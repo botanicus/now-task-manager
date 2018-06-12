@@ -4,8 +4,6 @@ require 'pomodoro/tools'
 require 'refined-refinements/colours'
 require 'refined-refinements/cli/commander'
 
-ScheduledFormat = import('pomodoro/formats/scheduled')
-
 module Pomodoro
   module Commands
     module EnvironmentCommunication
@@ -140,7 +138,7 @@ module Pomodoro
       end
 
       def parse_task_list(config)
-        ScheduledFormat.parse(File.new(config.task_list_path, encoding: 'utf-8'))
+        Pomodoro::Formats::Scheduled.parse(File.new(config.task_list_path, encoding: 'utf-8'))
       rescue Errno::ENOENT
         raise Pomodoro::Config::ConfigError.new
       end

@@ -90,7 +90,7 @@ describe Pomodoro::Formats::Scheduled::Parser do
                   tags: [
                     {tag: {str: 'errands'}}
                   ]
-                },
+                }
               }, {
                 task: {
                   start_time: {hour: '9:20'},

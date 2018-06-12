@@ -21,7 +21,8 @@ describe Pomodoro::Commands::Edit do
     let(:config) do
       OpenStruct.new(
         today_path: "spec/data/#{described_class}.#{rand(1000)}.today",
-        task_list_path: File.expand_path('spec/data/tasks.todo'))
+        task_list_path: File.expand_path('spec/data/tasks.todo')
+      )
     end
 
     let(:data) { '' }
@@ -30,7 +31,8 @@ describe Pomodoro::Commands::Edit do
       context "without config.today_path" do
         let(:config) do
           OpenStruct.new(
-            task_list_path: File.expand_path('spec/data/tasks.todo'))
+            task_list_path: File.expand_path('spec/data/tasks.todo')
+          )
         end
 
         it "raises a configuration error" do

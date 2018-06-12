@@ -21,13 +21,14 @@ describe Pomodoro::Formats::Scheduled::TaskList do
 
     it "does not accept anything but array" do
       expect { described_class.new(Hash.new) }.to raise_error(
-        ArgumentError, /Data is supposed to be an array of TaskGroup instances/)
+        ArgumentError, /Data is supposed to be an array of TaskGroup instances/
+      )
     end
-
 
     it "does not accept anything but array of TaskGroups" do
       expect { described_class.new([Hash.new]) }.to raise_error(
-        ArgumentError, /Data is supposed to be an array of TaskGroup instances/)
+        ArgumentError, /Data is supposed to be an array of TaskGroup instances/
+      )
     end
   end
 
@@ -54,7 +55,8 @@ describe Pomodoro::Formats::Scheduled::TaskList do
     it "throws an error if task group with the same header is already in the list" do
       task_group = Pomodoro::Formats::Scheduled::TaskGroup.new(header: 'Tomorrow')
       expect { subject << task_group }.to raise_error(
-        ArgumentError, /Task group with header Tomorrow is already on the list/)
+        ArgumentError, /Task group with header Tomorrow is already on the list/
+      )
     end
   end
 

@@ -9,13 +9,13 @@ class Pomodoro::Commands::Fail < Pomodoro::Commands::Command
   def run
     ensure_today
 
-    if  with_active_task(self.config) do |active_task|
+    if with_active_task(self.config) do |active_task|
           print "#{t(:prompt_why)} "
           reason = $stdin.readline.chomp
 
           active_task.fail!(reason)
           puts t(:success, task: Pomodoro::Tools.unsentence(active_task.body))
-        end
+       end
     else
       abort t(:no_task_in_progress)
     end

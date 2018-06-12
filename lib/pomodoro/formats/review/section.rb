@@ -13,9 +13,7 @@ class Pomodoro::Formats::Review::Section
   def initialize(header:, raw_data:)
     @header, @raw_data = header, raw_data
 
-    unless header.is_a?(String)
-      raise ArgumentError.new
-    end
+    raise ArgumentError unless header.is_a?(String)
   end
 
   def method_name

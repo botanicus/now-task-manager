@@ -9,14 +9,14 @@ class Pomodoro::Commands::MoveOn < Pomodoro::Commands::Command
   def run
     ensure_today
 
-    if  with_active_task(self.config) do |active_task|
+    if with_active_task(self.config) do |active_task|
           # Without this, it looks like it has been done.
           #print "#{t(:prompt_why)} "
           #reason = STDIN.readline.chomp
 
           active_task.finish_for_the_day!#(reason)
           puts t(:success, task: Pomodoro::Tools.unsentence(active_task.body))
-        end
+       end
     else
       abort t(:no_task_in_progress)
     end

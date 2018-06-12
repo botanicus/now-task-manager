@@ -17,15 +17,13 @@ module Pomodoro::Formats::Today
     attr_reader :lines, :subtasks, :metadata
     def initialize(lines: [], subtasks: [], metadata: {})
       @lines, @subtasks, @metadata = lines, subtasks, metadata
-      @lines.is_a?(Array)    || raise(ArgumentError.new("Lines must be an array!"))
-      @subtasks.is_a?(Array) || raise(ArgumentError.new("Subtasks must be an array!"))
-      @metadata.is_a?(Hash)  || raise(ArgumentError.new("Metadata must be an array!"))
+      @lines.is_a?(Array)    || raise ArgumentError, "Lines must be an array!"
+      @subtasks.is_a?(Array) || raise ArgumentError, "Subtasks must be an array!"
+      @metadata.is_a?(Hash)  || raise ArgumentError, "Metadata must be an array!"
     end
 
     def []=(key, value)
-      if @metadata['Postponed'] && key == 'Failed'
-        raise ArgumentError.new("....")
-      end
+      raise ArgumentError.new("....") if @metadata['Postponed'] && key == 'Failed'
     end
 
     def to_s

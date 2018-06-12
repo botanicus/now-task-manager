@@ -17,7 +17,8 @@ module Pomodoro
         super(
           I18n.t(
             'errors.config.missing_file',
-            path: RR::Homepath.new(config_path).to_s))
+            path: RR::Homepath.new(config_path).to_s
+          ))
       end
     end
 
@@ -38,7 +39,7 @@ module Pomodoro
     def data
       @data ||= YAML.load_file(@path)
     rescue Errno::ENOENT
-      raise ConfigFileMissingError.new(@path)
+      raise ConfigFileMissingError, @path
     end
 
     def inspect
@@ -50,7 +51,7 @@ module Pomodoro
       if File.directory?(data_root_path)
         [data_root_path, *chunks].join('/')
       else
-        raise ConfigError.new("data_root_path was supposed to be #{data_root_path}, but such path doesn't exist.")
+        raise ConfigError, "data_root_path was supposed to be #{data_root_path}, but such path doesn't exist."
       end
     end
 
@@ -59,7 +60,7 @@ module Pomodoro
     ].each do |key|
       define_method(:"#{key}_dir") do |time = Time.now|
         value = self.data.fetch(key.to_s) do
-          raise MissingKeyError.new(key)
+          raise MissingKeyError, key
         end
 
         File.expand_path("#{time.strftime(value)}/..")
@@ -67,7 +68,7 @@ module Pomodoro
 
       define_method(key) do |time = Time.now|
         value = self.data.fetch(key.to_s) do
-          raise MissingKeyError.new(key)
+          raise MissingKeyError, key
         end
 
         path = File.expand_path(time.strftime(value))
@@ -75,7 +76,7 @@ module Pomodoro
           path
         else
           dir, base = File.split(path)
-          raise ConfigError.new("#{self.class}##{key}: Root directory #{RR::Homepath.new(dir)} for file #{base} doesn't exist..)")
+          raise ConfigError, "#{self.class}##{key}: Root directory #{RR::Homepath.new(dir)} for file #{base} doesn't exist..)"
         end
       end
     end

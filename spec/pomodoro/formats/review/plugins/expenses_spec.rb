@@ -170,13 +170,13 @@ describe Pomodoro::Formats::Review::Plugins::Expenses::Expenses do
       ),
       Pomodoro::Formats::Review::Plugins::Expenses::Expense.new(
         amount: 9.25, currency: :PLN, description: 'Piwo.'
-      ),
+      )
     ])
   end
 
   describe '#totals' do
     it do
-      expect(subject.totals).to eql({CZK: 160.25, PLN: 9.25})
+      expect(subject.totals).to eql(CZK: 160.25, PLN: 9.25)
     end
   end
 end

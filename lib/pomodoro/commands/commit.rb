@@ -17,7 +17,7 @@ class Pomodoro::Commands::Commit < Pomodoro::Commands::Command
   def run
     ensure_today
 
-    if  with_active_task(self.config) do |active_task|
+    if with_active_task(self.config) do |active_task|
           tag = active_task.tags.find { |tag| tag.match(/^\d+$/) }
           body = [active_task.body, tag && "Closes ##{tag}"].compact.join(' ')
           # TODO: closes vs. mention only? Shall we use commit -v?
@@ -26,7 +26,7 @@ class Pomodoro::Commands::Commit < Pomodoro::Commands::Command
           puts("#{t(:log_command, commit_message: commit_message)}\n\n")
 
           command("git commit #{arguments}")
-        end
+       end
     else
       abort t(:no_task_in_progress) # TODO: raise NoTaskInProgress.
     end

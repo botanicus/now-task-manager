@@ -19,8 +19,8 @@ module Pomodoro::Formats::Scheduled
       Task.new(**data)
     end
 
-    rule(task_group: subtree(:data)) {
+    rule(task_group: subtree(:data)) do
       TaskGroup.new(**data)
-    }
+    end
   end
 end

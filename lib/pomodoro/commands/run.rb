@@ -18,9 +18,7 @@ class Pomodoro::Commands::Run < Pomodoro::Commands::Command
 
     edit_next_task_when_no_task_active(self.config) do |next_task|
       @matcher = dsl.matchers.find { |matcher| matcher.true?(next_task) }
-      unless @matcher
-        abort t(:no_matcher_found, task: next_task)
-      end
+      abort t(:no_matcher_found, task: next_task) unless @matcher
     end
 
     Pomodoro::Commands::Start.new(['--no-wait']).run

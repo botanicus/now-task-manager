@@ -16,16 +16,14 @@ module Pomodoro::Formats::Scheduled
     def initialize(body:, time_frame: nil, start_time: nil, tags: Array.new)
       @body, @time_frame, @start_time, @tags = body, time_frame, start_time, tags
 
-      if body.empty?
-        raise ArgumentError.new("Body cannot be empty.")
+      raise ArgumentError, "Body cannot be empty." if body.empty?
+
+      if start_time && !start_time.is_a?(Hour)
+        raise ArgumentError, "Hour instance was expected, got #{start_time.class}"
       end
 
-      if start_time && ! start_time.is_a?(Hour)
-        raise ArgumentError.new("Hour instance was expected, got #{start_time.class}")
-      end
-
-      if ! tags.empty? && tags.any? { |tag| ! tag.is_a?(Symbol) }
-        raise ArgumentError.new("Tags are supposed to be an array of symbols.")
+      if !tags.empty? && tags.any? { |tag| !tag.is_a?(Symbol) }
+        raise ArgumentError, "Tags are supposed to be an array of symbols."
       end
     end
 
@@ -36,7 +34,7 @@ module Pomodoro::Formats::Scheduled
         '-',
         ("[#{@time_frame}]" if @time_frame),
         ("[#{@start_time}]" if @start_time),
-        "#{@body}", *@tags.map { |tag| "##{tag}"}
+        @body.to_s, *@tags.map { |tag| "##{tag}" }
       ].compact.join(' ')
     end
   end

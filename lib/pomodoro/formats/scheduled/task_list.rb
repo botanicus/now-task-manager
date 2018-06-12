@@ -24,7 +24,7 @@ module Pomodoro::Formats::Scheduled
       @data = data
 
       unless data.is_a?(Array) && data.all? { |item| item.respond_to?(:header) && item.respond_to?(:tasks) }
-        raise ArgumentError.new("Data is supposed to be an array of TaskGroup instances.")
+        raise ArgumentError, "Data is supposed to be an array of TaskGroup instances."
       end
     end
 
@@ -49,11 +49,11 @@ module Pomodoro::Formats::Scheduled
     # @since 0.2
     def <<(task_group)
       unless task_group.is_a?(TaskGroup)
-        raise ArgumentError.new("TaskGroup expected, got #{task_group.class}.")
+        raise ArgumentError, "TaskGroup expected, got #{task_group.class}."
       end
 
       if self[task_group.header]
-        raise ArgumentError.new("Task group with header #{task_group.header} is already on the list.")
+        raise ArgumentError, "Task group with header #{task_group.header} is already on the list."
       end
 
       @data << task_group

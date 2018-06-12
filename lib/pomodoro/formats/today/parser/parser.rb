@@ -42,8 +42,8 @@ module Pomodoro::Formats::Today
 
     rule(:task_time_info) do
       (str('[') >> start_time_end_time >> str(']') >> space).maybe >>
-      (str('[') >> hour_strict.as(:fixed_start_time) >> str(']') >> space).maybe >>
-      (str('[') >> integer.as(:duration) >> str(']') >> space).maybe
+        (str('[') >> hour_strict.as(:fixed_start_time) >> str(']') >> space).maybe >>
+        (str('[') >> integer.as(:duration) >> str(']') >> space).maybe
     end
 
     rule(:metadata) { (str("\n").absent? >> any).repeat.as(:str) }

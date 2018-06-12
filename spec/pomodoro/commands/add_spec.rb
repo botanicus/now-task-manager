@@ -40,7 +40,7 @@ describe Pomodoro::Commands::Add do
     end
 
     context "with an escaped string" do
-      let(:args) { %w{Do this and that.} }
+      let(:args) { %w[Do this and that.] }
 
       it "adds the task into the 'Later' task group" do
         run(subject)

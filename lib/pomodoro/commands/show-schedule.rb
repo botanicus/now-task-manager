@@ -9,7 +9,7 @@ module DateTimeMixin
 
   def next_wday(n)
     unless n.is_a?(Integer)
-      raise ArgumentError.new("DateTimeMixin#next_wday expects Integer, got #{n.class}.")
+      raise ArgumentError, "DateTimeMixin#next_wday expects Integer, got #{n.class}."
     end
 
     n > self.wday ? self + (n - self.wday) : self.next_week.next_day(n)

@@ -5,8 +5,8 @@ module Pomodoro
     def self.unsentence(possible_sentense)
       words = possible_sentense.split(' ')
 
-      if words[0].match(/^[A-Z][a-z]+$/)
-        words[0].sub!(/^(.)/) { $1.downcase }
+      if words[0] =~ /^[A-Z][a-z]+$/
+        words[0].sub!(/^(.)/) { Regexp.last_match(1).downcase }
       end
 
       words.join(' ').chomp('.')

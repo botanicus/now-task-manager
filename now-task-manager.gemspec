@@ -1,4 +1,5 @@
 #!/usr/bin/env gem build
+# frozen_string_literal: true
 
 begin
   require 'refined-refinements/colours'
@@ -22,10 +23,10 @@ Gem::Specification.new do |s|
   s.executables = Dir['bin/*'].map(&File.method(:basename))
 
   s.add_runtime_dependency('commonjs_modules', ['~> 0.0'])
-  s.add_runtime_dependency('parslet', ['~> 1.8'])
-  s.add_runtime_dependency('term-ansicolor', ['~> 1.4'])
-  s.add_runtime_dependency('refined-refinements', ['~> 0.0.2.1'])
   s.add_runtime_dependency('i18n', ['~> 0.9'])
+  s.add_runtime_dependency('parslet', ['~> 1.8'])
+  s.add_runtime_dependency('refined-refinements', ['~> 0.0.2.1'])
+  s.add_runtime_dependency('term-ansicolor', ['~> 1.4'])
 
   # s.post_install_message = <<-EOF.gsub(/^\s*/, '').colourise
   #   <green.bold>Welcome to NTM!</green.bold>

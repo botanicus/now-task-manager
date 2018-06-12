@@ -13,9 +13,7 @@ class Pomodoro::Commands::Test < Pomodoro::Commands::Command
   EOF
 
   def run
-    unless @args.first && @args.first.match(/^\d{4}$/)
-      @args.unshift(Date.today.year.to_s)
-    end
+    @args.unshift(Date.today.year.to_s) unless @args.first&.match(/^\d{4}$/)
 
     year = @args.shift
 
@@ -26,7 +24,7 @@ class Pomodoro::Commands::Test < Pomodoro::Commands::Command
         "features/#{argument}.feature"
       elsif Date::MONTHNAMES.compact.include?(argument)
         "features/months/#{argument}.feature"
-      elsif argument.match(/^\d+$/) && (1..52).include?(argument.to_i)
+      elsif argument.match(/^\d+$/) && (1..52).cover?(argument.to_i)
         "features/weeks/#{argument}.feature"
       end
     end

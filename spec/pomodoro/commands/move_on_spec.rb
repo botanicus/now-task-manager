@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Status: unsure whether we want it https://github.com/botanicus/now-task-manager/issues/121
 
 require 'spec_helper'

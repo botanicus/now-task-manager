@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Pomodoro::Formats::Today
   class Formatter
     def self.format(task)

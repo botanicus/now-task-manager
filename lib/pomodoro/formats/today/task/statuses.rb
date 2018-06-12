@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Pomodoro::Formats::Today
   module TaskStatuses
     # @!group Status checking methods

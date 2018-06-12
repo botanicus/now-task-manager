@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.shared_examples(:is_out_of_main_help) do
   describe '.description' do
     it "doesn't have it" do

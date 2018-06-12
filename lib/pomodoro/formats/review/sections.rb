@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Pomodoro::Formats::Review::Sections
   attr_reader :sections
   def initialize(sections)

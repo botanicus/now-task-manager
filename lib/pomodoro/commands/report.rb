@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # https://github.com/botanicus/now-task-manager/issues/123
 class Pomodoro::Commands::Report < Pomodoro::Commands::Command
   self.help = <<-EOF.gsub(/^\s*/, '')

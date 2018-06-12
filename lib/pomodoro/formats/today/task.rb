@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'refined-refinements/hour'
 require 'pomodoro/formats/today'
 require 'pomodoro/formats/today/task/statuses'

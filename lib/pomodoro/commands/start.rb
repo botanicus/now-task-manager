@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Pomodoro::Commands::Start < Pomodoro::Commands::Command
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <magenta>start</magenta> <bright_black># #{self.description}</bright_black>

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # TODO: Use I18n.
 class Pomodoro::Commands::BitBar < Pomodoro::Commands::Command
   def today_list

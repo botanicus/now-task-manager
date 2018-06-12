@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Pomodoro::Formats::Review::Section
   def self.plugins
     @plugins ||= Array.new

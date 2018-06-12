@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'pomodoro/router'
 
 class Pomodoro::Commands::Review < Pomodoro::Commands::Command

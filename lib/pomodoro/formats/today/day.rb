@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'date'
 require 'pomodoro/formats/today'
 require 'pomodoro/formats/review'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Pomodoro::Commands::Config < Pomodoro::Commands::Command
   self.help = <<-EOF.gsub(/^\s*/, '')
     now <yellow>config</yellow>

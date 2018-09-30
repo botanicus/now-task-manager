@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+require 'pomodoro/formats/today/archive'
+
+archive = Pomodoro::Formats::Today::Archive.new(Date.new(2017, 12, 20), Date.today)
+
+archive.days.each do |day|
+  expenses = day.task_list.each_log_item.map { |log_item| log_item['price'] }.compact
+  total = expenses.reduce(Hash.new { |hash, key| hash[key] = 0 }) do |sums, record|
+    amount, currency = record.split(/\s+/)
+    sums[currency.to_sym] += amount.to_i
+    sums
+  end
+
+  puts "#{day.date.strftime('%d/%m')}: #{total}"
+end
